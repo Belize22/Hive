@@ -2,21 +2,17 @@
 #ifndef BOARD
 #define BOARD
 
-#include <map>
-
-#include "GamePiece.h"
-#include "Coordinate.h"
+#include "HexNode.h"
 
 class Board
 {
 private:
-	std::map<int, int> _gamePieces;
-	//std::map<GamePiece, Coordinate> _gamePieces;
+	HexNode* _root;
 
 public:
 	Board();
-	//void placeGamePiece(GamePiece * gamePiece);
-	//void moveGamePiece(GamePiece * gamePiece);
+	void placePiece();
+	HexNode getRoot();
 };
 
 #endif

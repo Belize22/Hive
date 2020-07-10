@@ -11,6 +11,9 @@ private:
 public:
 	Coordinate();
 	Coordinate(int* x, int* y, int* z);
+	int getX();
+	int getY();
+	int getZ();
 	void setCoordinate(int* x, int* y, int* z);
 };
 
