@@ -128,12 +128,14 @@
     <ClCompile Include="GamePiece.cpp" />
     <ClCompile Include="HexNode.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Player.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Board.h" />
     <ClInclude Include="Coordinate.h" />
     <ClInclude Include="GamePiece.h" />
     <ClInclude Include="HexNode.h" />
+    <ClInclude Include="Player.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,9 +1,8 @@
 #include "GamePiece.h"
 
-GamePiece::GamePiece(Coordinate* coordinate) {
-	_position = coordinate;
+GamePiece::GamePiece(Board* board, Player* player) {
+	_board = board;
+	_player = player;
+	_active = false;
+	_buried = false;
 };
-
-Coordinate * GamePiece::getPosition() {
-	return _position;
-}

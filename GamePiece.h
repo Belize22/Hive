@@ -1,19 +1,19 @@
 #ifndef GAME_PIECE
 #define GAME_PIECE
 
-#include <map>
-
-#include "Board.h"
-#include "Coordinate.h"
+class Board;
+class Player;
 
 class GamePiece
 {
 private:
-	Coordinate * _position;
+	Board* _board;
+	Player* _player;
+	bool _active;
+	bool _buried;
 
 public:
-	GamePiece(Coordinate* coordinate);
-	Coordinate * getPosition();
+	GamePiece(Board* board, Player* player);
 };
 
 #endif
