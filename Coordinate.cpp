@@ -22,6 +22,9 @@ int Coordinate::getZ() {
 }
 
 void Coordinate::setCoordinate(int* x, int* y, int* z) {
+	delete _x;
+	delete _y;
+	delete _z;
 	_x = x;
 	_y = y;
 	_z = z;

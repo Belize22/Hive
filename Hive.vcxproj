@@ -134,6 +134,7 @@
     <ClInclude Include="Board.h" />
     <ClInclude Include="Coordinate.h" />
     <ClInclude Include="GamePiece.h" />
+    <ClInclude Include="HexDirectionEnum.h" />
     <ClInclude Include="HexNode.h" />
     <ClInclude Include="Player.h" />
   </ItemGroup>

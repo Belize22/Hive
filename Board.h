@@ -3,6 +3,8 @@
 
 #include "HexNode.h"
 
+#include "HexDirectionEnum.h"
+
 class Board
 {
 private:

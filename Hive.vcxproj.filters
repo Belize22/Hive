@@ -50,5 +50,8 @@
     <ClInclude Include="GamePiece.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="HexDirectionEnum.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
