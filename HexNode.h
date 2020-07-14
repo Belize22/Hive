@@ -15,6 +15,8 @@ private:
 	std::vector<HexNode*> _adjacentNodes;
 	Coordinate* _coordinate;
 	GamePiece* _gamePiece;
+	int horizontalDirectionOffset(HexDirection direction);
+	int verticalDirectionOffset(HexDirection direction, int xValue);
 
 public:
 	HexNode();

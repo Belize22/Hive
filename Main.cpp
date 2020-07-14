@@ -13,6 +13,6 @@ int main() {
 	}
 	HexNode* root = &(board->getRoot());
 	Coordinate rootCoordinate = root->getCoordinate();
-	std::cout << rootCoordinate.getZ() << std::endl;
+	std::cout << rootCoordinate.getX() << ", " << rootCoordinate.getY() << ", " << rootCoordinate.getZ() << std::endl;
 	return 0;
 }
