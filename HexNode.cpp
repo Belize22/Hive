@@ -12,10 +12,16 @@ HexNode::HexNode(Coordinate* coordinate, HexDirection direction) {
 }
 
 void HexNode::initializeNode() {
+	_adjacentNodes = new std::vector<HexNode*>();
 	for (int i = 0; i < 6; i++) {
-		_adjacentNodes.push_back(nullptr);
+		_adjacentNodes->push_back(nullptr);
 	}
 	_gamePiece = nullptr;
+}
+
+
+std::vector<HexNode*>* HexNode::getAdjacentNodes() {
+	return _adjacentNodes;
 }
 
 Coordinate HexNode::getCoordinate() {
@@ -31,6 +37,7 @@ void HexNode::setCoordinate(Coordinate* coordinate) {
 void HexNode::setGamePiece(GamePiece* gamePiece) {
 	delete _gamePiece;
 	_gamePiece = gamePiece;
+	setAdjacentNodes();
 };
 
 void HexNode::offsetCoordinate(Coordinate* coordinate, HexDirection direction) {
@@ -72,4 +79,39 @@ int HexNode::verticalDirectionOffset(HexDirection direction, int xValue) {
 		default:
 			return 0;
 	}
+}
+
+void HexNode::setAdjacentNodes() {
+	HexNode* firstNode;
+	if (_adjacentNodes->at(0) == nullptr) {
+		firstNode = new HexNode();
+	}
+	else {
+		firstNode = _adjacentNodes->at(0);
+	}
+	HexNode* previousNode = nullptr;
+	for (int i = 0; i < 6; i++) {	
+		if (i == 0) {
+			_adjacentNodes->at(i) = firstNode;
+			previousNode = firstNode;
+		}
+		else {
+			if (_adjacentNodes->at(i) == nullptr) {
+				_adjacentNodes->at(i) = new HexNode();
+			}
+			((_adjacentNodes->at(i))->getAdjacentNodes())->at(mod(i - 2, 6)) = previousNode;
+			(previousNode->getAdjacentNodes())->at(abs(i + 1) % 6) = _adjacentNodes->at(i);
+			previousNode = _adjacentNodes->at(i);
+			if (i == 5) {
+				((_adjacentNodes->at(i))->getAdjacentNodes())->at(mod(i + 2, 6)) = firstNode;
+				(firstNode->getAdjacentNodes())->at(mod(i - 1, 6)) = _adjacentNodes->at(i);
+			}
+		}
+		((_adjacentNodes->at(i))->getAdjacentNodes())->at(mod(i - 3, 6)) = this;
+	}
+}
+
+//% is remainder, not mod in C++
+int HexNode::mod(int a, int b) {
+	return (a % b + b) % b;
 }
