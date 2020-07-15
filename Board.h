@@ -12,7 +12,7 @@ private:
 
 public:
 	Board();
-	void placePiece();
+	void placeGamePiece(GamePiece* gamePiece);
 	HexNode getRoot();
 };
 

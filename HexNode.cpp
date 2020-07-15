@@ -7,7 +7,6 @@ HexNode::HexNode() {
 
 HexNode::HexNode(Coordinate* coordinate, HexDirection direction) {
 	offsetCoordinate(coordinate, direction);
-	delete _coordinate;
 	_coordinate = new Coordinate(new int(coordinate->getX()), new int(coordinate->getY()), new int(coordinate->getZ()));
 	initializeNode();
 }
@@ -24,8 +23,15 @@ Coordinate HexNode::getCoordinate() {
 }
 
 void HexNode::setCoordinate(Coordinate* coordinate) {
+	delete _coordinate;
 	_coordinate = coordinate;
 }
+
+
+void HexNode::setGamePiece(GamePiece* gamePiece) {
+	delete _gamePiece;
+	_gamePiece = gamePiece;
+};
 
 void HexNode::offsetCoordinate(Coordinate* coordinate, HexDirection direction) {
 	//May need to plug potential memory leak here.

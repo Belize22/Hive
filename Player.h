@@ -10,10 +10,12 @@ class Player
 {
 private:
 	Board* _board;
-	std::vector<GamePiece*> _gamePieces;
+	std::vector<GamePiece*>* _gamePieces;
 
 public:
 	Player(Board* board);
+	std::vector<GamePiece*>* getGamePieces();
+	void placeGamePiece(GamePiece* gamePiece);
 };
 
 #endif

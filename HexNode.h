@@ -24,6 +24,7 @@ public:
 	void initializeNode();
 	Coordinate getCoordinate();
 	void setCoordinate(Coordinate* coordinate);
+	void setGamePiece(GamePiece* gamePiece);
 	void offsetCoordinate(Coordinate* coordinate, HexDirection direction);
 };
 

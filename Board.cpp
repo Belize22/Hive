@@ -1,13 +1,11 @@
 #include "Board.h"
 
 Board::Board() {
-	placePiece();
+	_root = new HexNode();
 }
 
-void Board::placePiece() {
-	_root = new HexNode();
-	Coordinate* coordinate = &(_root->getCoordinate());
-	_root = new HexNode(new Coordinate(*coordinate), UP);
+void Board::placeGamePiece(GamePiece* gamePiece) {
+	_root->setGamePiece(gamePiece);
 }
 
 HexNode Board::getRoot() {
