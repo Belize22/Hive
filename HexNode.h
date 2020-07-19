@@ -26,6 +26,7 @@ public:
 	void initializeNode();
 	std::vector<HexNode*>* getAdjacentNodes();
 	Coordinate* getCoordinate();
+	GamePiece* getGamePiece();
 	void setCoordinate(Coordinate* coordinate);
 	void setGamePiece(GamePiece* gamePiece);
 	void offsetCoordinate(Coordinate* coordinate, HexDirection direction); 

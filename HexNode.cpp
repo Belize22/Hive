@@ -28,6 +28,10 @@ Coordinate* HexNode::getCoordinate() {
 	return _coordinate;
 }
 
+GamePiece* HexNode::getGamePiece() {
+	return _gamePiece;
+}
+
 void HexNode::setCoordinate(Coordinate* coordinate) {
 	delete _coordinate;
 	_coordinate = coordinate;

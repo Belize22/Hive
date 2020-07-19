@@ -13,9 +13,11 @@ int main() {
 	}
 	Player* currentPlayer = players.at(0);
 	GamePiece* currentGamePiece = (currentPlayer->getGamePieces())->at(0);
+	std::vector<Coordinate*>* coordinates = board->getPlacementCandidates(board->getRoot());
 	currentPlayer->placeGamePiece(currentGamePiece);
-	HexNode* root = &(board->getRoot());
+	HexNode* root = board->getRoot();
 	Coordinate* rootCoordinate = root->getCoordinate();
 	std::cout << rootCoordinate->getX() << ", " << rootCoordinate->getY() << ", " << rootCoordinate->getZ() << std::endl;
+	coordinates = board->getPlacementCandidates(board->getRoot());
 	return 0;
 }
