@@ -13,8 +13,9 @@ private:
 
 public:
 	Board();
-	void placeGamePiece(GamePiece* gamePiece);
+	void placeGamePiece(GamePiece* gamePiece, Coordinate* coordinate);
 	std::vector<Coordinate*>* getPlacementCandidates(HexNode* start);
+	HexNode* getChosenPlacementCandidate(HexNode* start, Coordinate* coordinate);
 	void advanceBFS(std::vector<HexNode*>* openList, std::vector<HexNode*>* closedList);
 	HexNode* getRoot();
 	static bool isAPlacementCandidate(std::vector<HexNode*>* openList, std::vector<HexNode*>* closedList, HexNode* currentHexNode);

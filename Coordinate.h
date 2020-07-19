@@ -15,6 +15,7 @@ public:
 	int getY();
 	int getZ();
 	void setCoordinate(int* x, int* y, int* z);
+	bool operator == (const Coordinate& other);
 };
 
 #endif

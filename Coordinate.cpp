@@ -26,3 +26,8 @@ void Coordinate::setCoordinate(int* x, int* y, int* z) {
 	_y = y;
 	_z = z;
 }
+
+bool Coordinate::operator==(const Coordinate& other) {
+	//z excluded for now. Will be explored when Beetle token is implemented.
+	return *_x == *other._x && *_y == *other._y;
+}

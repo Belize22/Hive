@@ -8,11 +8,10 @@ Player::Player(Board* board) {
 	}
 }
 
-
 std::vector<GamePiece*>* Player::getGamePieces() {
 	return _gamePieces;
 };
 
-void Player::placeGamePiece(GamePiece* gamePiece) {
-	_board->placeGamePiece(gamePiece);
+void Player::placeGamePiece(GamePiece* gamePiece, Coordinate* coordinate) {
+	_board->placeGamePiece(gamePiece, coordinate);
 }

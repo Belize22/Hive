@@ -4,8 +4,9 @@ Board::Board() {
 	_root = new HexNode();
 }
 
-void Board::placeGamePiece(GamePiece* gamePiece) {
-	_root->setGamePiece(gamePiece);
+void Board::placeGamePiece(GamePiece* gamePiece, Coordinate* coordinate) {
+	HexNode* target = getChosenPlacementCandidate(_root, coordinate);
+	target->setGamePiece(gamePiece);
 }
 
 std::vector<Coordinate*>* Board::getPlacementCandidates(HexNode* start) {
@@ -23,6 +24,24 @@ std::vector<Coordinate*>* Board::getPlacementCandidates(HexNode* start) {
 	delete openList;
 	delete closedList;
 	return freeSpots;
+}
+
+
+HexNode* Board::getChosenPlacementCandidate(HexNode* start, Coordinate* coordinate) {
+	std::vector<HexNode*>* openList = new std::vector<HexNode*>();
+	std::vector<HexNode*>* closedList = new std::vector<HexNode*>();
+	openList->push_back(start);
+	while (openList->size() > 0) {
+		HexNode* currentHexNode = openList->at(0);
+		Coordinate durr = *coordinate;
+		if (*(currentHexNode->getCoordinate()) == *coordinate) {
+			return currentHexNode;
+		}
+		advanceBFS(openList, closedList);
+	}
+	delete openList;
+	delete closedList;
+	return nullptr;
 }
 
 void Board::advanceBFS(std::vector<HexNode*>* openList, std::vector<HexNode*>* closedList) {
