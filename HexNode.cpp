@@ -24,8 +24,8 @@ std::vector<HexNode*>* HexNode::getAdjacentNodes() {
 	return _adjacentNodes;
 }
 
-Coordinate HexNode::getCoordinate() {
-	return *_coordinate;
+Coordinate* HexNode::getCoordinate() {
+	return _coordinate;
 }
 
 void HexNode::setCoordinate(Coordinate* coordinate) {
@@ -41,9 +41,8 @@ void HexNode::setGamePiece(GamePiece* gamePiece) {
 };
 
 void HexNode::offsetCoordinate(Coordinate* coordinate, HexDirection direction) {
-	//May need to plug potential memory leak here.
 	coordinate->setCoordinate(new int(coordinate->getX() + horizontalDirectionOffset(direction)),
-		new int(coordinate->getY() + verticalDirectionOffset(direction, coordinate->getX())), 
+		new int(coordinate->getY() + verticalDirectionOffset(direction, coordinate->getX())),
 		new int(coordinate->getZ()));
 }
 
@@ -84,7 +83,7 @@ int HexNode::verticalDirectionOffset(HexDirection direction, int xValue) {
 void HexNode::setAdjacentNodes() {
 	HexNode* firstNode;
 	if (_adjacentNodes->at(0) == nullptr) {
-		firstNode = new HexNode();
+		firstNode = new HexNode(new Coordinate(*(this->getCoordinate())), static_cast<HexDirection>(0));
 	}
 	else {
 		firstNode = _adjacentNodes->at(0);
@@ -97,7 +96,7 @@ void HexNode::setAdjacentNodes() {
 		}
 		else {
 			if (_adjacentNodes->at(i) == nullptr) {
-				_adjacentNodes->at(i) = new HexNode();
+				_adjacentNodes->at(i) = new HexNode(new Coordinate((*this->getCoordinate())), static_cast<HexDirection>(i));
 			}
 			((_adjacentNodes->at(i))->getAdjacentNodes())->at(mod(i - 2, 6)) = previousNode;
 			(previousNode->getAdjacentNodes())->at(abs(i + 1) % 6) = _adjacentNodes->at(i);

@@ -15,7 +15,7 @@ int main() {
 	GamePiece* currentGamePiece = (currentPlayer->getGamePieces())->at(0);
 	currentPlayer->placeGamePiece(currentGamePiece);
 	HexNode* root = &(board->getRoot());
-	Coordinate rootCoordinate = root->getCoordinate();
-	std::cout << rootCoordinate.getX() << ", " << rootCoordinate.getY() << ", " << rootCoordinate.getZ() << std::endl;
+	Coordinate* rootCoordinate = root->getCoordinate();
+	std::cout << rootCoordinate->getX() << ", " << rootCoordinate->getY() << ", " << rootCoordinate->getZ() << std::endl;
 	return 0;
 }
