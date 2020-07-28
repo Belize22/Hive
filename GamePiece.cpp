@@ -6,3 +6,8 @@ GamePiece::GamePiece(Board* board, Player* player) {
 	_active = false;
 	_buried = false;
 };
+
+
+Player* GamePiece::getPlayer() {
+	return _player;
+}

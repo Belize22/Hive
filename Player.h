@@ -15,7 +15,7 @@ private:
 public:
 	Player(Board* board);
 	std::vector<GamePiece*>* getGamePieces();
-	void placeGamePiece(Coordinate* coordinate);
+	bool placeGamePiece(Coordinate* coordinate);
 };
 
 #endif

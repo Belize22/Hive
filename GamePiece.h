@@ -14,6 +14,7 @@ private:
 
 public:
 	GamePiece(Board* board, Player* player);
+	Player* getPlayer();
 };
 
 #endif

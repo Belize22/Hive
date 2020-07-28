@@ -12,7 +12,10 @@ std::vector<GamePiece*>* Player::getGamePieces() {
 	return _gamePieces;
 };
 
-void Player::placeGamePiece(Coordinate* coordinate) {
-	_board->placeGamePiece(_gamePieces->at(0), coordinate);
-	(_gamePieces->erase(_gamePieces->begin()));
+bool Player::placeGamePiece(Coordinate* coordinate) {
+	bool isValidSpot = _board->placeGamePiece(_gamePieces->at(0), coordinate);
+	if (isValidSpot) {
+		(_gamePieces->erase(_gamePieces->begin()));
+	}
+	return isValidSpot;
 }
