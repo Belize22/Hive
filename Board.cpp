@@ -24,14 +24,14 @@ bool Board::placeGamePiece(GamePiece* gamePiece, Coordinate* coordinate) {
 	}
 }
 
-std::vector<Coordinate*>* Board::getPlacementCandidates(HexNode* start) {
+std::vector<Coordinate*>* Board::getPlacementCandidates(HexNode* start, Player* player) {
 	std::vector<HexNode*>* openList = new std::vector<HexNode*>();
 	std::vector<HexNode*>* closedList = new std::vector<HexNode*>();
 	std::vector<Coordinate*>* freeSpots = new std::vector<Coordinate*>();
 	openList->push_back(start);
 	while (openList->size() > 0) {
 		HexNode* currentHexNode = openList->at(0);
-		if (!currentHexNode->getGamePiece()) {
+		if (!currentHexNode->getGamePiece() && !spotAdjacentToOpposingPiece(player, currentHexNode)) {
 			freeSpots->push_back(currentHexNode->getCoordinate());
 		}
 		advanceBFS(openList, closedList);

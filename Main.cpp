@@ -18,7 +18,7 @@ int main() {
 	int* currentPlayerNumber = new int(-1);
 	Player* currentPlayer = changePlayer(players, currentPlayerNumber);
 	while (true) {
-		displayPlacementCandidates(board->getPlacementCandidates(board->getRoot()));
+		displayPlacementCandidates(board->getPlacementCandidates(board->getRoot(), currentPlayer));
 		std::cout << "Insert x-coordinate: ";
 		int x = getCoordinateInput();
 		std::cout << "Insert y-coordinate: ";
