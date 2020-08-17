@@ -2,26 +2,43 @@
 
 Board::Board() {
 	_root = new HexNode();
+	_gamePieces = new std::map<std::string, HexNode*>();
+	_gamePieces->insert(std::pair<std::string, HexNode*>(_root->getCoordinate()->toString(), _root));
 }
 
 bool Board::placeGamePiece(GamePiece* gamePiece, Coordinate* coordinate) {
-	HexNode* target = getChosenPlacementCandidate(_root, coordinate);
-	if (!pieceCanBePlaced(target) || spotAdjacentToOpposingPiece(gamePiece->getPlayer(), target)) {
+	HexNode* target = (_gamePieces->find(coordinate->toString()) != _gamePieces->end()) ? _gamePieces->at(coordinate->toString()) : nullptr;
+	if (!pieceCanBePlaced(target) || spotAdjacentToOpposingPiece(gamePiece->getPlayer(), target->getCoordinate())) {
 		if (target == nullptr) {
 			std::cout << "Spot is not adjacent to the Hive!" << std::endl;
 		}
 		else if (target->getGamePiece() != nullptr) {
 			std::cout << "Spot is occupied!" << std::endl;
 		}
-		else if (spotAdjacentToOpposingPiece(gamePiece->getPlayer(), target)) {
+		else if (spotAdjacentToOpposingPiece(gamePiece->getPlayer(), target->getCoordinate())) {
 			std::cout << "Cannot place piece next to opponent's!" << std::endl;
 		}
 		return false;
 	}
 	else {
 		target->setGamePiece(gamePiece);
+		setAdjacentSpots(target);
 		return true;
 	}
+}
+
+void Board::setAdjacentSpots(HexNode* target) {
+	HexNode* currentNode;
+	Coordinate* currentCoordinate = target->getCoordinate();
+	for (int i = 0; i < 6; i++) {
+		currentCoordinate->offsetCoordinate(currentCoordinate, static_cast<HexDirection>(i));
+		currentNode = (_gamePieces->find(currentCoordinate->toString()) != _gamePieces->end()) ? _gamePieces->at(currentCoordinate->toString()) : nullptr;
+		if (currentNode == nullptr) {
+			_gamePieces->insert(std::pair<std::string, HexNode*>(currentCoordinate->toString(), new HexNode(currentCoordinate, static_cast<HexDirection>(i))));
+		}
+		currentCoordinate->offsetCoordinate(currentCoordinate, static_cast<HexDirection>(mod(i + 3, 6)));
+	}
+	//delete currentNode;
 }
 
 std::vector<Coordinate*>* Board::getPlacementCandidates(HexNode* start, Player* player) {
@@ -31,7 +48,7 @@ std::vector<Coordinate*>* Board::getPlacementCandidates(HexNode* start, Player* 
 	openList->push_back(start);
 	while (openList->size() > 0) {
 		HexNode* currentHexNode = openList->at(0);
-		if (!currentHexNode->getGamePiece() && !spotAdjacentToOpposingPiece(player, currentHexNode)) {
+		if (!currentHexNode->getGamePiece() && !spotAdjacentToOpposingPiece(player, currentHexNode->getCoordinate())) {
 			freeSpots->push_back(currentHexNode->getCoordinate());
 		}
 		advanceBFS(openList, closedList);
@@ -40,7 +57,6 @@ std::vector<Coordinate*>* Board::getPlacementCandidates(HexNode* start, Player* 
 	delete closedList;
 	return freeSpots;
 }
-
 
 HexNode* Board::getChosenPlacementCandidate(HexNode* start, Coordinate* coordinate) {
 	std::vector<HexNode*>* openList = new std::vector<HexNode*>();
@@ -59,38 +75,67 @@ HexNode* Board::getChosenPlacementCandidate(HexNode* start, Coordinate* coordina
 }
 
 void Board::advanceBFS(std::vector<HexNode*>* openList, std::vector<HexNode*>* closedList) {
-	HexNode* currentHexNode = openList->at(0);
-	std::vector<HexNode*>* adjacentNodes = currentHexNode->getAdjacentNodes();
+	HexNode* currentHexNode = openList->at(0); 
+	HexNode* currentNode;
+	Coordinate* currentCoordinate = currentHexNode->getCoordinate();
+	//std::vector<HexNode*>* adjacentNodes = currentHexNode->getAdjacentNodes();
 	openList->erase(openList->begin());
-	for (size_t i = 0; i < adjacentNodes->size(); i++) {
-		if (isAPlacementCandidate(openList, closedList, adjacentNodes->at(i)) && adjacentNodes->at(i)) {
-			openList->push_back(adjacentNodes->at(i));
+	//for (size_t i = 0; i < adjacentNodes->size(); i++) {
+	//	if (isAPlacementCandidate(openList, closedList, adjacentNodes->at(i)) && adjacentNodes->at(i)) {
+	//		openList->push_back(adjacentNodes->at(i));
+	//	}
+	//}
+	for (int i = 0; i < 6; i++) {
+		currentCoordinate->offsetCoordinate(currentCoordinate, static_cast<HexDirection>(i));
+		currentNode = (_gamePieces->find(currentCoordinate->toString()) != _gamePieces->end()) ? _gamePieces->at(currentCoordinate->toString()) : nullptr;
+		if (isAPlacementCandidate(openList, closedList, currentNode) && currentNode != nullptr) {
+			openList->push_back(currentNode);
 		}
+		currentCoordinate->offsetCoordinate(currentCoordinate, static_cast<HexDirection>(mod(i + 3, 6)));
 	}
 	closedList->push_back(currentHexNode);
+}
+
+std::map<std::string, HexNode*>* Board::getGamePieces() {
+	return _gamePieces;
 }
 
 HexNode* Board::getRoot() {
 	return _root;
 }
 
-bool Board::spotAdjacentToOpposingPiece(Player* player, HexNode* spot) {
-	//Exception: Second player placing first piece (must be adjacent to opponent's first piece)
-	bool rootHasNoAdjacentPieces = true;
-	for (int i = 0; i < _root->getAdjacentNodes()->size(); i++) {
-		if (_root->getAdjacentNodes()->at(i) != nullptr && _root->getAdjacentNodes()->at(i)->getGamePiece() != nullptr) {
-			rootHasNoAdjacentPieces = false;
-		}
-	}
-	if (rootHasNoAdjacentPieces) {
+bool Board::spotAdjacentToOpposingPiece(Player* player, Coordinate* coordinate) {
+	if (onlyOnePiecePlaced()) {
 		return false;
 	}
-	for (int i = 0; i < spot->getAdjacentNodes()->size(); i++) {
-		if (spot->getAdjacentNodes()->at(i) != nullptr && spot->getAdjacentNodes()->at(i)->getGamePiece() != nullptr && spot->getAdjacentNodes()->at(i)->getGamePiece()->getPlayer() != player) {
+	HexNode* currentNode;
+	for (int i = 0; i < 6; i++) {
+		coordinate->offsetCoordinate(coordinate, static_cast<HexDirection>(i));
+		currentNode = (_gamePieces->find(coordinate->toString()) != _gamePieces->end()) ? _gamePieces->at(coordinate->toString()) : nullptr;
+		if (currentNode != nullptr && currentNode->getGamePiece() != nullptr && currentNode->getGamePiece()->getPlayer() != player) {
+			//delete currentNode;
 			return true;
 		}
+		coordinate->offsetCoordinate(coordinate, static_cast<HexDirection>(mod(i + 3, 6)));
 	}
+	//delete currentNode;
 	return false;
+}
+
+bool Board::onlyOnePiecePlaced() {
+	HexNode* currentNode = _root;
+	Coordinate* currentCoordinate = currentNode->getCoordinate();
+	for (int i = 0; i < 6; i++) {
+		currentCoordinate->offsetCoordinate(currentCoordinate, static_cast<HexDirection>(i));
+		currentNode = (_gamePieces->find(currentCoordinate->toString()) != _gamePieces->end()) ? _gamePieces->at(currentCoordinate->toString()) : nullptr;
+		if (currentNode != nullptr && currentNode->getGamePiece() != nullptr) {
+			//delete currentNode;
+			return false;
+		}
+		currentCoordinate->offsetCoordinate(currentCoordinate, static_cast<HexDirection>(mod(i + 3, 6)));
+	}
+	//delete currentNode;
+	return true;
 }
 
 bool Board::isAPlacementCandidate(std::vector<HexNode*>* openList, std::vector<HexNode*>* closedList, HexNode* currentHexNode) {
@@ -111,3 +156,7 @@ bool Board::pieceCanBePlaced(HexNode* target) {
 	return target != nullptr && target->getGamePiece() == nullptr;
 }
 
+//% is remainder, not mod in C++
+int Board::mod(int a, int b) {
+	return (a % b + b) % b;
+}

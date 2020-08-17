@@ -1,6 +1,9 @@
 #ifndef COORDINATE
 #define COORDINATE
 
+#include <string>
+#include "HexDirectionEnum.h"
+
 class Coordinate
 {
 private:
@@ -15,7 +18,12 @@ public:
 	int getY();
 	int getZ();
 	void setCoordinate(int* x, int* y, int* z);
+	std::string toString();
+	static void offsetCoordinate(Coordinate* coordinate, HexDirection direction);
+	static int horizontalDirectionOffset(HexDirection direction);
+	static int verticalDirectionOffset(HexDirection direction, int xValue);
 	bool operator == (const Coordinate& other);
+	bool operator < (const Coordinate& other);
 };
 
 #endif
