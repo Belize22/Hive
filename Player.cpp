@@ -13,6 +13,10 @@ std::vector<GamePiece*>* Player::getGamePieces() {
 };
 
 bool Player::placeGamePiece(Coordinate* coordinate) {
+	if (_gamePieces->size() == 0) {
+		std::cout << "Cannot place anymore pieces!" << std::endl;
+		return false;
+	}
 	bool isValidSpot = _board->placeGamePiece(_gamePieces->at(0), coordinate);
 	if (isValidSpot) {
 		(_gamePieces->erase(_gamePieces->begin()));

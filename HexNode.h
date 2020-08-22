@@ -24,7 +24,6 @@ public:
 	GamePiece* getGamePiece();
 	void setCoordinate(Coordinate* coordinate);
 	void setGamePiece(GamePiece* gamePiece);
-	static int mod(int a, int b);
 };
 
 #endif
