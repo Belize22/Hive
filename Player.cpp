@@ -17,7 +17,7 @@ bool Player::placeGamePiece(Coordinate* coordinate) {
 		std::cout << "Cannot place anymore pieces!" << std::endl;
 		return false;
 	}
-	bool isValidSpot = _board->placeGamePiece(_gamePieces->at(0), coordinate);
+	bool isValidSpot = _board->handleGamePiece(_gamePieces->at(0), coordinate);
 	if (isValidSpot) {
 		(_gamePieces->erase(_gamePieces->begin()));
 	}
