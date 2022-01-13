@@ -1,4 +1,10 @@
 #include "GamePieceStrategy.h"
+#include "Board.h"
+
+GamePieceStrategy::GamePieceStrategy()
+{
+
+}
 
 GamePieceStrategy::GamePieceStrategy(Board* board) {
 	_board = board;

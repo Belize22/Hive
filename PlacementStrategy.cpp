@@ -1,4 +1,13 @@
 #include "PlacementStrategy.h"
+#include "Board.h"
+
+PlacementStrategy::PlacementStrategy() {
+
+}
+
+PlacementStrategy::PlacementStrategy(Board* board) {
+	_board = board;
+}
 
 bool PlacementStrategy::handleGamePiece(GamePiece* gamePiece, Coordinate* coordinate)
 {

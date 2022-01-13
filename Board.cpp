@@ -4,6 +4,7 @@ Board::Board() {
 	_root = new HexNode();
 	_gamePieces = new std::map<std::string, HexNode*>();
 	_gamePieces->insert(std::pair<std::string, HexNode*>(_root->getCoordinate()->toString(), _root));
+	_gamePieceStrategy = new PlacementStrategy(this);
 }
 
 bool Board::placeGamePiece(GamePiece* gamePiece, Coordinate* coordinate) {

@@ -2,6 +2,8 @@
 #define BOARD
 
 #include "HexNode.h"
+#include "GamePieceStrategy.h"
+#include "PlacementStrategy.h"
 
 #include <iostream>
 #include <vector>
@@ -14,6 +16,7 @@ class Board
 private:
 	std::map<std::string, HexNode*>* _gamePieces;
 	HexNode* _root;
+	GamePieceStrategy* _gamePieceStrategy;
 
 public:
 	Board();

@@ -3,6 +3,7 @@
 
 #pragma once
 
+class Board;
 #include "GamePieceStrategy.h"
 #include "GamePiece.h"
 #include "Coordinate.h"
@@ -10,6 +11,8 @@
 class PlacementStrategy : public GamePieceStrategy
 {
 public:
+	PlacementStrategy();
+	PlacementStrategy(Board* board);
 	bool handleGamePiece(GamePiece* gamePiece, Coordinate* coordinate);
 	std::vector<Coordinate*>* getCandidates(HexNode* start, Player* player);
 	bool spotAdjacentToOpposingPiece(Player* player, Coordinate* coordinate);
