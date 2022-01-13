@@ -71,10 +71,6 @@ bool PlacementStrategy::spotAdjacentToOpposingPiece(Player* player, Coordinate* 
 	return false;
 }
 
-bool PlacementStrategy::pieceCanBePlaced(HexNode* target) {
-	return target != nullptr && target->getGamePiece() == nullptr;
-}
-
 void PlacementStrategy::advanceBFS(std::vector<HexNode*>* openList, std::vector<HexNode*>* closedList) {
 	HexNode* currentHexNode = openList->at(0);
 	HexNode* currentNode;

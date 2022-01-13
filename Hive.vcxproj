@@ -129,6 +129,7 @@
     <ClCompile Include="GamePieceStrategy.cpp" />
     <ClCompile Include="HexNode.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="MovementStrategy.cpp" />
     <ClCompile Include="PlacementStrategy.cpp" />
     <ClCompile Include="Player.cpp" />
   </ItemGroup>
@@ -139,6 +140,7 @@
     <ClInclude Include="GamePieceStrategy.h" />
     <ClInclude Include="HexDirectionEnum.h" />
     <ClInclude Include="HexNode.h" />
+    <ClInclude Include="MovementStrategy.h" />
     <ClInclude Include="PlacementStrategy.h" />
     <ClInclude Include="Player.h" />
   </ItemGroup>

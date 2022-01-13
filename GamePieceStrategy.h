@@ -19,7 +19,8 @@ public:
 	GamePieceStrategy();
 	GamePieceStrategy(Board* board);
 	void setAdjacentSpots(HexNode* target);
-	virtual bool handleGamePiece(GamePiece* gamePiece, Coordinate* coordinate/*, std::map<std::string, HexNode*>* gamePieces*/) = 0;
+	bool pieceCanBePlaced(HexNode* target);
+	virtual bool handleGamePiece(GamePiece* gamePiece, Coordinate* coordinate) = 0;
 	virtual std::vector<Coordinate*>* getCandidates(HexNode* start, Player* player) = 0;
 	static int mod(int a, int b);
 };

@@ -25,6 +25,10 @@ void GamePieceStrategy::setAdjacentSpots(HexNode* target) {
 	}
 }
 
+bool GamePieceStrategy::pieceCanBePlaced(HexNode* target) {
+	return target != nullptr && target->getGamePiece() == nullptr;
+}
+
 //% is remainder, not mod in C++
 int GamePieceStrategy::mod(int a, int b) {
 	return (a % b + b) % b;

@@ -3,12 +3,14 @@
 
 class Board;
 class Player;
+class HexNode;
 
 class GamePiece
 {
 private:
 	Board* _board;
 	Player* _player;
+	HexNode* _hexNode;
 	bool _active;
 	bool _buried;
 
