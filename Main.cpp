@@ -3,9 +3,12 @@
 
 #include "Board.h"
 #include "Player.h"
+#include "InputParser.h"
+#include "GamePIeceTypeEnum.h"
 
 void displayPlacementCandidates(std::vector<Coordinate*>* coordinates); 
 Player* changePlayer(std::vector<Player*>* players, int* currentPlayerNumber);
+std::string getRegexInput();
 int getCoordinateInput();
 
 int main() {
@@ -19,17 +22,21 @@ int main() {
 	Player* currentPlayer = changePlayer(players, currentPlayerNumber);
 	while (true) {
 		displayPlacementCandidates(board->getPlacementCandidates(board->getRoot(), currentPlayer));
-		std::cout << "Insert x-coordinate: ";
+		std::cout << "Place a piece: P[A|B|G|Q|S]([-]?[0-9]+,[-]?[0-9]+" << std::endl;
+		std::cout << "Move a piece: M[A|B|G|Q|S][0-9]([-]?[0-9]+,[-]?[0-9]+" << std::endl;
+		std::cout << "Insert Input: ";
+		std::string input = getRegexInput();
+		/*std::cout << "Insert x-coordinate: ";
 		int x = getCoordinateInput();
 		std::cout << "Insert y-coordinate: ";
 		int y = getCoordinateInput();
 		int z = 0;
 		Coordinate* inputCoordinate = new Coordinate(&x, &y, &z);
-		bool isValidSpot = currentPlayer->placeGamePiece(inputCoordinate);
+		bool isValidSpot = currentPlayer->placeGamePiece(inputCoordinate, QUEEN_BEE);
 		delete inputCoordinate;
 		if (isValidSpot) {
 			currentPlayer = changePlayer(players, currentPlayerNumber);
-		}
+		}*/
 	}
 	return 0;
 }
@@ -40,6 +47,13 @@ void displayPlacementCandidates(std::vector<Coordinate*>* coordinates) {
     	std::cout << coordinates->at(i)->getX() << ", " << coordinates->at(i)->getY() << ", " << coordinates->at(i)->getZ() << std::endl;
     }
     std::cout << "-----------------" << std::endl;
+}
+
+std::string getRegexInput() {
+	std::string input;
+	std::cin >> input;
+	InputParser::isValidRegex(input);
+	return input;
 }
 
 int getCoordinateInput() {

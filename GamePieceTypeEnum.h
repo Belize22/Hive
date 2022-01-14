@@ -1,0 +1,6 @@
+#ifndef GAME_PIECE_TYPE
+#define GAME_PIECE_TYPE
+
+enum GamePieceType { QUEEN_BEE, BEETLE, GRASSHOPPER, SPIDER, SOLDIER_ANT };
+
+#endif

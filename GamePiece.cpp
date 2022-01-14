@@ -1,8 +1,10 @@
 #include "GamePiece.h"
 
-GamePiece::GamePiece(Board* board, Player* player) {
+GamePiece::GamePiece(Board* board, Player* player, GamePieceType gamePieceType) {
 	_board = board;
 	_player = player;
+	_gamePieceType = gamePieceType;
+	_hexNode = nullptr;
 	_active = false;
 	_buried = false;
 };
@@ -10,4 +12,12 @@ GamePiece::GamePiece(Board* board, Player* player) {
 
 Player* GamePiece::getPlayer() {
 	return _player;
+}
+
+HexNode* GamePiece::getHexNode() {
+	return _hexNode;
+}
+
+void GamePiece::setHexNode(HexNode* hexNode) {
+	_hexNode = hexNode;
 }

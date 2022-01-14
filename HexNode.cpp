@@ -1,4 +1,4 @@
-#include "HexNode.h";
+#include "HexNode.h"
 
 HexNode::HexNode() {
 	_coordinate = new Coordinate();

@@ -27,6 +27,7 @@ bool PlacementStrategy::handleGamePiece(GamePiece* gamePiece, Coordinate* coordi
 		return false;
 	}
 	else {
+		gamePiece->setHexNode(target);
 		target->setGamePiece(gamePiece);
 		setAdjacentSpots(target);
 		return true;
