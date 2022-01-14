@@ -4,20 +4,26 @@
 #include "Coordinate.h"
 #include "GamePiece.h"
 #include "GamePieceTypeEnum.h"
+#include "GamePieceInteractionType.h"
 #include <iostream>
 #include <string>
 #include <regex>
 
 const std::regex placementRegex("P[ABGQS]\\([-]?[0-9]+,[-]?[0-9]+\\)");     //ex: PQ(-1,1)
 const std::regex movementRegex("M[ABGQS][0-9]\\([-]?[0-9]+,[-]?[0-9]+\\)"); //ex: MS1(0,-2)
+const std::regex interactionTypeRegex("^[MP]");
+const std::regex gamePieceTypeRegex("^[ABGQS]");
+const std::regex gamePieceRegex("^[ABGQS][0-9]");
+const std::regex coordinateRegex("[-]?[0-9]");
 
 class InputParser 
 {
 public:
 	static bool isValidRegex(std::string input);
+	static GamePieceInteractionType getGamePieceInteractionTypeFromInput(std::string& gamePieceInteractionTypeInput);
+	static GamePieceType getGamePieceTypeFromInput(std::string& gamePieceTypeInput); //Placement only.
+	static GamePiece getGamePieceFromInput(std::string&); //Movement only.
 	static Coordinate* getCoordinateFromInput(std::string coordinateInput);
-	static GamePieceType getGamePieceTypeFromInput(std::string gamePieceTypeInput); //Placement only.
-	static GamePiece getGamePieceFromInput(std::string); //Movement only.
 };
 
 #pragma once

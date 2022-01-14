@@ -15,3 +15,67 @@ bool InputParser::isValidRegex(std::string input)
 	std::cout << "Invalid Input" << std::endl;
 	return false;
 }
+
+
+GamePieceInteractionType InputParser::getGamePieceInteractionTypeFromInput(std::string& gamePieceInteractionTypeInput)
+{
+	std::smatch match;
+
+	while (std::regex_search(gamePieceInteractionTypeInput, match, interactionTypeRegex))
+	{
+		if (match.str() == "P") {
+			gamePieceInteractionTypeInput = match.suffix().str();
+			return PLACEMENT;
+		}
+		gamePieceInteractionTypeInput = match.suffix().str();
+		return MOVEMENT;
+	}
+	return PLACEMENT; //Will never fire. Placed here for compiling purposes.
+}
+
+GamePieceType InputParser::getGamePieceTypeFromInput(std::string& gamePieceTypeInput) {
+	std::smatch match;
+
+	while (std::regex_search(gamePieceTypeInput, match, gamePieceTypeRegex))
+	{
+		if (match.str() == "Q") {
+			gamePieceTypeInput = match.suffix().str();
+			return QUEEN_BEE;
+		}
+		if (match.str() == "B") {
+			gamePieceTypeInput = match.suffix().str();
+			return BEETLE;
+		}
+		if (match.str() == "G") {
+			gamePieceTypeInput = match.suffix().str();
+			return GRASSHOPPER;
+		}
+		if (match.str() == "S") {
+			gamePieceTypeInput = match.suffix().str();
+			return SPIDER;
+		}
+		gamePieceTypeInput = match.suffix().str();
+		return SOLDIER_ANT;
+	}
+	return QUEEN_BEE; //Will never fire. Placed here for compiling purposes.
+}
+
+Coordinate* InputParser::getCoordinateFromInput(std::string coordinateInput) {
+	std::smatch match;
+	int x;
+	int y;
+	int z = 0;
+
+	while (std::regex_search(coordinateInput, match, coordinateRegex))
+	{
+		if (coordinateInput[0] == '('){
+			x = stoi(match.str());
+		}
+		else {
+			y = stoi(match.str());
+		}
+		coordinateInput = match.suffix().str();
+	}
+
+	return new Coordinate(&x, &y, &z);
+}

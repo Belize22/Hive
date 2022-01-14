@@ -4,7 +4,8 @@
 #include "Board.h"
 #include "Player.h"
 #include "InputParser.h"
-#include "GamePIeceTypeEnum.h"
+#include "GamePieceTypeEnum.h"
+#include "GamePieceInteractionType.h"
 
 void displayPlacementCandidates(std::vector<Coordinate*>* coordinates); 
 Player* changePlayer(std::vector<Player*>* players, int* currentPlayerNumber);
@@ -26,6 +27,14 @@ int main() {
 		std::cout << "Move a piece: M[A|B|G|Q|S][0-9]([-]?[0-9]+,[-]?[0-9]+" << std::endl;
 		std::cout << "Insert Input: ";
 		std::string input = getRegexInput();
+		if (input != "") {
+			GamePieceInteractionType gamePieceInteractionType = InputParser::getGamePieceInteractionTypeFromInput(input);
+			if (gamePieceInteractionType == PLACEMENT) {
+				GamePieceType gamePieceType = InputParser::getGamePieceTypeFromInput(input);
+			}
+			Coordinate* inputCoordinate = InputParser::getCoordinateFromInput(input);
+			std::cout << "Input Parsed" << std::endl;
+		}
 		/*std::cout << "Insert x-coordinate: ";
 		int x = getCoordinateInput();
 		std::cout << "Insert y-coordinate: ";
@@ -52,8 +61,12 @@ void displayPlacementCandidates(std::vector<Coordinate*>* coordinates) {
 std::string getRegexInput() {
 	std::string input;
 	std::cin >> input;
-	InputParser::isValidRegex(input);
-	return input;
+	if (InputParser::isValidRegex(input)) {
+		return input;
+	}
+	else {
+		return "";
+	}
 }
 
 int getCoordinateInput() {
