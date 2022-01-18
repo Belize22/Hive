@@ -31,11 +31,6 @@ std::vector<GamePiece*>* Player::getGamePieces() {
 };
 
 bool Player::placeGamePiece(Coordinate* coordinate, GamePieceType gamePieceType) {
-	if (_gamePieces->size() == 0) {
-		std::cout << "Cannot place anymore pieces!" << std::endl;
-		return false;
-	}
-
 	GamePiece* selectedGamePiece = nullptr;
 
 	//TO-DO: Duplicate code. Refactor various arrays into an array of arrays later on.
@@ -101,9 +96,6 @@ bool Player::placeGamePiece(Coordinate* coordinate, GamePieceType gamePieceType)
 		return false;
 	}
 
-	bool isValidSpot = _board->handleGamePiece(_gamePieces->at(0), coordinate);
-	if (isValidSpot) {
-		(_gamePieces->erase(_gamePieces->begin()));
-	}
+	bool isValidSpot = _board->handleGamePiece(selectedGamePiece, coordinate);
 	return isValidSpot;
 }

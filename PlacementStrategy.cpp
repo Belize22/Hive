@@ -11,9 +11,9 @@ PlacementStrategy::PlacementStrategy(Board* board) {
 
 bool PlacementStrategy::handleGamePiece(GamePiece* gamePiece, Coordinate* coordinate)
 {
-	HexNode* target = (_board->getGamePieces()->find(coordinate->toString()) != 
-		_board->getGamePieces()->end()) ? 
-		_board->getGamePieces()->at(coordinate->toString()) : nullptr;
+	//std::map<std::string, HexNode*>::iterator i = _board->getGamePieces()->find(coordinate->toString());
+	HexNode* target = (_board->getGamePieces()->count(coordinate->toString()) > 0 ? 
+		_board->getGamePieces()->at(coordinate->toString()) : nullptr);
 	if (!pieceCanBePlaced(target) || spotAdjacentToOpposingPiece(gamePiece->getPlayer(), target->getCoordinate())) {
 		if (target == nullptr) {
 			std::cout << "Spot is not adjacent to the Hive!" << std::endl;

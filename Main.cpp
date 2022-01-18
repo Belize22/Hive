@@ -31,21 +31,14 @@ int main() {
 			GamePieceInteractionType gamePieceInteractionType = InputParser::getGamePieceInteractionTypeFromInput(input);
 			if (gamePieceInteractionType == PLACEMENT) {
 				GamePieceType gamePieceType = InputParser::getGamePieceTypeFromInput(input);
+				Coordinate* inputCoordinate = InputParser::getCoordinateFromInput(input);
+				bool isValidSpot = currentPlayer->placeGamePiece(inputCoordinate, gamePieceType);
+				delete inputCoordinate;
+				if (isValidSpot) {
+					currentPlayer = changePlayer(players, currentPlayerNumber);
+				}
 			}
-			Coordinate* inputCoordinate = InputParser::getCoordinateFromInput(input);
-			std::cout << "Input Parsed" << std::endl;
 		}
-		/*std::cout << "Insert x-coordinate: ";
-		int x = getCoordinateInput();
-		std::cout << "Insert y-coordinate: ";
-		int y = getCoordinateInput();
-		int z = 0;
-		Coordinate* inputCoordinate = new Coordinate(&x, &y, &z);
-		bool isValidSpot = currentPlayer->placeGamePiece(inputCoordinate, QUEEN_BEE);
-		delete inputCoordinate;
-		if (isValidSpot) {
-			currentPlayer = changePlayer(players, currentPlayerNumber);
-		}*/
 	}
 	return 0;
 }
