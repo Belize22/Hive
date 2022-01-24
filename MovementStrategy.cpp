@@ -35,5 +35,9 @@ bool MovementStrategy::handleGamePiece(GamePiece* gamePiece, Coordinate* coordin
 		setAdjacentSpots(target);
 		return true;
 	}
+}
 
+std::vector<Coordinate*>* MovementStrategy::getCandidates(HexNode* start, Player* player)
+{
+	return new std::vector<Coordinate*>(); //Placeholder
 }

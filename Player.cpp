@@ -40,6 +40,17 @@ bool Player::placeGamePiece(Coordinate* coordinate, GamePieceType gamePieceType)
 		return false;
 	}
 
-	bool isValidSpot = _board->handleGamePiece(selectedGamePiece, coordinate);
-	return isValidSpot;
+	return _board->placeGamePiece(selectedGamePiece, coordinate);
+}
+
+
+bool Player::moveGamePiece(Coordinate* coordinate, GamePiece* gamePiece)
+{
+	if (gamePiece->getHexNode() == nullptr)
+	{
+		std::cout << "Could not find game piece on board" << std::endl;
+		return false;
+	}
+
+	return _board->moveGamePiece(gamePiece, coordinate);
 }

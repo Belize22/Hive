@@ -2,6 +2,7 @@
 #define INPUT_PARSER
 
 #include "Coordinate.h"
+#include "Player.h"
 #include "GamePiece.h"
 #include "GamePieceTypeEnum.h"
 #include "GamePieceInteractionType.h"
@@ -22,7 +23,7 @@ public:
 	static bool isValidRegex(std::string input);
 	static GamePieceInteractionType getGamePieceInteractionTypeFromInput(std::string& gamePieceInteractionTypeInput);
 	static GamePieceType getGamePieceTypeFromInput(std::string& gamePieceTypeInput); //Placement only.
-	static GamePiece getGamePieceFromInput(std::string&); //Movement only.
+	static GamePiece* getGamePieceFromInput(Player* player, std::string& gamePieceInput); //Movement only.
 	static Coordinate* getCoordinateFromInput(std::string coordinateInput);
 };
 

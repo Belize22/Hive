@@ -38,6 +38,15 @@ int main() {
 					currentPlayer = changePlayer(players, currentPlayerNumber);
 				}
 			}
+			else if (gamePieceInteractionType == MOVEMENT) {
+				GamePiece* gamePiece = InputParser::getGamePieceFromInput(currentPlayer, input);
+				Coordinate* inputCoordinate = InputParser::getCoordinateFromInput(input);
+				bool isValidSpot = currentPlayer->moveGamePiece(inputCoordinate, gamePiece);
+				delete inputCoordinate;
+				if (isValidSpot) {
+					currentPlayer = changePlayer(players, currentPlayerNumber);
+				}
+			}
 		}
 	}
 	return 0;

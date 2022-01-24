@@ -4,6 +4,7 @@
 #include "HexNode.h"
 #include "GamePieceStrategy.h"
 #include "PlacementStrategy.h"
+#include "MovementStrategy.h"
 
 #include <iostream>
 #include <vector>
@@ -20,6 +21,8 @@ private:
 
 public:
 	Board();
+	bool placeGamePiece(GamePiece* gamePiece, Coordinate* coordinate);
+	bool moveGamePiece(GamePiece* gamePiece, Coordinate* coordinate);
 	bool handleGamePiece(GamePiece* gamePiece, Coordinate* coordinate); 
 	void setAdjacentSpots(HexNode* target);
 	std::vector<Coordinate*>* getPlacementCandidates(HexNode* start, Player* player);

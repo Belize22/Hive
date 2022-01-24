@@ -13,7 +13,7 @@ public:
 	MovementStrategy(Board* board);
 	void unsetAdjacentSpots(HexNode* target);
 	bool handleGamePiece(GamePiece* gamePiece, Coordinate* coordinate);
-	virtual std::vector<Coordinate*>* getCandidates(HexNode* start, Player* player) = 0;
+	std::vector<Coordinate*>* getCandidates(HexNode* start, Player* player);
 };
 
 #endif

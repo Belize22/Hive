@@ -30,6 +30,7 @@ void Coordinate::setCoordinate(int* x, int* y, int* z) {
 std::string Coordinate::toString() {
 	return std::to_string(*_x) + ", " + std::to_string(*_y) + ", " + std::to_string(*_z);
 };
+
 void Coordinate::offsetCoordinate(Coordinate* coordinate, HexDirection direction) {
 	coordinate->setCoordinate(new int(coordinate->getX() + horizontalDirectionOffset(direction)),
 		new int(coordinate->getY() + verticalDirectionOffset(direction, coordinate->getX())),
@@ -72,7 +73,7 @@ int Coordinate::verticalDirectionOffset(HexDirection direction, int xValue) {
 
 bool Coordinate::operator==(const Coordinate& other) {
 	// z excluded for now. Will be explored when Beetle token is implemented.
-	return *_x == *other._x && *_y == *other._y;
+	return *_x == *other._x && *_y == *other._y && *other._z == *other._z;
 }
 
 bool Coordinate::operator<(const Coordinate& other) {

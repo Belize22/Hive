@@ -20,6 +20,7 @@ public:
 	Player(Board* board);
 	std::vector<std::vector<GamePiece*>*>* getGamePieces();
 	bool placeGamePiece(Coordinate* coordinate, GamePieceType gamePieceType);
+	bool moveGamePiece(Coordinate* coordinate, GamePiece* gamePiece);
 };
 
 #endif

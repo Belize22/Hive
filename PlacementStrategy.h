@@ -14,10 +14,5 @@ public:
 	PlacementStrategy();
 	PlacementStrategy(Board* board);
 	bool handleGamePiece(GamePiece* gamePiece, Coordinate* coordinate);
-	std::vector<Coordinate*>* getCandidates(HexNode* start, Player* player);
-	bool spotAdjacentToOpposingPiece(Player* player, Coordinate* coordinate);
-	void advanceBFS(std::vector<HexNode*>* openList, std::vector<HexNode*>* closedList);
-	bool onlyOnePiecePlaced();
-	bool isAPlacementCandidate(std::vector<HexNode*>* openList, std::vector<HexNode*>* closedList, HexNode* currentHexNode);
 };
 #endif
