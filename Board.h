@@ -16,7 +16,7 @@ class Board
 {
 private:
 	std::map<std::string, HexNode*>* _gamePieces;
-	HexNode* _root;
+	HexNode* _mostRecentSpot;
 	GamePieceStrategy* _gamePieceStrategy;
 
 public:
@@ -27,7 +27,8 @@ public:
 	void setAdjacentSpots(HexNode* target);
 	std::vector<Coordinate*>* getPlacementCandidates(HexNode* start, Player* player);
 	std::map<std::string, HexNode*>* getGamePieces();
-	HexNode* getRoot();
+	HexNode* getMostRecentSpot();
+	void setMostRecentSpot(HexNode* mostRecentSpot);
 };
 
 #endif

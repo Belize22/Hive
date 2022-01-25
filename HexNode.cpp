@@ -5,7 +5,7 @@ HexNode::HexNode() {
 	initializeNode();
 }
 
-HexNode::HexNode(Coordinate* coordinate, HexDirection direction) {
+HexNode::HexNode(Coordinate* coordinate) {
 	_coordinate = new Coordinate(new int(coordinate->getX()), new int(coordinate->getY()), new int(coordinate->getZ()));
 	initializeNode();
 }

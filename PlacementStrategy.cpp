@@ -29,7 +29,8 @@ bool PlacementStrategy::handleGamePiece(GamePiece* gamePiece, Coordinate* coordi
 		gamePiece->setHexNode(target);
 		target->setGamePiece(gamePiece);
 		setAdjacentSpots(target);
+		_board->setMostRecentSpot(target);
+
 		return true;
 	}
-
 }

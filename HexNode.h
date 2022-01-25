@@ -7,8 +7,6 @@
 #include "Coordinate.h"
 #include "GamePiece.h"
 
-#include "HexDirectionEnum.h"
-
 class HexNode
 {
 
@@ -18,7 +16,7 @@ private:
 
 public:
 	HexNode();
-	HexNode(Coordinate* coordinate, HexDirection direction);
+	HexNode(Coordinate* coordinate);
 	void initializeNode();
 	Coordinate* getCoordinate();
 	GamePiece* getGamePiece();

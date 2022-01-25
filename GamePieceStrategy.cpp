@@ -19,9 +19,9 @@ void GamePieceStrategy::setAdjacentSpots(HexNode* target) {
 			_board->getGamePieces()->end()) ? 
 			_board->getGamePieces()->at(currentCoordinate->toString()) : nullptr;
 		if (currentNode == nullptr) {
-			_board->getGamePieces()->insert(std::pair<std::string, HexNode*>(currentCoordinate->toString(), new HexNode(new Coordinate(*currentCoordinate), static_cast<HexDirection>(i))));
+			_board->getGamePieces()->insert(std::pair<std::string, HexNode*>(currentCoordinate->toString(), new HexNode(new Coordinate(*currentCoordinate))));
 		}
-		currentCoordinate->offsetCoordinate(currentCoordinate, static_cast<HexDirection>(mod(i + 3, 6)));
+		currentCoordinate->offsetCoordinate(currentCoordinate, static_cast<HexDirection>(mod(i + 3, 6))); //Return to original hex location!
 	}
 }
 
@@ -86,7 +86,7 @@ void GamePieceStrategy::advanceBFS(std::vector<HexNode*>* openList, std::vector<
 }
 
 bool GamePieceStrategy::onlyOnePiecePlaced() {
-	HexNode* currentNode = _board->getRoot();
+	HexNode* currentNode = _board->getMostRecentSpot();
 	Coordinate* currentCoordinate = currentNode->getCoordinate();
 	for (int i = 0; i < 6; i++) {
 		currentCoordinate->offsetCoordinate(currentCoordinate, static_cast<HexDirection>(i));

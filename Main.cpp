@@ -22,7 +22,7 @@ int main() {
 	int* currentPlayerNumber = new int(-1);
 	Player* currentPlayer = changePlayer(players, currentPlayerNumber);
 	while (true) {
-		displayPlacementCandidates(board->getPlacementCandidates(board->getRoot(), currentPlayer));
+		displayPlacementCandidates(board->getPlacementCandidates(board->getMostRecentSpot(), currentPlayer));
 		std::cout << "Place a piece: P[A|B|G|Q|S]([-]?[0-9]+,[-]?[0-9]+" << std::endl;
 		std::cout << "Move a piece: M[A|B|G|Q|S][0-9]([-]?[0-9]+,[-]?[0-9]+" << std::endl;
 		std::cout << "Insert Input: ";
