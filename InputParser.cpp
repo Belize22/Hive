@@ -90,5 +90,5 @@ Coordinate* InputParser::getCoordinateFromInput(std::string coordinateInput) {
 		coordinateInput = match.suffix().str();
 	}
 
-	return new Coordinate(&x, &y, new int(0));
+	return new Coordinate(new int(x), new int (y), new int(0));
 }

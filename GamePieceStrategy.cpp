@@ -27,22 +27,21 @@ void GamePieceStrategy::setAdjacentSpots(HexNode* target) {
 
 std::vector<Coordinate*>* GamePieceStrategy::getCandidates(HexNode* start, Player* player)
 {
-	std::vector<HexNode*>* openList = new std::vector<HexNode*>();
-	std::vector<HexNode*>* closedList = new std::vector<HexNode*>();
+	std::map<std::string, HexNode*>::iterator it = _board->getGamePieces()->begin();
 	std::vector<Coordinate*>* freeSpots = new std::vector<Coordinate*>();
-	openList->push_back(start);
-	while (openList->size() > 0) {
-		HexNode* currentHexNode = openList->at(0);
-		if (!currentHexNode->getGamePiece()) {
-			freeSpots->push_back(currentHexNode->getCoordinate());
+	while (it != _board->getGamePieces()->end())
+	{
+		HexNode* currentHexNode = it->second;
+		Coordinate* coordinate = currentHexNode->getCoordinate();
+
+		if (currentHexNode->getGamePiece() == nullptr && (!spotAdjacentToOpposingPiece(player, coordinate) || onlyOnePiecePlaced()))
+		{
+			freeSpots->push_back(coordinate);
 		}
-		advanceBFS(openList, closedList);
+		it++;
 	}
-	delete openList;
-	delete closedList;
 	return freeSpots;
 }
-
 
 bool GamePieceStrategy::pieceCanBePlaced(HexNode* target) {
 	return target != nullptr && target->getGamePiece() == nullptr;
@@ -67,6 +66,7 @@ bool GamePieceStrategy::spotAdjacentToOpposingPiece(Player* player, Coordinate* 
 	return false;
 }
 
+//To be used for OHR verification!
 void GamePieceStrategy::advanceBFS(std::vector<HexNode*>* openList, std::vector<HexNode*>* closedList) {
 	HexNode* currentHexNode = openList->at(0);
 	HexNode* currentNode;
