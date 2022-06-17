@@ -66,25 +66,6 @@ bool GamePieceStrategy::spotAdjacentToOpposingPiece(Player* player, Coordinate* 
 	return false;
 }
 
-//To be used for OHR verification!
-void GamePieceStrategy::advanceBFS(std::vector<HexNode*>* openList, std::vector<HexNode*>* closedList) {
-	HexNode* currentHexNode = openList->at(0);
-	HexNode* currentNode;
-	Coordinate* currentCoordinate = currentHexNode->getCoordinate();
-	openList->erase(openList->begin());
-	for (int i = 0; i < ADJACENT_HEX_DIRECTIONS; i++) {
-		currentCoordinate->offsetCoordinate(currentCoordinate, static_cast<HexDirection>(i));
-		currentNode = (_board->getGamePieces()->find(currentCoordinate->toString()) !=
-			_board->getGamePieces()->end()) ?
-			_board->getGamePieces()->at(currentCoordinate->toString()) : nullptr;
-		if (isAPlacementCandidate(openList, closedList, currentNode) && currentNode != nullptr) {
-			openList->push_back(currentNode);
-		}
-		currentCoordinate->offsetCoordinate(currentCoordinate, static_cast<HexDirection>(mod(i + 3, 6)));
-	}
-	closedList->push_back(currentHexNode);
-}
-
 bool GamePieceStrategy::onlyOnePiecePlaced() {
 	HexNode* currentNode = _board->getMostRecentSpot();
 	Coordinate* currentCoordinate = new Coordinate(new int(currentNode->getCoordinate()->getX()), new int(currentNode->getCoordinate()->getY()), new int(currentNode->getCoordinate()->getZ()));
@@ -101,7 +82,7 @@ bool GamePieceStrategy::onlyOnePiecePlaced() {
 	return true;
 }
 
-bool GamePieceStrategy::isAPlacementCandidate(std::vector<HexNode*>* openList, std::vector<HexNode*>* closedList, HexNode* currentHexNode) {
+/*bool GamePieceStrategy::isAPlacementCandidate(std::vector<HexNode*>* openList, std::vector<HexNode*>* closedList, HexNode* currentHexNode) {
 	for (size_t i = 0; i < openList->size(); i++) {
 		if (currentHexNode == openList->at(i)) {
 			return false;
@@ -113,7 +94,7 @@ bool GamePieceStrategy::isAPlacementCandidate(std::vector<HexNode*>* openList, s
 		}
 	}
 	return true;
-}
+}*/
 
 //% is remainder, not mod in C++
 int GamePieceStrategy::mod(int a, int b) {

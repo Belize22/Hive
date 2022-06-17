@@ -24,9 +24,8 @@ public:
 	void setAdjacentSpots(HexNode* target);
 	bool pieceCanBePlaced(HexNode* target);
 	bool spotAdjacentToOpposingPiece(Player* player, Coordinate* coordinate);
-	void advanceBFS(std::vector<HexNode*>* openList, std::vector<HexNode*>* closedList);
 	bool onlyOnePiecePlaced();
-	bool isAPlacementCandidate(std::vector<HexNode*>* openList, std::vector<HexNode*>* closedList, HexNode* currentHexNode);
+	//bool isAPlacementCandidate(std::vector<HexNode*>* openList, std::vector<HexNode*>* closedList, HexNode* currentHexNode);
 	virtual bool handleGamePiece(GamePiece* gamePiece, Coordinate* coordinate) = 0;
 	static int mod(int a, int b);
 };
