@@ -11,6 +11,8 @@ class Board;
 #include <map>
 #include <iostream>
 
+const int ADJACENT_HEX_DIRECTIONS = 6;
+
 class GamePieceStrategy
 {
 protected:

@@ -24,24 +24,26 @@ bool MovementStrategy::handleGamePiece(GamePiece* gamePiece, Coordinate* coordin
 			std::cout << "Destination spot is occupied!" << std::endl;
 		}
 
-		//TO-DO: Check if move respects One-Hive Rule
-
-		//TO-DO: Check if move respects Freedom to Move Rule
-
 		return false;
 	}
-	else {
-		unsetAdjacentSpots(source);
-		gamePiece->setHexNode(nullptr);
-		source->setGamePiece(nullptr);
-
-		gamePiece->setHexNode(target);
-		target->setGamePiece(gamePiece);
-		setAdjacentSpots(target);
-		_board->setMostRecentSpot(target);
-
-		return true;
+	if (!respectsOHR(gamePiece))
+	{
+		std::cout << "Moving this piece will separate the Hive!" << std::endl;
+		return false;
 	}
+
+	//TO-DO: Check if move respects Freedom to Move Rule
+	
+	unsetAdjacentSpots(source);
+	gamePiece->setHexNode(nullptr);
+	source->setGamePiece(nullptr);
+
+	gamePiece->setHexNode(target);
+	target->setGamePiece(gamePiece);
+	setAdjacentSpots(target);
+	_board->setMostRecentSpot(target);
+
+	return true;
 }
 
 void MovementStrategy::unsetAdjacentSpots(HexNode* target)
@@ -51,7 +53,7 @@ void MovementStrategy::unsetAdjacentSpots(HexNode* target)
 	HexNode* adjacentNode;
 	Coordinate* adjacentCoordinate;
 	bool freeSpotNeedsToExist;
-	for (int i = 0; i < 6; i++) {
+	for (int i = 0; i < ADJACENT_HEX_DIRECTIONS; i++) {
 		currentCoordinate->offsetCoordinate(currentCoordinate, static_cast<HexDirection>(i));
 		currentNode = (_board->getGamePieces()->at(currentCoordinate->toString())); //No coordinate should be null. Focused on adjacent spot of source piece.
 		adjacentCoordinate = currentCoordinate;
@@ -61,7 +63,7 @@ void MovementStrategy::unsetAdjacentSpots(HexNode* target)
 			continue; //Has a game piece. No adjacent spots require removal!
 		}
 		freeSpotNeedsToExist = false;
-		for (int j = 0; j < 6; j++) {
+		for (int j = 0; j < ADJACENT_HEX_DIRECTIONS; j++) {
 			adjacentCoordinate->offsetCoordinate(adjacentCoordinate, static_cast<HexDirection>(j));
 			adjacentNode = (_board->getGamePieces()->find(adjacentCoordinate->toString()) !=
 				_board->getGamePieces()->end()) ?
@@ -84,4 +86,37 @@ void MovementStrategy::unsetAdjacentSpots(HexNode* target)
 std::vector<Coordinate*>* MovementStrategy::getCandidates(HexNode* start, Player* player)
 {
 	return new std::vector<Coordinate*>(); //Placeholder
+}
+
+
+bool MovementStrategy::respectsOHR(GamePiece* gamePiece)
+{
+	if (!surroundingGamePiecesAreDisjointed(gamePiece))
+	{
+		return false;
+	}
+
+	//TODO: Code for OHR verification via BFS.
+
+	return false;
+}
+
+
+bool MovementStrategy::surroundingGamePiecesAreDisjointed(GamePiece* gamePiece)
+{
+	HexNode* currentNode;
+	Coordinate* currentCoordinate = gamePiece->getHexNode()->getCoordinate();
+	int gamePiecePartitions = 0;
+	bool lastAdjacentSpotHadGamePiece = false;
+	for (int i = 0; i < ADJACENT_HEX_DIRECTIONS + 1; i++) { //Must check the first adjacent spot twice for partition count purposes.
+		currentCoordinate->offsetCoordinate(currentCoordinate, static_cast<HexDirection>(mod(i, ADJACENT_HEX_DIRECTIONS)));
+		currentNode = (_board->getGamePieces()->at(currentCoordinate->toString())); //No coordinate should be null. Focused on adjacent spots of source piece.
+		if (!(currentNode->getGamePiece() != nullptr) && lastAdjacentSpotHadGamePiece)
+		{
+			gamePiecePartitions++;
+		}
+		lastAdjacentSpotHadGamePiece = currentNode->getGamePiece() != nullptr ? true : false;
+		currentCoordinate->offsetCoordinate(currentCoordinate, static_cast<HexDirection>(mod(i + 3, 6)));
+	}
+	return gamePiecePartitions > 1;
 }

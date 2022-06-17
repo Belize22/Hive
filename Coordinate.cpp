@@ -6,7 +6,7 @@ Coordinate::Coordinate()
 }
 
 Coordinate::Coordinate(int* x, int* y, int* z) {
-	setCoordinate(x, y, z);
+	setCoordinate(new int(*x), new int(*y), new int(*z));
 }
 
 int Coordinate::getX() {

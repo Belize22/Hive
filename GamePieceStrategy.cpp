@@ -13,7 +13,7 @@ GamePieceStrategy::GamePieceStrategy(Board* board) {
 void GamePieceStrategy::setAdjacentSpots(HexNode* target) {
 	HexNode* currentNode;
 	Coordinate* currentCoordinate = target->getCoordinate();
-	for (int i = 0; i < 6; i++) {
+	for (int i = 0; i < ADJACENT_HEX_DIRECTIONS; i++) {
 		currentCoordinate->offsetCoordinate(currentCoordinate, static_cast<HexDirection>(i));
 		currentNode = (_board->getGamePieces()->find(currentCoordinate->toString()) != 
 			_board->getGamePieces()->end()) ? 
@@ -52,7 +52,7 @@ bool GamePieceStrategy::spotAdjacentToOpposingPiece(Player* player, Coordinate* 
 		return false;
 	}
 	HexNode* currentNode;
-	for (int i = 0; i < 6; i++) {
+	for (int i = 0; i < ADJACENT_HEX_DIRECTIONS; i++) {
 		coordinate->offsetCoordinate(coordinate, static_cast<HexDirection>(i));
 		currentNode = (_board->getGamePieces()->find(coordinate->toString()) !=
 			_board->getGamePieces()->end()) ?
@@ -72,7 +72,7 @@ void GamePieceStrategy::advanceBFS(std::vector<HexNode*>* openList, std::vector<
 	HexNode* currentNode;
 	Coordinate* currentCoordinate = currentHexNode->getCoordinate();
 	openList->erase(openList->begin());
-	for (int i = 0; i < 6; i++) {
+	for (int i = 0; i < ADJACENT_HEX_DIRECTIONS; i++) {
 		currentCoordinate->offsetCoordinate(currentCoordinate, static_cast<HexDirection>(i));
 		currentNode = (_board->getGamePieces()->find(currentCoordinate->toString()) !=
 			_board->getGamePieces()->end()) ?
@@ -87,8 +87,8 @@ void GamePieceStrategy::advanceBFS(std::vector<HexNode*>* openList, std::vector<
 
 bool GamePieceStrategy::onlyOnePiecePlaced() {
 	HexNode* currentNode = _board->getMostRecentSpot();
-	Coordinate* currentCoordinate = currentNode->getCoordinate();
-	for (int i = 0; i < 6; i++) {
+	Coordinate* currentCoordinate = new Coordinate(new int(currentNode->getCoordinate()->getX()), new int(currentNode->getCoordinate()->getY()), new int(currentNode->getCoordinate()->getZ()));
+	for (int i = 0; i < ADJACENT_HEX_DIRECTIONS; i++) {
 		currentCoordinate->offsetCoordinate(currentCoordinate, static_cast<HexDirection>(i));
 		currentNode = (_board->getGamePieces()->find(currentCoordinate->toString()) !=
 			_board->getGamePieces()->end()) ?
