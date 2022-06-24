@@ -88,26 +88,24 @@ std::vector<Coordinate*>* MovementStrategy::getCandidates(HexNode* start, Player
 	return new std::vector<Coordinate*>(); //Placeholder
 }
 
-
+//Checks if the absence of a chosen game piece will separate the occupied hex nodes into multiple partitions
+//(Illegal move for the player if that is the case).
 bool MovementStrategy::respectsOHR(GamePiece* gamePiece)
 {
 	if (!surroundingGamePiecesAreDisjointed(gamePiece))
 	{
-		std::cout << "Partitions are not disjointed!" << std::endl;
 		return true;
 	}
-
 	if (hiveWillSeparateAfterMovingPiece(gamePiece))
 	{
-		std::cout << "This move will separate the Hive!" << std::endl;
 		return false;
 	}
 
-	std::cout << "Partitions are disjointed but this move won't separate the Hive!" << std::endl;
-	return false;
+	return true;
 }
 
-
+//Checks if the game piece is on the edge of the Hive.
+//If so, then moving it won't separate the Hive.
 bool MovementStrategy::surroundingGamePiecesAreDisjointed(GamePiece* gamePiece)
 {
 	HexNode* currentNode;
@@ -124,27 +122,32 @@ bool MovementStrategy::surroundingGamePiecesAreDisjointed(GamePiece* gamePiece)
 		lastAdjacentSpotHadGamePiece = currentNode->getGamePiece() != nullptr ? true : false;
 		currentCoordinate->offsetCoordinate(currentCoordinate, static_cast<HexDirection>(mod(i + 3, 6)));
 	}
-	std::cout << "Partitions: " << gamePiecePartitions << std::endl;
 	return gamePiecePartitions > 1;
 }
 
-
+//Closed loops formed in the Hive makes it so that moving a game piece that is in a center portion of the Hive
+//may not separate the Hive. BFS is used to see if the candidate in question is part of anything else other
+//than a closed loop or not (BFS will find every available spot in the Hive if that isn't the case).
 bool MovementStrategy::hiveWillSeparateAfterMovingPiece(GamePiece* gamePiece)
 {
 	std::vector<HexNode*>* openList = new std::vector<HexNode*>();
 	std::vector<HexNode*>* closedList = new std::vector<HexNode*>();
 	Coordinate* currentCoordinate = gamePiece->getHexNode()->getCoordinate();
 	HexNode* currentNode;
+	bool foundOccupiedHexNode = false;
 
 	//Find the first adjacent spot occupied by a game piece and use as starting point for BFS.
 	for (int i = 0; i < ADJACENT_HEX_DIRECTIONS; i++) { //Must check the first adjacent spot twice for partition count purposes.
 		currentCoordinate->offsetCoordinate(currentCoordinate, static_cast<HexDirection>(mod(i, ADJACENT_HEX_DIRECTIONS)));
 		currentNode = (_board->getGamePieces()->at(currentCoordinate->toString())); //No coordinate should be null. Focused on adjacent spots of source piece.
-		if (currentNode->getGamePiece() != nullptr)
+		if (currentNode->getGamePiece() != nullptr && !foundOccupiedHexNode)
 		{
 			openList->push_back(currentNode);
-			currentCoordinate->offsetCoordinate(currentCoordinate, static_cast<HexDirection>(mod(i + 3, 6)));
-			break;
+			foundOccupiedHexNode = true;
+		}
+		else if (currentNode->getGamePiece() == nullptr) //Need to add available spots so that all hex nodes are explored if hive is not separated.
+		{
+			closedList->push_back(currentNode);
 		}
 		currentCoordinate->offsetCoordinate(currentCoordinate, static_cast<HexDirection>(mod(i + 3, 6)));
 	}
@@ -159,9 +162,12 @@ bool MovementStrategy::hiveWillSeparateAfterMovingPiece(GamePiece* gamePiece)
 		{
 			advanceBFS(openList, closedList);
 		}
-		else //Transfer current hex node from open list to closed list if no game piece occupies it.
+		else //Transfer current hex node from open list to closed list if no game piece occupies it (do not want to do BFS on available Hex nodes).
 		{
-			closedList->push_back(openList->at(0));
+			if (!std::count(closedList->begin(), closedList->end(), openList->at(0)))
+			{
+				closedList->push_back(openList->at(0));
+			}
 			openList->erase(openList->begin());
 		}
 	}
@@ -169,6 +175,8 @@ bool MovementStrategy::hiveWillSeparateAfterMovingPiece(GamePiece* gamePiece)
 	return !(closedList->size() == _board->getGamePieces()->size());
 }
 
+//Generalized BFS algorithm for Hex node structure.
+//Currently used for OHR verification.
 void MovementStrategy::advanceBFS(std::vector<HexNode*>* openList, std::vector<HexNode*>* closedList) {
 	HexNode* currentHexNode = openList->at(0);
 	HexNode* currentNode;
@@ -179,11 +187,12 @@ void MovementStrategy::advanceBFS(std::vector<HexNode*>* openList, std::vector<H
 		currentNode = (_board->getGamePieces()->find(currentCoordinate->toString()) !=
 			_board->getGamePieces()->end()) ?
 			_board->getGamePieces()->at(currentCoordinate->toString()) : nullptr;
-		//TODO: Need to set custom equality method (or find an alternate method of comparison) for Hex Node class for closed list check to work!
 		if (currentNode != nullptr && !std::count(closedList->begin(), closedList->end(), currentNode)) {
 			openList->push_back(currentNode);
 		}
 		currentCoordinate->offsetCoordinate(currentCoordinate, static_cast<HexDirection>(mod(i + 3, 6)));
 	}
-	closedList->push_back(currentHexNode);
+	if (!std::count(closedList->begin(), closedList->end(), currentHexNode)) {
+		closedList->push_back(currentHexNode);
+	}
 }

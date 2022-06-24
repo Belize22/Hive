@@ -22,6 +22,7 @@ public:
 	GamePiece* getGamePiece();
 	void setCoordinate(Coordinate* coordinate);
 	void setGamePiece(GamePiece* gamePiece);
+	bool operator == (const HexNode& other);
 };
 
 #endif
