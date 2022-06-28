@@ -96,6 +96,16 @@ bool GamePieceStrategy::onlyOnePiecePlaced() {
 	return true;
 }*/
 
+HexNode* GamePieceStrategy::getAdjacentHexNode(Coordinate* coordinate, int iteratorValue)
+{
+	coordinate->offsetCoordinate(coordinate, static_cast<HexDirection>(iteratorValue)); //Get coordinates of specified adjacent direction.
+	HexNode* currentNode = (_board->getGamePieces()->find(coordinate->toString()) !=
+		_board->getGamePieces()->end()) ?
+		_board->getGamePieces()->at(coordinate->toString()) : nullptr;
+	coordinate->offsetCoordinate(coordinate, static_cast<HexDirection>(mod(iteratorValue + 3, 6))); //Return to original hex location to avoid going off-center!
+	return currentNode;
+}
+
 //% is remainder, not mod in C++
 int GamePieceStrategy::mod(int a, int b) {
 	return (a % b + b) % b;

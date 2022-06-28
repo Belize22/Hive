@@ -100,11 +100,7 @@ bool MovementStrategy::destinationIsAdjacentToAnotherGamePiece(HexNode* source, 
 	HexNode* currentNode;
 	for (int i = 0; i < ADJACENT_HEX_DIRECTIONS; i++)
 	{
-		destCoord->offsetCoordinate(destCoord, static_cast<HexDirection>(mod(i, ADJACENT_HEX_DIRECTIONS)));
-		currentNode = (_board->getGamePieces()->find(destCoord->toString()) !=
-			_board->getGamePieces()->end()) ?
-			_board->getGamePieces()->at(destCoord->toString()) : nullptr;
-		destCoord->offsetCoordinate(destCoord, static_cast<HexDirection>(mod(i + 3, 6)));
+		currentNode = getAdjacentHexNode(destCoord, i);
 		if (currentNode != source) //Disregard source since its game piece is the movement candidate.
 		{
 			if (currentNode != nullptr && currentNode->getGamePiece() != nullptr)
