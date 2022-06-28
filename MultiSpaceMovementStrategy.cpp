@@ -9,7 +9,7 @@ MultiSpaceMovementStrategy::MultiSpaceMovementStrategy(Board* board) {
 	_board = board;
 }
 
-bool MultiSpaceMovementStrategy::destinationDetectableByDFS(GamePiece* gamePiece, Coordinate* coordinate)
+bool MultiSpaceMovementStrategy::destinationDetectableByDFS(HexNode* source, HexNode* destination)
 {
 	return true; //TODO: Implement this function!
 }

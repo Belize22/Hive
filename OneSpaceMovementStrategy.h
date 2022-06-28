@@ -9,8 +9,9 @@ class OneSpaceMovementStrategy : public MovementStrategy
 public:
 	OneSpaceMovementStrategy();
 	OneSpaceMovementStrategy(Board* board);
-	bool areSourceAndDestinationAdjacent(GamePiece* gamePiece, Coordinate* coordinate);
-	virtual bool isMovementProper(GamePiece* gamePiece, Coordinate* coordinate) = 0;
+	int directionOfAdjacentDestination(HexNode* source, HexNode* destination);
+	bool FTMRespectedForSpecifiedDirection(HexNode* source, HexDirection direction);
+	virtual bool isMovementProper(HexNode* source, HexNode* destination) = 0;
 };
 
 #endif

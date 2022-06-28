@@ -9,7 +9,7 @@ BeetleMovementStrategy::BeetleMovementStrategy(Board* board) {
 	_board = board;
 }
 
-bool BeetleMovementStrategy::isMovementProper(GamePiece* gamePiece, Coordinate* coordinate)
+bool BeetleMovementStrategy::isMovementProper(HexNode* source, HexNode* destination)
 {
 	std::cout << "Moving Beetle!" << std::endl;
 	return true; //TODO: Implement this function!

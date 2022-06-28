@@ -9,8 +9,8 @@ class MultiSpaceMovementStrategy : public MovementStrategy
 public:
 	MultiSpaceMovementStrategy();
 	MultiSpaceMovementStrategy(Board* board);
-	bool destinationDetectableByDFS(GamePiece* gamePiece, Coordinate* coordinate);
-	virtual bool isMovementProper(GamePiece* gamePiece, Coordinate* coordinate) = 0;
+	bool destinationDetectableByDFS(HexNode* source, HexNode* destination);
+	virtual bool isMovementProper(HexNode* source, HexNode* destination) = 0;
 };
 
 #endif

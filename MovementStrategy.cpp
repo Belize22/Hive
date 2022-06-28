@@ -39,7 +39,7 @@ bool MovementStrategy::handleGamePiece(GamePiece* gamePiece, Coordinate* coordin
 		return false;
 	}
 
-	if (!isMovementProper(gamePiece, coordinate))
+	if (!isMovementProper(source, target))
 	{
 		//Feedback to the user lies in subclass dedicated to the type of game piece.
 		return false;

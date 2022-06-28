@@ -9,7 +9,7 @@ GrasshopperMovementStrategy::GrasshopperMovementStrategy(Board* board) {
 	_board = board;
 }
 
-bool GrasshopperMovementStrategy::isMovementProper(GamePiece* gamePiece, Coordinate* coordinate)
+bool GrasshopperMovementStrategy::isMovementProper(HexNode* source, HexNode* destination)
 {
 	std::cout << "Moving Grasshopper!" << std::endl;
 	return true; //TODO: Implement this function!

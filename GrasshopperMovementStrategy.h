@@ -9,7 +9,7 @@ class GrasshopperMovementStrategy : public MovementStrategy
 public:
 	GrasshopperMovementStrategy();
 	GrasshopperMovementStrategy(Board* board);
-	bool isMovementProper(GamePiece* gamePiece, Coordinate* coordinate);
+	bool isMovementProper(HexNode* source, HexNode* destination);
 };
 
 #endif

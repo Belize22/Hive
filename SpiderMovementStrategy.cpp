@@ -9,7 +9,7 @@ SpiderMovementStrategy::SpiderMovementStrategy(Board* board) {
 	_board = board;
 }
 
-bool SpiderMovementStrategy::isMovementProper(GamePiece* gamePiece, Coordinate* coordinate)
+bool SpiderMovementStrategy::isMovementProper(HexNode* source, HexNode* destination)
 {
 	std::cout << "Moving Spider!" << std::endl;
 	return true; //TODO: Implement this function!

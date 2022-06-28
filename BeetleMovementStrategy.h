@@ -9,7 +9,7 @@ class BeetleMovementStrategy : public OneSpaceMovementStrategy
 public:
 	BeetleMovementStrategy();
 	BeetleMovementStrategy(Board* board);
-	bool isMovementProper(GamePiece* gamePiece, Coordinate* coordinate);
+	bool isMovementProper(HexNode* source, HexNode* destination);
 };
 
 #endif
