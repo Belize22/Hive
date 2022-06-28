@@ -31,7 +31,7 @@ void HexNode::setGamePiece(GamePiece* gamePiece) {
 };
 
 bool HexNode::operator==(const HexNode& other) {
-	//Coordinate acts as unique identifier for a Hex Node!
+	//Coordinate acts as unique identifier for Hex Node!
 	return *_coordinate == *other._coordinate;
 }
 

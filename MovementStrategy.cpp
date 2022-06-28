@@ -26,6 +26,13 @@ bool MovementStrategy::handleGamePiece(GamePiece* gamePiece, Coordinate* coordin
 
 		return false;
 	}
+
+	if (!destinationIsAdjacentToAnotherGamePiece(gamePiece->getHexNode(), coordinate))
+	{
+		std::cout << "Piece must be adjacent to at least one other piece!" << std::endl;
+		return false;
+	}
+
 	if (!respectsOHR(gamePiece))
 	{
 		std::cout << "Moving this piece will separate the Hive!" << std::endl;
@@ -86,6 +93,27 @@ void MovementStrategy::unsetAdjacentSpots(HexNode* target)
 std::vector<Coordinate*>* MovementStrategy::getCandidates(HexNode* start, Player* player)
 {
 	return new std::vector<Coordinate*>(); //Placeholder
+}
+
+bool MovementStrategy::destinationIsAdjacentToAnotherGamePiece(HexNode* source, Coordinate* destCoord)
+{
+	HexNode* currentNode;
+	for (int i = 0; i < ADJACENT_HEX_DIRECTIONS; i++)
+	{
+		destCoord->offsetCoordinate(destCoord, static_cast<HexDirection>(mod(i, ADJACENT_HEX_DIRECTIONS)));
+		currentNode = (_board->getGamePieces()->find(destCoord->toString()) !=
+			_board->getGamePieces()->end()) ?
+			_board->getGamePieces()->at(destCoord->toString()) : nullptr;
+		destCoord->offsetCoordinate(destCoord, static_cast<HexDirection>(mod(i + 3, 6)));
+		if (currentNode != source) //Disregard source since its game piece is the movement candidate.
+		{
+			if (currentNode != nullptr && currentNode->getGamePiece() != nullptr)
+			{
+				return true;
+			}
+		}
+	}
+	return false;
 }
 
 //Checks if the absence of a chosen game piece will separate the occupied hex nodes into multiple partitions

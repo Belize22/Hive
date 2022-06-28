@@ -14,6 +14,7 @@ public:
 	void unsetAdjacentSpots(HexNode* target);
 	bool handleGamePiece(GamePiece* gamePiece, Coordinate* coordinate);
 	std::vector<Coordinate*>* getCandidates(HexNode* start, Player* player);
+	bool destinationIsAdjacentToAnotherGamePiece(HexNode* source, Coordinate* destination);
 	bool respectsOHR(GamePiece* gamePiece);
 	bool surroundingGamePiecesAreDisjointed(GamePiece* gamePiece);
 	bool hiveWillSeparateAfterMovingPiece(GamePiece* gamePiece);
