@@ -27,7 +27,7 @@ bool MovementStrategy::handleGamePiece(GamePiece* gamePiece, Coordinate* coordin
 		return false;
 	}
 
-	if (!destinationIsAdjacentToAnotherGamePiece(gamePiece->getHexNode(), coordinate))
+	if (!destinationIsAdjacentToAnotherGamePiece(source, coordinate))
 	{
 		std::cout << "Piece must be adjacent to at least one other piece!" << std::endl;
 		return false;
@@ -61,32 +61,25 @@ void MovementStrategy::unsetAdjacentSpots(HexNode* target)
 	Coordinate* adjacentCoordinate;
 	bool freeSpotNeedsToExist;
 	for (int i = 0; i < ADJACENT_HEX_DIRECTIONS; i++) {
-		currentCoordinate->offsetCoordinate(currentCoordinate, static_cast<HexDirection>(i));
-		currentNode = (_board->getGamePieces()->at(currentCoordinate->toString())); //No coordinate should be null. Focused on adjacent spot of source piece.
-		adjacentCoordinate = currentCoordinate;
+		currentNode = getAdjacentHexNode(currentCoordinate, i);
+		adjacentCoordinate = currentNode->getCoordinate(); //Current node should never be null (since an occupied hex node is analyzed here).
 		if (currentNode->getGamePiece() != nullptr)
 		{
-			currentCoordinate->offsetCoordinate(currentCoordinate, static_cast<HexDirection>(mod(i + 3, 6)));
 			continue; //Has a game piece. No adjacent spots require removal!
 		}
 		freeSpotNeedsToExist = false;
 		for (int j = 0; j < ADJACENT_HEX_DIRECTIONS; j++) {
-			adjacentCoordinate->offsetCoordinate(adjacentCoordinate, static_cast<HexDirection>(j));
-			adjacentNode = (_board->getGamePieces()->find(adjacentCoordinate->toString()) !=
-				_board->getGamePieces()->end()) ?
-				_board->getGamePieces()->at(adjacentCoordinate->toString()) : nullptr;
+			adjacentNode = getAdjacentHexNode(adjacentCoordinate, j);
 			if (adjacentNode != nullptr) {
 				if (adjacentNode->getGamePiece() != nullptr && adjacentNode != target) //Target will be in different location when moving anyways.
 				{
 					freeSpotNeedsToExist = true;
 				}
 			}
-			adjacentCoordinate->offsetCoordinate(adjacentCoordinate, static_cast<HexDirection>(mod(j + 3, 6)));
 		}
 		if (!freeSpotNeedsToExist) {
-			_board->getGamePieces()->erase(_board->getGamePieces()->find(currentCoordinate->toString()));
+			_board->getGamePieces()->erase(_board->getGamePieces()->find(currentNode->getCoordinate()->toString()));
 		}
-		currentCoordinate->offsetCoordinate(currentCoordinate, static_cast<HexDirection>(mod(i + 3, 6)));
 	}
 }
 
@@ -137,14 +130,12 @@ bool MovementStrategy::surroundingGamePiecesAreDisjointed(GamePiece* gamePiece)
 	int gamePiecePartitions = 0;
 	bool lastAdjacentSpotHadGamePiece = false;
 	for (int i = 0; i < ADJACENT_HEX_DIRECTIONS + 1; i++) { //Must check the first adjacent spot twice for partition count purposes.
-		currentCoordinate->offsetCoordinate(currentCoordinate, static_cast<HexDirection>(mod(i, ADJACENT_HEX_DIRECTIONS)));
-		currentNode = (_board->getGamePieces()->at(currentCoordinate->toString())); //No coordinate should be null. Focused on adjacent spots of source piece.
+		currentNode = getAdjacentHexNode(currentCoordinate, mod(i, 6));
 		if (!(currentNode->getGamePiece() != nullptr) && lastAdjacentSpotHadGamePiece)
 		{
 			gamePiecePartitions++;
 		}
 		lastAdjacentSpotHadGamePiece = currentNode->getGamePiece() != nullptr ? true : false;
-		currentCoordinate->offsetCoordinate(currentCoordinate, static_cast<HexDirection>(mod(i + 3, 6)));
 	}
 	return gamePiecePartitions > 1;
 }
@@ -162,8 +153,7 @@ bool MovementStrategy::hiveWillSeparateAfterMovingPiece(GamePiece* gamePiece)
 
 	//Find the first adjacent spot occupied by a game piece and use as starting point for BFS.
 	for (int i = 0; i < ADJACENT_HEX_DIRECTIONS; i++) { //Must check the first adjacent spot twice for partition count purposes.
-		currentCoordinate->offsetCoordinate(currentCoordinate, static_cast<HexDirection>(mod(i, ADJACENT_HEX_DIRECTIONS)));
-		currentNode = (_board->getGamePieces()->at(currentCoordinate->toString())); //No coordinate should be null. Focused on adjacent spots of source piece.
+		currentNode = getAdjacentHexNode(currentCoordinate, i);
 		if (currentNode->getGamePiece() != nullptr && !foundOccupiedHexNode)
 		{
 			openList->push_back(currentNode);
@@ -173,7 +163,6 @@ bool MovementStrategy::hiveWillSeparateAfterMovingPiece(GamePiece* gamePiece)
 		{
 			closedList->push_back(currentNode);
 		}
-		currentCoordinate->offsetCoordinate(currentCoordinate, static_cast<HexDirection>(mod(i + 3, 6)));
 	}
 
 	currentNode = (_board->getGamePieces()->at(currentCoordinate->toString())); //No coordinate should be null. Focused on adjacent spots of source piece.
@@ -207,14 +196,10 @@ void MovementStrategy::advanceBFS(std::vector<HexNode*>* openList, std::vector<H
 	Coordinate* currentCoordinate = currentHexNode->getCoordinate();
 	openList->erase(openList->begin());
 	for (int i = 0; i < ADJACENT_HEX_DIRECTIONS; i++) {
-		currentCoordinate->offsetCoordinate(currentCoordinate, static_cast<HexDirection>(i));
-		currentNode = (_board->getGamePieces()->find(currentCoordinate->toString()) !=
-			_board->getGamePieces()->end()) ?
-			_board->getGamePieces()->at(currentCoordinate->toString()) : nullptr;
+		currentNode = getAdjacentHexNode(currentCoordinate, i);
 		if (currentNode != nullptr && !std::count(closedList->begin(), closedList->end(), currentNode)) {
 			openList->push_back(currentNode);
 		}
-		currentCoordinate->offsetCoordinate(currentCoordinate, static_cast<HexDirection>(mod(i + 3, 6)));
 	}
 	if (!std::count(closedList->begin(), closedList->end(), currentHexNode)) {
 		closedList->push_back(currentHexNode);
