@@ -18,6 +18,10 @@ HexNode* GamePiece::getHexNode() {
 	return _hexNode;
 }
 
+GamePieceType GamePiece::getGamePieceType() {
+	return _gamePieceType;
+}
+
 void GamePiece::setHexNode(HexNode* hexNode) {
 	_hexNode = hexNode;
 }

@@ -5,6 +5,11 @@
 #include "GamePieceStrategy.h"
 #include "PlacementStrategy.h"
 #include "MovementStrategy.h"
+#include "QueenBeeMovementStrategy.h"
+#include "BeetleMovementStrategy.h"
+#include "GrasshopperMovementStrategy.h"
+#include "SpiderMovementStrategy.h"
+#include "SoldierAntMovementStrategy.h"
 
 #include <iostream>
 #include <vector>

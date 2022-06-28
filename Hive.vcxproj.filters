@@ -45,6 +45,27 @@
     <ClCompile Include="InputParser.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="OneSpaceMovementStrategy.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="QueenBeeMovementStrategy.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BeetleMovementStrategy.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GrasshopperMovementStrategy.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MultiSpaceMovementStrategy.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SpiderMovementStrategy.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SoldierAntMovementStrategy.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Board.h">
@@ -81,6 +102,27 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="GamePieceInteractionType.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OneSpaceMovementStrategy.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="QueenBeeMovementStrategy.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BeetleMovementStrategy.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GrasshopperMovementStrategy.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MultiSpaceMovementStrategy.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SpiderMovementStrategy.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SoldierAntMovementStrategy.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

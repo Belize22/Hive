@@ -18,7 +18,27 @@ bool Board::placeGamePiece(GamePiece* gamePiece, Coordinate* coordinate) {
 }
 
 bool Board::moveGamePiece(GamePiece* gamePiece, Coordinate* coordinate) {
-	_gamePieceStrategy = new MovementStrategy(this);
+	GamePieceType gamePieceType = gamePiece->getGamePieceType();
+	if (gamePieceType == QUEEN_BEE)
+	{
+		_gamePieceStrategy = new QueenBeeMovementStrategy(this);
+	}
+	else if (gamePieceType == BEETLE)
+	{
+		_gamePieceStrategy = new BeetleMovementStrategy(this);
+	}
+	else if (gamePieceType == GRASSHOPPER)
+	{
+		_gamePieceStrategy = new GrasshopperMovementStrategy(this);
+	}
+	else if (gamePieceType == SPIDER)
+	{
+		_gamePieceStrategy = new SpiderMovementStrategy(this);
+	}
+	else if (gamePieceType == SOLDIER_ANT)
+	{
+		_gamePieceStrategy = new SoldierAntMovementStrategy(this);
+	}
 	bool isValidPlacement = _gamePieceStrategy->handleGamePiece(gamePiece, coordinate);
 	return isValidPlacement;
 }

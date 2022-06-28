@@ -1,0 +1,15 @@
+#ifndef GRASSHOPPER_MOVEMENT_STRATEGY
+#define GRASSHOPPER_MOVEMENT_STRATEGY
+
+class Board;
+#include "MovementStrategy.h"
+
+class GrasshopperMovementStrategy : public MovementStrategy
+{
+public:
+	GrasshopperMovementStrategy();
+	GrasshopperMovementStrategy(Board* board);
+	bool isMovementProper(GamePiece* gamePiece, Coordinate* coordinate);
+};
+
+#endif

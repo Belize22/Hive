@@ -21,6 +21,7 @@ public:
 	GamePiece(Board* board, Player* player, GamePieceType gamePieceType);
 	Player* getPlayer();
 	HexNode* getHexNode();
+	GamePieceType getGamePieceType();
 	void setHexNode(HexNode* hexNode);
 };
 

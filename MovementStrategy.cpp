@@ -39,7 +39,11 @@ bool MovementStrategy::handleGamePiece(GamePiece* gamePiece, Coordinate* coordin
 		return false;
 	}
 
-	//TO-DO: Check if move respects Freedom to Move Rule
+	if (!isMovementProper(gamePiece, coordinate))
+	{
+		//Feedback to the user lies in subclass dedicated to the type of game piece.
+		return false;
+	}
 	
 	unsetAdjacentSpots(source);
 	gamePiece->setHexNode(nullptr);
