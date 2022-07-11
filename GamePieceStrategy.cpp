@@ -44,7 +44,17 @@ std::vector<Coordinate*>* GamePieceStrategy::getCandidates(HexNode* start, Playe
 }
 
 bool GamePieceStrategy::pieceCanBePlaced(HexNode* target) {
-	return target != nullptr && target->getGamePiece() == nullptr;
+	return spotExists(target) && spotIsAvailable(target);
+}
+
+bool GamePieceStrategy::spotExists(HexNode* target)
+{
+	return target != nullptr;
+}
+
+bool GamePieceStrategy::spotIsAvailable(HexNode* target)
+{
+	return target->getGamePiece() == nullptr;
 }
 
 bool GamePieceStrategy::spotAdjacentToOpposingPiece(Player* player, Coordinate* coordinate) {

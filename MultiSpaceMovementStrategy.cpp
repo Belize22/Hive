@@ -13,3 +13,9 @@ bool MultiSpaceMovementStrategy::destinationDetectableByDFS(HexNode* source, Hex
 {
 	return true; //TODO: Implement this function!
 }
+
+bool MultiSpaceMovementStrategy::pieceCanMoveOnOccupiedSpace(HexNode* target)
+{
+	std::cout << "Destination spot is occupied!" << std::endl;
+	return false; //Only Beetle can move onto an occupied space (this class is for Spider and Soldier Ant)!
+}

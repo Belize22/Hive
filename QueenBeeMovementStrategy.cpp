@@ -9,6 +9,12 @@ QueenBeeMovementStrategy::QueenBeeMovementStrategy(Board* board) {
 	_board = board;
 }
 
+bool QueenBeeMovementStrategy::pieceCanMoveOnOccupiedSpace(HexNode* target)
+{
+	std::cout << "Destination spot is occupied!" << std::endl;
+	return false; //Only Beetle can move onto an occupied space!
+}
+
 bool QueenBeeMovementStrategy::isMovementProper(HexNode* source, HexNode* destination)
 {
 	std::cout << "Moving Queen Bee!" << std::endl;

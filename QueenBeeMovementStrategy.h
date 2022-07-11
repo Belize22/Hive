@@ -9,6 +9,7 @@ class QueenBeeMovementStrategy : public OneSpaceMovementStrategy
 public:
 	QueenBeeMovementStrategy();
 	QueenBeeMovementStrategy(Board* board);
+	bool pieceCanMoveOnOccupiedSpace(HexNode* target);
 	bool isMovementProper(HexNode* source, HexNode* destination);
 };
 

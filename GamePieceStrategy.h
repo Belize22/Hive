@@ -23,6 +23,8 @@ public:
 	std::vector<Coordinate*>* getCandidates(HexNode* start, Player* player);
 	void setAdjacentSpots(HexNode* target);
 	bool pieceCanBePlaced(HexNode* target);
+	bool spotExists(HexNode* target);
+	bool spotIsAvailable(HexNode* target);
 	bool spotAdjacentToOpposingPiece(Player* player, Coordinate* coordinate);
 	bool onlyOnePiecePlaced();
 	HexNode* getAdjacentHexNode(Coordinate* coordinate, int iteratorValue);

@@ -15,16 +15,18 @@ bool MovementStrategy::handleGamePiece(GamePiece* gamePiece, Coordinate* coordin
 	HexNode* target = (_board->getGamePieces()->find(coordinate->toString()) !=
 		_board->getGamePieces()->end()) ?
 		_board->getGamePieces()->at(coordinate->toString()) : nullptr;
-	if (!pieceCanBePlaced(target)) {
-		if (target == nullptr) {
-			std::cout << "Destination spot is not adjacent to the Hive!" << std::endl;
-		}
-		//Note: Beetle pieces can break this rule!
-		else if (target->getGamePiece() != nullptr) {
-			std::cout << "Destination spot is occupied!" << std::endl;
-		}
-
+	if (!spotExists(target)) 
+	{
+		std::cout << "Destination spot is not adjacent to the Hive!" << std::endl;
 		return false;
+	}
+
+	if (!spotIsAvailable(target))
+	{
+		if (!pieceCanMoveOnOccupiedSpace(target)) //To account for Beetles being able to move onto an occupied space!
+		{
+			return false;
+		}
 	}
 
 	if (!destinationIsAdjacentToAnotherGamePiece(source, coordinate))
@@ -45,10 +47,12 @@ bool MovementStrategy::handleGamePiece(GamePiece* gamePiece, Coordinate* coordin
 		return false;
 	}
 	
+	//Remove spaces that are not adjacent to any game piece after movement is completed!
 	unsetAdjacentSpots(source);
 	gamePiece->setHexNode(nullptr);
 	source->setGamePiece(nullptr);
 
+	//Add spaces that are adjacent to the moved game piece after movement is completed!
 	gamePiece->setHexNode(target);
 	target->setGamePiece(gamePiece);
 	setAdjacentSpots(target);

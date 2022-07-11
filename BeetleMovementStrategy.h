@@ -8,7 +8,8 @@ class BeetleMovementStrategy : public OneSpaceMovementStrategy
 {
 public:
 	BeetleMovementStrategy();
-	BeetleMovementStrategy(Board* board);
+	BeetleMovementStrategy(Board* board); 
+	bool pieceCanMoveOnOccupiedSpace(HexNode* target);
 	bool isMovementProper(HexNode* source, HexNode* destination);
 };
 

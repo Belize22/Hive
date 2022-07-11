@@ -11,6 +11,7 @@ public:
 	OneSpaceMovementStrategy(Board* board);
 	int directionOfAdjacentDestination(HexNode* source, HexNode* destination);
 	bool FTMRespectedForSpecifiedDirection(HexNode* source, HexDirection direction);
+	virtual bool pieceCanMoveOnOccupiedSpace(HexNode* target) = 0;
 	virtual bool isMovementProper(HexNode* source, HexNode* destination) = 0;
 };
 
