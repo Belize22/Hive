@@ -24,24 +24,47 @@ int OneSpaceMovementStrategy::directionOfAdjacentDestination(HexNode* source, He
 	return -1; //Means destination isn't adjacent.
 }
 
-bool OneSpaceMovementStrategy::FTMRespectedForSpecifiedDirection(HexNode* source, HexDirection direction)
+bool OneSpaceMovementStrategy::areSourceAndDestinationAdjacent(HexNode* source, HexNode* destination, int direction)
 {
-	HexNode* currentNode;
-	Coordinate* currentCoordinate = source->getCoordinate();
+	if (direction == -1)
+	{
+		return false;
+	}
 
-	//Check for occupied hex node in one adjacent direction.
-	currentNode = getAdjacentHexNode(currentCoordinate, mod((static_cast<int>(direction))-1, ADJACENT_HEX_DIRECTIONS));
-	if (currentNode->getGamePiece() == nullptr)
+	return true;
+}
+
+bool OneSpaceMovementStrategy::FTMRespectedForSpecifiedDirection(HexNode* node, HexDirection direction)
+{
+	if (isAdjacentDirectionShorter(node, direction, -1)) //Left
 	{
 		return true;
 	}
-
-	//Check for occupied hex node in other adjacent direction.
-	currentNode = getAdjacentHexNode(currentCoordinate, mod((static_cast<int>(direction)) + 1, ADJACENT_HEX_DIRECTIONS));
-	if (currentNode->getGamePiece() == nullptr)
+	if (isAdjacentDirectionShorter(node, direction, 1)) //Right
 	{
 		return true;
 	}
+	return false; //Piece cannot move one direction if both its adjacent directions are taller (or as tall) than the node!
+}
 
-	return false; //Piece cannot move one direction if both its adjacent directions are occupied by game pieces!
+bool OneSpaceMovementStrategy::isAdjacentDirectionShorter(HexNode* node, HexDirection direction, int directionOffset)
+{
+	Coordinate* currentCoordinate = new Coordinate(new int(node->getCoordinate()->getX()), new int(node->getCoordinate()->getY()), new int(node->getCoordinate()->getZ()));
+	HexNode* currentNode = getAdjacentHexNode(currentCoordinate, mod((static_cast<int>(direction)) + directionOffset, ADJACENT_HEX_DIRECTIONS));
+
+	//Check if direction topmost piece is taller (or as tall) as the source piece!
+	while (currentNode != nullptr && currentNode->getGamePiece() != nullptr)
+	{
+		currentCoordinate->incrementZ();
+		currentNode = getAdjacentHexNode(currentCoordinate, mod((static_cast<int>(direction)) + directionOffset, ADJACENT_HEX_DIRECTIONS));
+	}
+
+	if ((currentNode->getCoordinate()->getZ() < node->getCoordinate()->getZ()) || (currentCoordinate->getZ() == 0 && currentNode->getGamePiece() == nullptr))
+	{
+		delete currentCoordinate;
+		return true;
+	}
+
+	delete currentCoordinate;
+	return false;
 }

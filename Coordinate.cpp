@@ -21,6 +21,11 @@ int Coordinate::getZ() {
 	return *_z;
 }
 
+void Coordinate::incrementZ()
+{
+	(*_z)++; //Needed to find coordinate above an occupied spot that a Beetle will go onto.
+}
+
 void Coordinate::setCoordinate(int* x, int* y, int* z) {
 	_x = x;
 	_y = y;
@@ -72,7 +77,6 @@ int Coordinate::verticalDirectionOffset(HexDirection direction, int xValue) {
 }
 
 bool Coordinate::operator==(const Coordinate& other) {
-	// z excluded for now. Will be explored when Beetle token is implemented.
 	return *_x == *other._x && *_y == *other._y && *other._z == *other._z;
 }
 

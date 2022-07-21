@@ -17,6 +17,7 @@ public:
 	int getX();
 	int getY();
 	int getZ();
+	void incrementZ();
 	void setCoordinate(int* x, int* y, int* z);
 	std::string toString();
 	static void offsetCoordinate(Coordinate* coordinate, HexDirection direction);

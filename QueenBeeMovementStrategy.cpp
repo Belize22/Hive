@@ -19,15 +19,18 @@ bool QueenBeeMovementStrategy::isMovementProper(HexNode* source, HexNode* destin
 {
 	std::cout << "Moving Queen Bee!" << std::endl;
 	int direction = directionOfAdjacentDestination(source, destination);
-	if (direction == -1)
+	if (!areSourceAndDestinationAdjacent(source, destination, direction))
 	{
 		std::cout << "Queen Bee cannot move more than 1 space!" << std::endl;
 		return false;
 	}
+
+	//Only need to check one direction since source and destination are guaranteed to be z = 0.
 	if (!FTMRespectedForSpecifiedDirection(source, static_cast<HexDirection>(direction)))
 	{
 		std::cout << "Moving that direction violates Freedom To Move rule!" << std::endl;
 		return false;
 	}
+
 	return true;
 }

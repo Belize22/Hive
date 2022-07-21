@@ -62,9 +62,24 @@ bool GamePieceStrategy::spotAdjacentToOpposingPiece(Player* player, Coordinate* 
 		return false;
 	}
 	HexNode* currentNode;
-	for (int i = 0; i < ADJACENT_HEX_DIRECTIONS; i++) {
+	for (int i = 0; i < ADJACENT_HEX_DIRECTIONS; i++) 
+	{
 		currentNode = getAdjacentHexNode(coordinate, i);
-		if (currentNode != nullptr && currentNode->getGamePiece() != nullptr && currentNode->getGamePiece()->getPlayer() != player) {
+		HexNode* candidateNode = currentNode;
+		Coordinate* currentCoordinate = new Coordinate(new int(coordinate->getX()), new int(coordinate->getY()), new int(coordinate->getZ()));
+
+		//Need to get topmost piece of adjacent coordinate (takes priority for checking if potential placement is next to piece of opposing player.
+		while (candidateNode != nullptr)
+		{
+			currentNode = candidateNode;
+			currentCoordinate->incrementZ();
+			candidateNode = (_board->getGamePieces()->find(currentCoordinate->toString()) !=
+				_board->getGamePieces()->end()) ?
+				_board->getGamePieces()->at(currentCoordinate->toString()) : nullptr;
+		}
+
+		if (currentNode != nullptr && currentNode->getGamePiece() != nullptr && currentNode->getGamePiece()->getPlayer() != player) 
+		{
 			return true;
 		}
 	}

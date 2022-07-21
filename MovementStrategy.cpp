@@ -15,6 +15,13 @@ bool MovementStrategy::handleGamePiece(GamePiece* gamePiece, Coordinate* coordin
 	HexNode* target = (_board->getGamePieces()->find(coordinate->toString()) !=
 		_board->getGamePieces()->end()) ?
 		_board->getGamePieces()->at(coordinate->toString()) : nullptr;
+
+	if (isBuried(source))
+	{
+		std::cout << "Piece is buried by another piece!" << std::endl;
+		return false;
+	}
+
 	if (!spotExists(target)) 
 	{
 		std::cout << "Destination spot is not adjacent to the Hive!" << std::endl;
@@ -48,9 +55,16 @@ bool MovementStrategy::handleGamePiece(GamePiece* gamePiece, Coordinate* coordin
 	}
 	
 	//Remove spaces that are not adjacent to any game piece after movement is completed!
-	unsetAdjacentSpots(source);
+	if (source->getCoordinate()->getZ() == 0) //z > 0 implies existence of game pieces below source!
+	{
+		unsetAdjacentSpots(source);
+	}
 	gamePiece->setHexNode(nullptr);
 	source->setGamePiece(nullptr);
+	if (source->getCoordinate()->getZ() > 0) //Available spots are only indicated if z = 0!
+	{
+		_board->getGamePieces()->erase(_board->getGamePieces()->find(source->getCoordinate()->toString()));
+	}
 
 	//Add spaces that are adjacent to the moved game piece after movement is completed!
 	gamePiece->setHexNode(target);
@@ -94,6 +108,21 @@ void MovementStrategy::unsetAdjacentSpots(HexNode* target)
 std::vector<Coordinate*>* MovementStrategy::getCandidates(HexNode* start, Player* player)
 {
 	return new std::vector<Coordinate*>(); //Placeholder
+}
+
+bool MovementStrategy::isBuried(HexNode* source)
+{
+	Coordinate* candidateCoordinate = new Coordinate(new int(source->getCoordinate()->getX()), new int(source->getCoordinate()->getY()), new int(source->getCoordinate()->getZ()));
+	candidateCoordinate->incrementZ();
+	HexNode* candidateNode = (_board->getGamePieces()->find(candidateCoordinate->toString()) !=
+		_board->getGamePieces()->end()) ?
+		_board->getGamePieces()->at(candidateCoordinate->toString()) : nullptr;
+	if (spotExists(candidateNode))
+	{
+		return true;
+	}
+
+	return false;
 }
 
 bool MovementStrategy::destinationIsAdjacentToAnotherGamePiece(HexNode* source, Coordinate* destCoord)
