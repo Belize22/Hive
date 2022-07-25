@@ -14,11 +14,11 @@ bool BeetleMovementStrategy::pieceCanMoveOnOccupiedSpace(HexNode* target)
 	return true; //Only Beetle can move onto an occupied space!
 }
 
-bool BeetleMovementStrategy::isMovementProper(HexNode* source, HexNode* destination)
+bool BeetleMovementStrategy::isMovementProper(HexNode* source, HexNode& destination)
 {
 	std::cout << "Moving Beetle!" << std::endl;
-	int direction = directionOfAdjacentDestination(source, destination);
-	if (!areSourceAndDestinationAdjacent(source, destination, direction))
+	int direction = directionOfAdjacentDestination(source, &destination);
+	if (!areSourceAndDestinationAdjacent(source, &destination, direction))
 	{
 		std::cout << "Beetle cannot move more than 1 space!" << std::endl;
 		return false;
@@ -28,7 +28,7 @@ bool BeetleMovementStrategy::isMovementProper(HexNode* source, HexNode* destinat
 
 	//Need to check both directions to account for multiple height possibilities of source, destination, and adjacent spots.
 	if (!FTMRespectedForSpecifiedDirection(source, static_cast<HexDirection>(direction)) && 
-		!FTMRespectedForSpecifiedDirection(destination, static_cast<HexDirection>(mod(direction + 3, ADJACENT_HEX_DIRECTIONS))))
+		!FTMRespectedForSpecifiedDirection(&destination, static_cast<HexDirection>(mod(direction + 3, ADJACENT_HEX_DIRECTIONS))))
 	{
 		std::cout << "Moving that direction violates Freedom To Move rule!" << std::endl;
 		return false;
@@ -37,12 +37,12 @@ bool BeetleMovementStrategy::isMovementProper(HexNode* source, HexNode* destinat
 	return true;
 }
 
-void BeetleMovementStrategy::changeToLowestZValueOfAvailableDestinationCoordinate(HexNode* destination)
+void BeetleMovementStrategy::changeToLowestZValueOfAvailableDestinationCoordinate(HexNode& destination)
 {
-	HexNode* currentNode = destination;
+	HexNode* currentNode = &destination;
 
 	//Do not modify coordinate of spots below where the Beetle will go!
-	Coordinate* candidateCoordinate = new Coordinate(new int(destination->getCoordinate()->getX()), new int(destination->getCoordinate()->getY()), new int(destination->getCoordinate()->getZ()));
+	Coordinate* candidateCoordinate = new Coordinate(new int(currentNode->getCoordinate()->getX()), new int(currentNode->getCoordinate()->getY()), new int(currentNode->getCoordinate()->getZ()));
 
 	//Need to check for availability since z should be 0 if spot is available!
 	while (spotExists(currentNode) && !spotIsAvailable(currentNode))
@@ -53,5 +53,10 @@ void BeetleMovementStrategy::changeToLowestZValueOfAvailableDestinationCoordinat
 			_board->getGamePieces()->at(candidateCoordinate->toString()) : nullptr;
 	}
 
-	destination = currentNode; //Change destination to available spot with lowest z-value!
+	_board->getGamePieces()->insert(std::pair<std::string, HexNode*>(candidateCoordinate->toString(), new HexNode(new Coordinate(*candidateCoordinate))));
+
+	//The node that was just put in the board is the new destination!
+	destination = (_board->getGamePieces()->find(candidateCoordinate->toString()) !=
+		_board->getGamePieces()->end()) ?
+		*(_board->getGamePieces()->at(candidateCoordinate->toString())) : nullptr;
 }

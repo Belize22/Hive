@@ -10,8 +10,8 @@ public:
 	BeetleMovementStrategy();
 	BeetleMovementStrategy(Board* board); 
 	bool pieceCanMoveOnOccupiedSpace(HexNode* target);
-	bool isMovementProper(HexNode* source, HexNode* destination);
-	void changeToLowestZValueOfAvailableDestinationCoordinate(HexNode* destination);
+	bool isMovementProper(HexNode* source, HexNode& destination);
+	void changeToLowestZValueOfAvailableDestinationCoordinate(HexNode& destination);
 };
 
 #endif

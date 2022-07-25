@@ -15,7 +15,7 @@ bool GrasshopperMovementStrategy::pieceCanMoveOnOccupiedSpace(HexNode* target)
 	return false; //Only Beetle can move onto an occupied space!
 }
 
-bool GrasshopperMovementStrategy::isMovementProper(HexNode* source, HexNode* destination)
+bool GrasshopperMovementStrategy::isMovementProper(HexNode* source, HexNode& destination)
 {
 	std::cout << "Moving Grasshopper!" << std::endl;
 	return true; //TODO: Implement this function!

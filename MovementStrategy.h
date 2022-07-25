@@ -18,7 +18,7 @@ public:
 	bool destinationIsAdjacentToAnotherGamePiece(HexNode* source, Coordinate* destination);
 	bool respectsOHR(GamePiece* gamePiece);
 	virtual bool pieceCanMoveOnOccupiedSpace(HexNode* target) = 0;
-	virtual bool isMovementProper(HexNode* source, HexNode* destination) = 0;
+	virtual bool isMovementProper(HexNode* source, HexNode& destination) = 0;
 	bool surroundingGamePiecesAreDisjointed(GamePiece* gamePiece);
 	bool hiveWillSeparateAfterMovingPiece(GamePiece* gamePiece);
 	void advanceBFS(std::vector<HexNode*>* openList, std::vector<HexNode*>* closedList);

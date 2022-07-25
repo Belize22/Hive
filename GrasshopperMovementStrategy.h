@@ -10,7 +10,7 @@ public:
 	GrasshopperMovementStrategy();
 	GrasshopperMovementStrategy(Board* board);
 	bool pieceCanMoveOnOccupiedSpace(HexNode* target);
-	bool isMovementProper(HexNode* source, HexNode* destination);
+	bool isMovementProper(HexNode* source, HexNode& destination);
 };
 
 #endif

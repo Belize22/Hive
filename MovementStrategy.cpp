@@ -36,21 +36,22 @@ bool MovementStrategy::handleGamePiece(GamePiece* gamePiece, Coordinate* coordin
 		}
 	}
 
-	if (!destinationIsAdjacentToAnotherGamePiece(source, coordinate))
-	{
-		std::cout << "Piece must be adjacent to at least one other piece!" << std::endl;
-		return false;
-	}
-
 	if (!respectsOHR(gamePiece))
 	{
 		std::cout << "Moving this piece will separate the Hive!" << std::endl;
 		return false;
 	}
 
-	if (!isMovementProper(source, target))
+	if (!isMovementProper(source, *target))
 	{
 		//Feedback to the user lies in subclass dedicated to the type of game piece.
+		return false;
+	}
+
+	//z > 0 implies that destination is above another piece and therefore adjacent to the Hive
+	if (!destinationIsAdjacentToAnotherGamePiece(source, target->getCoordinate()) && target->getCoordinate()->getZ() == 0)
+	{
+		std::cout << "Piece must be adjacent to at least one other piece!" << std::endl;
 		return false;
 	}
 	
@@ -69,7 +70,10 @@ bool MovementStrategy::handleGamePiece(GamePiece* gamePiece, Coordinate* coordin
 	//Add spaces that are adjacent to the moved game piece after movement is completed!
 	gamePiece->setHexNode(target);
 	target->setGamePiece(gamePiece);
-	setAdjacentSpots(target);
+	if (target->getCoordinate()->getZ() == 0)
+	{
+		setAdjacentSpots(target);
+	}
 	_board->setMostRecentSpot(target);
 
 	return true;
