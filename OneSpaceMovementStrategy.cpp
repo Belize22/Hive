@@ -49,17 +49,21 @@ bool OneSpaceMovementStrategy::FTMRespectedForSpecifiedDirection(HexNode* node, 
 
 bool OneSpaceMovementStrategy::isAdjacentDirectionShorter(HexNode* node, HexDirection direction, int directionOffset)
 {
-	Coordinate* currentCoordinate = new Coordinate(new int(node->getCoordinate()->getX()), new int(node->getCoordinate()->getY()), new int(node->getCoordinate()->getZ()));
+	Coordinate* currentCoordinate = new Coordinate(new int(node->getCoordinate()->getX()), new int(node->getCoordinate()->getY()), new int(0));
 	HexNode* currentNode = getAdjacentHexNode(currentCoordinate, mod((static_cast<int>(direction)) + directionOffset, ADJACENT_HEX_DIRECTIONS));
+	HexNode* previousNode = currentNode; //Incase z = 0.
 
 	//Check if direction topmost piece is taller (or as tall) as the source piece!
 	while (currentNode != nullptr && currentNode->getGamePiece() != nullptr)
 	{
 		currentCoordinate->incrementZ();
+		previousNode = currentNode;
 		currentNode = getAdjacentHexNode(currentCoordinate, mod((static_cast<int>(direction)) + directionOffset, ADJACENT_HEX_DIRECTIONS));
 	}
 
-	if ((currentNode->getCoordinate()->getZ() < node->getCoordinate()->getZ()) || (currentCoordinate->getZ() == 0 && currentNode->getGamePiece() == nullptr))
+	//Compare to current node if z = 0 & not occupied since the node will never change.
+	//(must use previous node as reference for z > 0 since availability only indicated for z = 0)
+	if ((previousNode->getCoordinate()->getZ() + 1 < node->getCoordinate()->getZ()) || (currentCoordinate->getZ() == 0 && currentNode->getGamePiece() == nullptr))
 	{
 		delete currentCoordinate;
 		return true;

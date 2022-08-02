@@ -42,14 +42,14 @@ bool MovementStrategy::handleGamePiece(GamePiece* gamePiece, Coordinate* coordin
 		return false;
 	}
 
-	if (!isMovementProper(source, *target))
+	if (!isMovementProper(source, *coordinate))
 	{
 		//Feedback to the user lies in subclass dedicated to the type of game piece.
 		return false;
 	}
 
 	//z > 0 implies that destination is above another piece and therefore adjacent to the Hive
-	if (!destinationIsAdjacentToAnotherGamePiece(source, target->getCoordinate()) && target->getCoordinate()->getZ() == 0)
+	if (!destinationIsAdjacentToAnotherGamePiece(source, coordinate) && coordinate->getZ() == 0)
 	{
 		std::cout << "Piece must be adjacent to at least one other piece!" << std::endl;
 		return false;
@@ -67,10 +67,15 @@ bool MovementStrategy::handleGamePiece(GamePiece* gamePiece, Coordinate* coordin
 		_board->getGamePieces()->erase(_board->getGamePieces()->find(source->getCoordinate()->toString()));
 	}
 
+	//Retrieve again incase target coordinates changed (i.e. beetle moving to a coordinate where z > 0)
+	target = (_board->getGamePieces()->find(coordinate->toString()) !=
+		_board->getGamePieces()->end()) ?
+		_board->getGamePieces()->at(coordinate->toString()) : nullptr;
+
 	//Add spaces that are adjacent to the moved game piece after movement is completed!
 	gamePiece->setHexNode(target);
 	target->setGamePiece(gamePiece);
-	if (target->getCoordinate()->getZ() == 0)
+	if (coordinate->getZ() == 0)
 	{
 		setAdjacentSpots(target);
 	}
@@ -150,6 +155,11 @@ bool MovementStrategy::destinationIsAdjacentToAnotherGamePiece(HexNode* source, 
 //(Illegal move for the player if that is the case).
 bool MovementStrategy::respectsOHR(GamePiece* gamePiece)
 {
+	//z > 0 implies game piece(s) underneath. Therefore, no risk of violating OHR.
+	if (gamePiece->getHexNode()->getCoordinate()->getZ() > 0)
+	{
+		return true;
+	}
 	if (!surroundingGamePiecesAreDisjointed(gamePiece))
 	{
 		return true;

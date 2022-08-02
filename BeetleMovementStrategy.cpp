@@ -14,21 +14,29 @@ bool BeetleMovementStrategy::pieceCanMoveOnOccupiedSpace(HexNode* target)
 	return true; //Only Beetle can move onto an occupied space!
 }
 
-bool BeetleMovementStrategy::isMovementProper(HexNode* source, HexNode& destination)
+bool BeetleMovementStrategy::isMovementProper(HexNode* source, Coordinate& destinationCoordinate)
 {
 	std::cout << "Moving Beetle!" << std::endl;
-	int direction = directionOfAdjacentDestination(source, &destination);
-	if (!areSourceAndDestinationAdjacent(source, &destination, direction))
+	HexNode* destination = (_board->getGamePieces()->find((&destinationCoordinate)->toString()) !=
+			_board->getGamePieces()->end()) ?
+		(_board->getGamePieces()->at((&destinationCoordinate)->toString())) : nullptr;
+	int direction = directionOfAdjacentDestination(getLowestGamePieceForSource(source), destination);
+	if (!areSourceAndDestinationAdjacent(source, destination, direction))
 	{
 		std::cout << "Beetle cannot move more than 1 space!" << std::endl;
 		return false;
 	}
 
-	changeToLowestZValueOfAvailableDestinationCoordinate(destination);
+	changeToLowestZValueOfAvailableDestinationCoordinate(destination, destinationCoordinate);
+
+	//Incase z > 0 for destination (required for accurate FTM verification).
+	destination = (_board->getGamePieces()->find((&destinationCoordinate)->toString()) !=
+		_board->getGamePieces()->end()) ?
+		(_board->getGamePieces()->at((&destinationCoordinate)->toString())) : nullptr;
 
 	//Need to check both directions to account for multiple height possibilities of source, destination, and adjacent spots.
 	if (!FTMRespectedForSpecifiedDirection(source, static_cast<HexDirection>(direction)) && 
-		!FTMRespectedForSpecifiedDirection(&destination, static_cast<HexDirection>(mod(direction + 3, ADJACENT_HEX_DIRECTIONS))))
+		!FTMRespectedForSpecifiedDirection(destination, static_cast<HexDirection>(mod(direction + 3, ADJACENT_HEX_DIRECTIONS))))
 	{
 		std::cout << "Moving that direction violates Freedom To Move rule!" << std::endl;
 		return false;
@@ -37,26 +45,44 @@ bool BeetleMovementStrategy::isMovementProper(HexNode* source, HexNode& destinat
 	return true;
 }
 
-void BeetleMovementStrategy::changeToLowestZValueOfAvailableDestinationCoordinate(HexNode& destination)
+//If z > 0 for source, get equivalent where z = 0.
+HexNode* BeetleMovementStrategy::getLowestGamePieceForSource(HexNode* source)
 {
-	HexNode* currentNode = &destination;
+	if (source->getCoordinate()->getZ() == 0) //Measure to avoid creation and deletion of coordinate below. Not needed if z = 0.
+	{
+		return source;
+	}
 
+	Coordinate* modifiedCoordinate = new Coordinate(
+		new int(source->getCoordinate()->getX()),
+		new int(source->getCoordinate()->getY()),
+		new int(0)
+	);
+
+	HexNode* modifiedSource = (_board->getGamePieces()->find((modifiedCoordinate)->toString()) !=
+		_board->getGamePieces()->end()) ?
+		(_board->getGamePieces()->at((modifiedCoordinate)->toString())) : nullptr;
+
+	delete modifiedCoordinate;
+	return modifiedSource;
+}
+
+void BeetleMovementStrategy::changeToLowestZValueOfAvailableDestinationCoordinate(HexNode* destination, Coordinate& destinationCoordinate)
+{
 	//Do not modify coordinate of spots below where the Beetle will go!
-	Coordinate* candidateCoordinate = new Coordinate(new int(currentNode->getCoordinate()->getX()), new int(currentNode->getCoordinate()->getY()), new int(currentNode->getCoordinate()->getZ()));
+	Coordinate* candidateCoordinate = new Coordinate(new int(destination->getCoordinate()->getX()), new int(destination->getCoordinate()->getY()), new int(destination->getCoordinate()->getZ()));
 
 	//Need to check for availability since z should be 0 if spot is available!
-	while (spotExists(currentNode) && !spotIsAvailable(currentNode))
+	while (spotExists(destination) && !spotIsAvailable(destination))
 	{
 		candidateCoordinate->incrementZ();
-		currentNode = (_board->getGamePieces()->find(candidateCoordinate->toString()) !=
+		destination = (_board->getGamePieces()->find(candidateCoordinate->toString()) !=
 			_board->getGamePieces()->end()) ?
 			_board->getGamePieces()->at(candidateCoordinate->toString()) : nullptr;
 	}
 
 	_board->getGamePieces()->insert(std::pair<std::string, HexNode*>(candidateCoordinate->toString(), new HexNode(new Coordinate(*candidateCoordinate))));
 
-	//The node that was just put in the board is the new destination!
-	destination = (_board->getGamePieces()->find(candidateCoordinate->toString()) !=
-		_board->getGamePieces()->end()) ?
-		*(_board->getGamePieces()->at(candidateCoordinate->toString())) : nullptr;
+	//Must change the coordinate, not the node (since prior node must still exist)
+	destinationCoordinate = *candidateCoordinate;
 }

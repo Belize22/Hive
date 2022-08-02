@@ -11,7 +11,7 @@ public:
 	MultiSpaceMovementStrategy(Board* board);
 	bool destinationDetectableByDFS(HexNode* source, HexNode* destination);
 	bool pieceCanMoveOnOccupiedSpace(HexNode* target);
-	virtual bool isMovementProper(HexNode* source, HexNode& destination) = 0;
+	virtual bool isMovementProper(HexNode* source, Coordinate& destinationCoordinate) = 0;
 };
 
 #endif

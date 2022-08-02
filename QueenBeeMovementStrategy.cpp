@@ -15,11 +15,14 @@ bool QueenBeeMovementStrategy::pieceCanMoveOnOccupiedSpace(HexNode* target)
 	return false; //Only Beetle can move onto an occupied space!
 }
 
-bool QueenBeeMovementStrategy::isMovementProper(HexNode* source, HexNode& destination)
+bool QueenBeeMovementStrategy::isMovementProper(HexNode* source, Coordinate& destinationCoordinate)
 {
 	std::cout << "Moving Queen Bee!" << std::endl;
-	int direction = directionOfAdjacentDestination(source, &destination);
-	if (!areSourceAndDestinationAdjacent(source, &destination, direction))
+	HexNode* destination = (_board->getGamePieces()->find((&destinationCoordinate)->toString()) !=
+		_board->getGamePieces()->end()) ?
+		(_board->getGamePieces()->at((&destinationCoordinate)->toString())) : nullptr;
+	int direction = directionOfAdjacentDestination(source, destination);
+	if (!areSourceAndDestinationAdjacent(source, destination, direction))
 	{
 		std::cout << "Queen Bee cannot move more than 1 space!" << std::endl;
 		return false;
