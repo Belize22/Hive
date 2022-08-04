@@ -12,7 +12,7 @@ public:
 	bool pieceCanMoveOnOccupiedSpace(HexNode* target);
 	bool isMovementProper(HexNode* source, Coordinate& destinationCoordinate);
 	HexNode* getLowestGamePieceForSource(HexNode* source);
-	void changeToLowestZValueOfAvailableDestinationCoordinate(HexNode* destination, Coordinate& destinationCoordinate);
+	HexNode* changeToLowestZValueOfAvailableDestinationCoordinate(HexNode* destination, Coordinate& destinationCoordinate);
 };
 
 #endif

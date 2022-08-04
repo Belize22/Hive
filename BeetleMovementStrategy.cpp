@@ -27,20 +27,19 @@ bool BeetleMovementStrategy::isMovementProper(HexNode* source, Coordinate& desti
 		return false;
 	}
 
-	changeToLowestZValueOfAvailableDestinationCoordinate(destination, destinationCoordinate);
-
-	//Incase z > 0 for destination (required for accurate FTM verification).
-	destination = (_board->getGamePieces()->find((&destinationCoordinate)->toString()) !=
-		_board->getGamePieces()->end()) ?
-		(_board->getGamePieces()->at((&destinationCoordinate)->toString())) : nullptr;
+	HexNode* candidateDestination = changeToLowestZValueOfAvailableDestinationCoordinate(destination, destinationCoordinate);
 
 	//Need to check both directions to account for multiple height possibilities of source, destination, and adjacent spots.
 	if (!FTMRespectedForSpecifiedDirection(source, static_cast<HexDirection>(direction)) && 
-		!FTMRespectedForSpecifiedDirection(destination, static_cast<HexDirection>(mod(direction + 3, ADJACENT_HEX_DIRECTIONS))))
+		!FTMRespectedForSpecifiedDirection(candidateDestination, static_cast<HexDirection>(mod(direction + 3, ADJACENT_HEX_DIRECTIONS))))
 	{
 		std::cout << "Moving that direction violates Freedom To Move rule!" << std::endl;
 		return false;
 	}
+
+	//Insert only when FTM is confirmed to be respected!
+	//No issue if z = 0 since map insert does not replace upon discovery of existence!
+	_board->getGamePieces()->insert(std::pair<std::string, HexNode*>((&destinationCoordinate)->toString(), candidateDestination));
 
 	return true;
 }
@@ -67,7 +66,7 @@ HexNode* BeetleMovementStrategy::getLowestGamePieceForSource(HexNode* source)
 	return modifiedSource;
 }
 
-void BeetleMovementStrategy::changeToLowestZValueOfAvailableDestinationCoordinate(HexNode* destination, Coordinate& destinationCoordinate)
+HexNode* BeetleMovementStrategy::changeToLowestZValueOfAvailableDestinationCoordinate(HexNode* destination, Coordinate& destinationCoordinate)
 {
 	//Do not modify coordinate of spots below where the Beetle will go!
 	Coordinate* candidateCoordinate = new Coordinate(new int(destination->getCoordinate()->getX()), new int(destination->getCoordinate()->getY()), new int(destination->getCoordinate()->getZ()));
@@ -81,8 +80,9 @@ void BeetleMovementStrategy::changeToLowestZValueOfAvailableDestinationCoordinat
 			_board->getGamePieces()->at(candidateCoordinate->toString()) : nullptr;
 	}
 
-	_board->getGamePieces()->insert(std::pair<std::string, HexNode*>(candidateCoordinate->toString(), new HexNode(new Coordinate(*candidateCoordinate))));
-
 	//Must change the coordinate, not the node (since prior node must still exist)
 	destinationCoordinate = *candidateCoordinate;
+
+	//Do not insert into board yet (move may not be done if FTM is violated)!
+	return new HexNode(new Coordinate(*candidateCoordinate));
 }

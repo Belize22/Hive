@@ -63,7 +63,9 @@ bool OneSpaceMovementStrategy::isAdjacentDirectionShorter(HexNode* node, HexDire
 
 	//Compare to current node if z = 0 & not occupied since the node will never change.
 	//(must use previous node as reference for z > 0 since availability only indicated for z = 0)
-	if ((previousNode->getCoordinate()->getZ() + 1 < node->getCoordinate()->getZ()) || (currentCoordinate->getZ() == 0 && currentNode->getGamePiece() == nullptr))
+	//Ignore check entirely if adjacent node is not occupied.
+	if ((previousNode->getCoordinate()->getZ() < node->getCoordinate()->getZ()) || 
+		(previousNode->getCoordinate()->getZ() == 0 && previousNode->getGamePiece() == nullptr))
 	{
 		delete currentCoordinate;
 		return true;
