@@ -24,7 +24,7 @@ bool GrasshopperMovementStrategy::isMovementProper(HexNode* source, Coordinate& 
 
 	if (!sourceAndDestinationAreAligned(source, destination))
 	{
-		std::cout << "Grasshopper is not permitted to hop at that angle!";
+		std::cout << "Grasshopper is not permitted to hop at that angle!" << std::endl;
 		return false;
 	}
 
@@ -32,7 +32,7 @@ bool GrasshopperMovementStrategy::isMovementProper(HexNode* source, Coordinate& 
 
 	if (!nodesBetweenSourceAndDestinationAreOccupied(source, destination, direction))
 	{
-		std::cout << "Grasshopper must hop over at least one occupied space without skipping an available space!";
+		std::cout << "Grasshopper must hop over at least one occupied space without skipping an available space!" << std::endl;
 		return false;
 	}
 
