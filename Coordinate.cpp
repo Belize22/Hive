@@ -62,15 +62,13 @@ int Coordinate::verticalDirectionOffset(HexDirection direction, int xValue) {
 	case UP:
 		return -1;
 	case UP_RIGHT:
+	case UP_LEFT:
 		return (xValue % 2 == 0 ? -1 : 0);
 	case DOWN_RIGHT:
-		return xValue % 2 == 0 ? 0 : 1;
-	case DOWN:
-		return 1;
 	case DOWN_LEFT:
 		return (xValue % 2 == 0 ? 0 : 1);
-	case UP_LEFT:
-		return xValue % 2 == 0 ? -1 : 0;
+	case DOWN:
+		return 1;
 	default:
 		return 0;
 	}

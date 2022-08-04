@@ -18,5 +18,131 @@ bool GrasshopperMovementStrategy::pieceCanMoveOnOccupiedSpace(HexNode* target)
 bool GrasshopperMovementStrategy::isMovementProper(HexNode* source, Coordinate& destinationCoordinate)
 {
 	std::cout << "Moving Grasshopper!" << std::endl;
-	return true; //TODO: Implement this function!
+	HexNode* destination = (_board->getGamePieces()->find((&destinationCoordinate)->toString()) !=
+		_board->getGamePieces()->end()) ?
+		(_board->getGamePieces()->at((&destinationCoordinate)->toString())) : nullptr;
+
+	if (!sourceAndDestinationAreAligned(source, destination))
+	{
+		std::cout << "Grasshopper is not permitted to hop at that angle!";
+		return false;
+	}
+
+	HexDirection direction = getDirectionToDestination(source, destination);
+
+	if (!nodesBetweenSourceAndDestinationAreOccupied(source, destination, direction))
+	{
+		std::cout << "Grasshopper must hop over at least one occupied space without skipping an available space!";
+		return false;
+	}
+
+	return true;
+}
+
+
+HexDirection GrasshopperMovementStrategy::getDirectionToDestination(HexNode* source, HexNode* destination)
+{
+	if (source->getCoordinate()->getX() == destination->getCoordinate()->getX())
+	{
+		return (source->getCoordinate()->getY() > destination->getCoordinate()->getY()) ? DOWN : UP;
+	}
+	else 
+	{
+		if (source->getCoordinate()->getY() > destination->getCoordinate()->getY() ||
+			(source->getCoordinate()->getY() == destination->getCoordinate()->getX() &&
+				source->getCoordinate()->getX() % 2 != 0))
+		{
+			return (source->getCoordinate()->getX() > destination->getCoordinate()->getX()) ? UP_LEFT : UP_RIGHT;
+		}
+		else //Covers (y1 < y2 || (y1 == y2 && x1 % 2 == 0), source is 1, destination is 2.
+		{
+			return (source->getCoordinate()->getX() > destination->getCoordinate()->getX()) ? DOWN_LEFT : DOWN_RIGHT;
+		}
+	}
+}
+
+bool GrasshopperMovementStrategy::nodesBetweenSourceAndDestinationAreOccupied(HexNode* source, HexNode* destination, HexDirection direction)
+{
+	HexNode* currentNode = getAdjacentHexNode(source->getCoordinate(), static_cast<int>(direction));
+	if (currentNode == destination)
+	{
+		return false; //Source and Destination cannot be adjacent (must hop over at least one game piece).
+	}
+
+	while (currentNode != destination)
+	{
+		if (currentNode->getGamePiece() == nullptr)
+		{
+			return false; //Cannot make multiple hops in a single turn!
+		}
+
+		currentNode = getAdjacentHexNode(currentNode->getCoordinate(), static_cast<int>(direction));
+	}
+
+	return true;
+}
+
+bool GrasshopperMovementStrategy::sourceAndDestinationAreAligned(HexNode* source, HexNode* destination)
+{
+	int x1 = source->getCoordinate()->getX();
+	int x2 = destination->getCoordinate()->getX();
+	int y1 = source->getCoordinate()->getY();
+	int y2 = destination->getCoordinate()->getY();
+
+	if (source->getCoordinate()->getX() == destination->getCoordinate()->getX()) //Are they vertically aligned?
+	{
+		return true;
+	}
+
+	if (source->getCoordinate()->getY() > destination->getCoordinate()->getY() ||
+	   (source->getCoordinate()->getY() == destination->getCoordinate()->getX() && 
+		source->getCoordinate()->getX() % 2 != 0))
+	{
+		return verifyDiagonalAlignment(source, destination, -1);
+	}
+	else //Covers (y1 < y2 || (y1 == y2 && x1 % 2 == 0), source is 1, destination is 2.
+	{
+		return verifyDiagonalAlignment(source, destination, 1);
+	}
+}
+
+bool GrasshopperMovementStrategy::verifyDiagonalAlignment(HexNode* source, HexNode* destination, int yOffset)
+{
+	//Use copies of coordinates since algorithm will change these values!
+	int* x1 = new int(source->getCoordinate()->getX());
+	int* x2 = new int(destination->getCoordinate()->getX());
+	int* y1 = new int(source->getCoordinate()->getY());
+	int* y2 = new int(destination->getCoordinate()->getY());
+
+	int* yN = y1;
+
+	if ((*x1) > (*x2))
+	{
+		while ((*x1) > *(x2))
+		{
+			if ((*x1) % 2 == 0)
+			{
+				(*yN) += yOffset;
+			}
+			(*x1)--;
+		}
+	}
+	else
+	{
+		while (*(x1) < *(x2))
+		{
+			if (*(x1) % 2 == 0)
+			{
+				(*yN) += yOffset;
+			}
+			(*x1)++;
+		}
+	}
+
+	if ((*yN) != (*y2))
+	{
+		return false;
+	}
+
+	return true;
 }
