@@ -44,7 +44,7 @@ HexDirection GrasshopperMovementStrategy::getDirectionToDestination(HexNode* sou
 {
 	if (source->getCoordinate()->getX() == destination->getCoordinate()->getX())
 	{
-		return (source->getCoordinate()->getY() > destination->getCoordinate()->getY()) ? DOWN : UP;
+		return (source->getCoordinate()->getY() > destination->getCoordinate()->getY()) ? UP : DOWN;
 	}
 	else 
 	{
@@ -96,7 +96,7 @@ bool GrasshopperMovementStrategy::sourceAndDestinationAreAligned(HexNode* source
 
 	if (source->getCoordinate()->getY() > destination->getCoordinate()->getY() ||
 	   (source->getCoordinate()->getY() == destination->getCoordinate()->getX() && 
-		source->getCoordinate()->getX() % 2 != 0))
+		mod(source->getCoordinate()->getX(), 2) != 0))
 	{
 		return verifyDiagonalAlignment(source, destination, -1);
 	}
@@ -114,13 +114,15 @@ bool GrasshopperMovementStrategy::verifyDiagonalAlignment(HexNode* source, HexNo
 	int* y1 = new int(source->getCoordinate()->getY());
 	int* y2 = new int(destination->getCoordinate()->getY());
 
+	int* moduloOffset = new int ((int)sqrt(yOffset + 1)); //To ensure that it's equal to 0 for negative offset and 1 for positive offset.
+
 	int* yN = y1;
 
 	if ((*x1) > (*x2))
 	{
 		while ((*x1) > *(x2))
 		{
-			if ((*x1) % 2 == 0)
+			if (mod(*x1, 2) == *(moduloOffset))
 			{
 				(*yN) += yOffset;
 			}
@@ -131,7 +133,7 @@ bool GrasshopperMovementStrategy::verifyDiagonalAlignment(HexNode* source, HexNo
 	{
 		while (*(x1) < *(x2))
 		{
-			if (*(x1) % 2 == 0)
+			if (mod(*x1, 2) == *(moduloOffset))
 			{
 				(*yN) += yOffset;
 			}
@@ -139,10 +141,18 @@ bool GrasshopperMovementStrategy::verifyDiagonalAlignment(HexNode* source, HexNo
 		}
 	}
 
+	delete moduloOffset;
+	delete x1;
+	delete x2;
+
 	if ((*yN) != (*y2))
 	{
+		delete y1;
+		delete y2;
 		return false;
 	}
 
+	delete y1;
+	delete y2;
 	return true;
 }
