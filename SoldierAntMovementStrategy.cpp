@@ -2,15 +2,15 @@
 #include "Board.h"
 
 SoldierAntMovementStrategy::SoldierAntMovementStrategy() {
-
+	maxDistance = INT_MAX;
 }
 
 SoldierAntMovementStrategy::SoldierAntMovementStrategy(Board* board) {
 	_board = board;
+	maxDistance = INT_MAX;
 }
 
-bool SoldierAntMovementStrategy::isMovementProper(HexNode* source, Coordinate& destinationCoordinate)
+bool SoldierAntMovementStrategy::distanceConditionSatisfied(int* distance)
 {
-	std::cout << "Moving Soldier Ant!" << std::endl;
-	return true; //TODO: Implement this function!
+	return true; //Any distance is good!
 }

@@ -4,12 +4,14 @@
 class Board;
 #include "MultiSpaceMovementStrategy.h"
 
+const int DISTANCE_SPIDER_CAN_MOVE = 3;
+
 class SpiderMovementStrategy : public MultiSpaceMovementStrategy
 {
 public:
 	SpiderMovementStrategy();
 	SpiderMovementStrategy(Board* board);
-	bool isMovementProper(HexNode* source, Coordinate& destinationCoordinate);
+	bool distanceConditionSatisfied(int* distance);
 };
 
 #endif

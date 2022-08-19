@@ -6,12 +6,18 @@ class Board;
 
 class MultiSpaceMovementStrategy : public MovementStrategy
 {
+protected:
+	int maxDistance;
 public:
 	MultiSpaceMovementStrategy();
 	MultiSpaceMovementStrategy(Board* board);
-	bool destinationDetectableByDFS(HexNode* source, HexNode* destination);
+	bool isMovementProper(HexNode* source, Coordinate& destinationCoordinate);
+	bool traversingOnEdge(HexNode* node, HexDirection direction, HexNode* source);
+	bool destinationReachableByDFS(HexNode* source, HexNode* destination);
 	bool pieceCanMoveOnOccupiedSpace(HexNode* target);
-	virtual bool isMovementProper(HexNode* source, Coordinate& destinationCoordinate) = 0;
+	void advanceBFSMultiMove(std::vector<HexNode*>* openList, std::vector<int*>* openListDistances, std::vector<HexNode*>* closedList, HexNode* source);
+	bool spotIsOccupied(HexNode* node, HexNode* source);
+	virtual bool distanceConditionSatisfied(int* distance) = 0;
 };
 
 #endif

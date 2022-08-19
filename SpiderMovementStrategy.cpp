@@ -2,15 +2,15 @@
 #include "Board.h"
 
 SpiderMovementStrategy::SpiderMovementStrategy() {
-
+	maxDistance = DISTANCE_SPIDER_CAN_MOVE;
 }
 
 SpiderMovementStrategy::SpiderMovementStrategy(Board* board) {
 	_board = board;
+	maxDistance = DISTANCE_SPIDER_CAN_MOVE;
 }
 
-bool SpiderMovementStrategy::isMovementProper(HexNode* source, Coordinate& destinationCoordinate)
+bool SpiderMovementStrategy::distanceConditionSatisfied(int* distance)
 {
-	std::cout << "Moving Spider!" << std::endl;
-	return true; //TODO: Implement this function!
+	return (*distance) == DISTANCE_SPIDER_CAN_MOVE;
 }

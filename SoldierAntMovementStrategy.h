@@ -9,7 +9,7 @@ class SoldierAntMovementStrategy : public MultiSpaceMovementStrategy
 public:
 	SoldierAntMovementStrategy();
 	SoldierAntMovementStrategy(Board* board);
-	bool isMovementProper(HexNode* source, Coordinate& destinationCoordinate);
+	bool distanceConditionSatisfied(int* distance);
 };
 
 #endif
