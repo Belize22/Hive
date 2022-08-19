@@ -1,5 +1,6 @@
 #include "MovementStrategy.h"
 #include "Board.h"
+#include "Player.h"
 
 MovementStrategy::MovementStrategy() {
 
@@ -15,6 +16,12 @@ bool MovementStrategy::handleGamePiece(GamePiece* gamePiece, Coordinate* coordin
 	HexNode* target = (_board->getGamePieces()->find(coordinate->toString()) !=
 		_board->getGamePieces()->end()) ?
 		_board->getGamePieces()->at(coordinate->toString()) : nullptr;
+
+	if (!queenBeePlaced(gamePiece->getPlayer()))
+	{
+		std::cout << "Cannot move a piece until you place your Queen Bee!" << std::endl;
+		return false;
+	}
 
 	if (isBuried(source))
 	{
@@ -117,6 +124,11 @@ void MovementStrategy::unsetAdjacentSpots(HexNode* target)
 std::vector<Coordinate*>* MovementStrategy::getCandidates(HexNode* start, Player* player)
 {
 	return new std::vector<Coordinate*>(); //Placeholder
+}
+
+bool MovementStrategy::queenBeePlaced(Player* player)
+{
+	return player->getGamePieces()->at(QUEEN_BEE)->at(0)->getHexNode() != nullptr;
 }
 
 bool MovementStrategy::isBuried(HexNode* source)
