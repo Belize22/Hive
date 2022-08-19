@@ -1,5 +1,6 @@
 #include "PlacementStrategy.h"
 #include "Board.h"
+#include "Player.h"
 
 PlacementStrategy::PlacementStrategy() {
 
@@ -13,6 +14,15 @@ bool PlacementStrategy::handleGamePiece(GamePiece* gamePiece, Coordinate* coordi
 {
 	HexNode* target = (_board->getGamePieces()->count(coordinate->toString()) > 0 ? 
 		_board->getGamePieces()->at(coordinate->toString()) : nullptr);
+
+	if (*(gamePiece->getPlayer()->getGamePieceQuantity()) >= 3 && 
+		gamePiece->getPlayer()->getGamePieces()->at(QUEEN_BEE)->at(0)->getHexNode() == nullptr &&
+		gamePiece->getGamePieceType() != QUEEN_BEE)
+	{
+		std::cout << "Must place Queen Bee this turn!" << std::endl;
+		return false;
+	}
+
 	if (!pieceCanBePlaced(target) || spotAdjacentToOpposingPiece(gamePiece->getPlayer(), target->getCoordinate())) 
 	{
 		if (!spotExists(target)) 
@@ -35,6 +45,8 @@ bool PlacementStrategy::handleGamePiece(GamePiece* gamePiece, Coordinate* coordi
 		target->setGamePiece(gamePiece);
 		setAdjacentSpots(target);
 		_board->setMostRecentSpot(target);
+
+		gamePiece->getPlayer()->incrementGamePieceQuantity();
 
 		return true;
 	}

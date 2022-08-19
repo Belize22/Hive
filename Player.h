@@ -13,6 +13,7 @@ const int PIECE_AMOUNTS[AMOUNT_OF_PIECE_TYPES] = {1, 2, 3, 2, 3};
 class Player
 {
 private:
+	int* _piecesPlaced;
 	Board* _board;
 	std::vector<std::vector<GamePiece*>*>* _gamePieces;
 
@@ -21,6 +22,8 @@ public:
 	std::vector<std::vector<GamePiece*>*>* getGamePieces();
 	bool placeGamePiece(Coordinate* coordinate, GamePieceType gamePieceType);
 	bool moveGamePiece(Coordinate* coordinate, GamePiece* gamePiece);
+	int* getGamePieceQuantity();
+	void incrementGamePieceQuantity();
 };
 
 #endif

@@ -1,6 +1,7 @@
 #include "Player.h"
 
 Player::Player(Board* board) {
+	_piecesPlaced = new int(0);
 	_board = board;
 	_gamePieces = new std::vector<std::vector<GamePiece*>*>();
 	for (int i = 0; i < AMOUNT_OF_PIECE_TYPES; i++)
@@ -43,7 +44,6 @@ bool Player::placeGamePiece(Coordinate* coordinate, GamePieceType gamePieceType)
 	return _board->placeGamePiece(selectedGamePiece, coordinate);
 }
 
-
 bool Player::moveGamePiece(Coordinate* coordinate, GamePiece* gamePiece)
 {
 	if (gamePiece->getHexNode() == nullptr)
@@ -53,4 +53,14 @@ bool Player::moveGamePiece(Coordinate* coordinate, GamePiece* gamePiece)
 	}
 
 	return _board->moveGamePiece(gamePiece, coordinate);
+}
+
+int* Player::getGamePieceQuantity()
+{
+	return _piecesPlaced;
+}
+
+void Player::incrementGamePieceQuantity()
+{
+	(*_piecesPlaced)++;
 }
