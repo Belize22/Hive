@@ -108,19 +108,36 @@ bool GamePieceStrategy::onlyOnePiecePlaced() {
 	return true;
 }
 
-/*bool GamePieceStrategy::isAPlacementCandidate(std::vector<HexNode*>* openList, std::vector<HexNode*>* closedList, HexNode* currentHexNode) {
-	for (size_t i = 0; i < openList->size(); i++) {
-		if (currentHexNode == openList->at(i)) {
+bool GamePieceStrategy::queenBeeSurrounded(HexNode* queenBeeSpot)
+{ 
+	if (queenBeeSpot == nullptr)
+	{
+		return false;
+	}
+
+	if (queenBeeSpot->getGamePiece() == nullptr)
+	{
+		return false;
+	}
+
+	//Other game pieces being surrounded has no influence on win/draw conditions.
+	if (queenBeeSpot->getGamePiece()->getGamePieceType() != QUEEN_BEE)
+	{
+		return false;
+	}
+
+	HexNode* currentNode = queenBeeSpot;
+	Coordinate* currentCoordinate = new Coordinate(new int(queenBeeSpot->getCoordinate()->getX()), new int(queenBeeSpot->getCoordinate()->getY()), new int(0));
+	for (int i = 0; i < ADJACENT_HEX_DIRECTIONS; i++) {
+		currentNode = getAdjacentHexNode(currentCoordinate, i);
+		if (currentNode == nullptr || currentNode->getGamePiece() == nullptr) {
+			delete currentCoordinate;
 			return false;
 		}
 	}
-	for (size_t i = 0; i < closedList->size(); i++) {
-		if (currentHexNode == closedList->at(i)) {
-			return false;
-		}
-	}
+	delete currentCoordinate;
 	return true;
-}*/
+}
 
 HexNode* GamePieceStrategy::getAdjacentHexNode(Coordinate* coordinate, int iteratorValue)
 {

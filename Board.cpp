@@ -55,6 +55,28 @@ std::map<std::string, HexNode*>* Board::getGamePieces() {
 	return _gamePieces;
 }
 
+bool Board::isGameOver(Player* playerOne, Player* playerTwo)
+{
+	bool playerOneQueenBeeSurrounded = _gamePieceStrategy->queenBeeSurrounded(playerOne->getGamePieces()->at(QUEEN_BEE)->at(0)->getHexNode());
+	bool playerTwoQueenBeeSurrounded = _gamePieceStrategy->queenBeeSurrounded(playerTwo->getGamePieces()->at(QUEEN_BEE)->at(0)->getHexNode());
+
+	if (playerOneQueenBeeSurrounded == playerTwoQueenBeeSurrounded)
+	{
+		if (playerOneQueenBeeSurrounded)
+		{
+			std::cout << "Game has ended in a stalemate!";
+			return true;
+		}
+
+		return false;
+	}
+
+	int winnerId = playerOneQueenBeeSurrounded + 1;
+	std::cout << "Player " << winnerId << " has won!" << std::endl;
+
+	return true;
+}
+
 HexNode* Board::getMostRecentSpot() {
 	return _mostRecentSpot;
 }

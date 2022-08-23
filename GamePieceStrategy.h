@@ -27,8 +27,8 @@ public:
 	bool spotIsAvailable(HexNode* target);
 	bool spotAdjacentToOpposingPiece(Player* player, Coordinate* coordinate);
 	bool onlyOnePiecePlaced();
+	bool queenBeeSurrounded(HexNode* queenBeeSpot);
 	HexNode* getAdjacentHexNode(Coordinate* coordinate, int iteratorValue);
-	//bool isAPlacementCandidate(std::vector<HexNode*>* openList, std::vector<HexNode*>* closedList, HexNode* currentHexNode);
 	virtual bool handleGamePiece(GamePiece* gamePiece, Coordinate* coordinate) = 0;
 	static int mod(int a, int b);
 };

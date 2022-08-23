@@ -7,17 +7,20 @@
 #include "GamePieceTypeEnum.h"
 #include "GamePieceInteractionType.h"
 
+const int NUM_PLAYERS = 2;
+
 void displayPlacementCandidates(std::vector<Coordinate*>* coordinates); 
 Player* changePlayer(std::vector<Player*>* players, int* currentPlayerNumber);
 std::string getRegexInput();
 int getCoordinateInput();
+bool isGameOver(Board* board, Player* playerOne, Player* playerTwo);
 
 int main() {
 	int turn = 1;
 	Board* board = new Board();
 	std::vector<Player*>* players = new std::vector<Player*>;
-	for (int i = 0; i < 2; i++) {
-		players->push_back(new Player(board));
+	for (int i = 0; i < NUM_PLAYERS; i++) {
+		players->push_back(new Player(board, &i));
 	}
 	int* currentPlayerNumber = new int(-1);
 	Player* currentPlayer = changePlayer(players, currentPlayerNumber);
@@ -35,6 +38,9 @@ int main() {
 				bool isValidSpot = currentPlayer->placeGamePiece(inputCoordinate, gamePieceType);
 				delete inputCoordinate;
 				if (isValidSpot) {
+					if (isGameOver(board, players->at(0), players->at(1))) {
+						break;
+					}
 					currentPlayer = changePlayer(players, currentPlayerNumber);
 				}
 			}
@@ -44,6 +50,9 @@ int main() {
 				bool isValidSpot = currentPlayer->moveGamePiece(inputCoordinate, gamePiece);
 				delete inputCoordinate;
 				if (isValidSpot) {
+					if (isGameOver(board, players->at(0), players->at(1))) {
+						break;
+					}
 					currentPlayer = changePlayer(players, currentPlayerNumber);
 				}
 			}
@@ -89,4 +98,8 @@ Player* changePlayer(std::vector<Player*>* players, int* currentPlayerNumber) {
 	*currentPlayerNumber = (*currentPlayerNumber + 1) % players->size();
 	std::cout << "Player " << *currentPlayerNumber + 1 << "'s Turn!" << std::endl;
 	return players->at(*currentPlayerNumber);
+}
+
+bool isGameOver(Board* board, Player* playerOne, Player* playerTwo) {
+	return board->isGameOver(playerOne, playerTwo);
 }

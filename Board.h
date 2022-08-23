@@ -5,6 +5,7 @@
 #include "GamePieceStrategy.h"
 #include "PlacementStrategy.h"
 #include "MovementStrategy.h"
+#include "Player.h"
 #include "QueenBeeMovementStrategy.h"
 #include "BeetleMovementStrategy.h"
 #include "GrasshopperMovementStrategy.h"
@@ -32,6 +33,7 @@ public:
 	void setAdjacentSpots(HexNode* target);
 	std::vector<Coordinate*>* getPlacementCandidates(HexNode* start, Player* player);
 	std::map<std::string, HexNode*>* getGamePieces();
+	bool isGameOver(Player* playerOne, Player* playerTwo);
 	HexNode* getMostRecentSpot();
 	void setMostRecentSpot(HexNode* mostRecentSpot);
 };
