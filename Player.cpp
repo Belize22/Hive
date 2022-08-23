@@ -70,3 +70,18 @@ void Player::incrementGamePieceQuantity()
 {
 	(*_piecesPlaced)++;
 }
+
+bool Player::allPiecesPlaced()
+{
+	for (int i = 0; i < _gamePieces->size(); i++)
+	{
+		for (int j = 0; j < _gamePieces->at(i)->size(); j++)
+		{
+			if (_gamePieces->at(i)->at(j)->getHexNode() == nullptr)
+			{
+				return false;
+			}
+		}
+	}
+	return true;
+}

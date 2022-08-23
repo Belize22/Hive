@@ -10,6 +10,9 @@
 #include <string>
 #include <regex>
 
+const std::string PASS_STRING = "PASS";
+const std::string TIE_STRING = "TIE";
+
 const std::regex placementRegex("P[ABGQS]\\([-]?[0-9]+,[-]?[0-9]+\\)");     //ex: PQ(-1,1)
 const std::regex movementRegex("M[ABGQS][0-9]\\([-]?[0-9]+,[-]?[0-9]+\\)"); //ex: MS1(0,-2)
 const std::regex interactionTypeRegex("^[MP]");

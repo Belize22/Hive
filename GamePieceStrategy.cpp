@@ -27,6 +27,11 @@ void GamePieceStrategy::setAdjacentSpots(HexNode* target) {
 
 std::vector<Coordinate*>* GamePieceStrategy::getCandidates(HexNode* start, Player* player)
 {
+	if (player->allPiecesPlaced())
+	{
+		return nullptr;
+	}
+
 	std::map<std::string, HexNode*>::iterator it = _board->getGamePieces()->begin();
 	std::vector<Coordinate*>* freeSpots = new std::vector<Coordinate*>();
 	while (it != _board->getGamePieces()->end())

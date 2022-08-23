@@ -26,6 +26,7 @@ public:
 	int* getPlayerId();
 	int* getGamePieceQuantity();
 	void incrementGamePieceQuantity();
+	bool allPiecesPlaced();
 };
 
 #endif

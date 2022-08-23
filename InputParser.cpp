@@ -7,9 +7,13 @@ bool InputParser::isValidRegex(std::string input)
 		std::cout << "Placing Piece" << std::endl;
 		return true;
 	}
-	else if (std::regex_match(input.begin(), input.end(), movementRegex))
+	if (std::regex_match(input.begin(), input.end(), movementRegex))
 	{
 		std::cout << "Moving Piece" << std::endl;
+		return true;
+	}
+	if (input == PASS_STRING || input == TIE_STRING)
+	{
 		return true;
 	}
 	std::cout << "Invalid Input" << std::endl;
