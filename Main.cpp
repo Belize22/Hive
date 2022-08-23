@@ -15,6 +15,8 @@ std::string getRegexInput();
 int getCoordinateInput();
 bool isGameOver(Board* board, Player* playerOne, Player* playerTwo);
 bool canPassTurn(Player* currentPlayer, Board* board);
+bool canProposeStalemate(Player* currentPlayer, Board* board);
+bool stalemateAgreedUpon(Player* currentPlayer);
 
 int main() {
 	int turn = 1;
@@ -28,7 +30,9 @@ int main() {
 	while (true) {
 		displayPlacementCandidates(board->getPlacementCandidates(board->getMostRecentSpot(), currentPlayer));
 		std::cout << "Place a piece: P[A|B|G|Q|S]([-]?[0-9]+,[-]?[0-9]+" << std::endl;
-		std::cout << "Move a piece: M[A|B|G|Q|S][0-9]([-]?[0-9]+,[-]?[0-9]+" << std::endl;
+		std::cout << "Move a piece: M[A|B|G|Q|S][0-9]([-]?[0-9]+,[-]?[0-9]+" << std::endl; 
+		std::cout << "Pass Turn: PASS" << std::endl;
+		std::cout << "Propose Stalemate: TIE" << std::endl;
 		std::cout << "Insert Input: ";
 		std::string input = getRegexInput();
 		if (input == "PASS") {
@@ -38,6 +42,22 @@ int main() {
 			}
 			else {
 				std::cout << "Can only pass turn if no viable placement options exist!" << std::endl;
+			}
+		}
+		else if (input == "TIE") {
+			if (canProposeStalemate(currentPlayer, board)) {
+				currentPlayer = changePlayer(players, currentPlayerNumber);
+				if (stalemateAgreedUpon(currentPlayer)) {
+					std::cout << "Player " << *currentPlayerNumber + 1 << " has agreed to end the game in a stalemate!" << std::endl;
+					break;
+				}
+				else {
+					std::cout << "Player " << *currentPlayerNumber + 1 << " wants to continue playing!" << std::endl;
+					currentPlayer = changePlayer(players, currentPlayerNumber);
+				}
+			}
+			else {
+				std::cout << "Can only propose stalemate if all your game pieces have been placed!" << std::endl;
 			}
 		}
 		else if (input != "") {
@@ -127,4 +147,20 @@ bool isGameOver(Board* board, Player* playerOne, Player* playerTwo) {
 bool canPassTurn(Player* currentPlayer, Board* board) {
 	std::vector<Coordinate*>* placementCandidates = board->getPlacementCandidates(board->getMostRecentSpot(), currentPlayer);
 	return (placementCandidates == nullptr || placementCandidates->size() == 0);
+}
+
+bool canProposeStalemate(Player* currentPlayer, Board* board) {
+	std::vector<Coordinate*>* placementCandidates = board->getPlacementCandidates(board->getMostRecentSpot(), currentPlayer);
+	return placementCandidates == nullptr; //Stalemate can only be proposed if player has placed all their game pieces.
+}
+
+bool stalemateAgreedUpon(Player* currentPlayer) {
+	int otherPlayerId = ((*(currentPlayer->getPlayerId()) + 1) % 2) + 1;
+	std::cout << "Player " << otherPlayerId << " has proposed a stalemate! Type Y to agree, type anything else to continue: ";
+	std::string input;
+	std::cin >> input;
+	if (input == "Y") {
+		return true;
+	}
+	return false;
 }
