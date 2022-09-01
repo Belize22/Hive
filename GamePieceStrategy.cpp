@@ -14,15 +14,13 @@ void GamePieceStrategy::setAdjacentSpots(HexNode* target) {
 	HexNode* currentNode;
 	Coordinate* currentCoordinate = target->getCoordinate();
 	for (int i = 0; i < ADJACENT_HEX_DIRECTIONS; i++) {
-		currentCoordinate->offsetCoordinate(currentCoordinate, static_cast<HexDirection>(i)); //Get coordinates of specified adjacent direction.
-		HexNode* currentNode = (_board->getHexNodes()->find(currentCoordinate->toString()) != _board->getHexNodes()->end()) ?
-			_board->getHexNodes()->at(currentCoordinate->toString()) : nullptr;
+		Coordinate* offsetCoordinate = currentCoordinate->getOffsetCoordinate(currentCoordinate, static_cast<HexDirection>(i)); //Get coordinates of specified adjacent direction.
+		HexNode* currentNode = (_board->getHexNodes()->find(offsetCoordinate->toString()) != _board->getHexNodes()->end()) ?
+			_board->getHexNodes()->at(offsetCoordinate->toString()) : nullptr;
 
 		if (currentNode == nullptr) {
-			_board->getHexNodes()->insert(std::pair<std::string, HexNode*>(currentCoordinate->toString(), new HexNode(new Coordinate(*currentCoordinate))));
+			_board->getHexNodes()->insert(std::pair<std::string, HexNode*>(offsetCoordinate->toString(), new HexNode(new Coordinate(*offsetCoordinate))));
 		}
-
-		currentCoordinate->offsetCoordinate(currentCoordinate, static_cast<HexDirection>(mod(i + 3, 6))); //Return to original hex location to avoid going off-center!
 	}
 }
 
@@ -77,10 +75,10 @@ bool GamePieceStrategy::queenBeeSurrounded(HexNode* queenBeeSpot) {
 }
 
 HexNode* GamePieceStrategy::getAdjacentHexNode(Coordinate* coordinate, int iteratorValue) {
-	coordinate->offsetCoordinate(coordinate, static_cast<HexDirection>(iteratorValue)); //Get coordinates of specified adjacent direction.
-	HexNode* currentNode = (_board->getHexNodes()->find(coordinate->toString()) != _board->getHexNodes()->end()) ?
-		_board->getHexNodes()->at(coordinate->toString()) : nullptr;
-	coordinate->offsetCoordinate(coordinate, static_cast<HexDirection>(mod(iteratorValue + 3, 6))); //Return to original hex location to avoid going off-center!
+	Coordinate* offsetCoordinate = coordinate->getOffsetCoordinate(coordinate, static_cast<HexDirection>(iteratorValue)); //Get coordinates of specified adjacent direction.
+	HexNode* currentNode = (_board->getHexNodes()->find(offsetCoordinate->toString()) != _board->getHexNodes()->end()) ?
+		_board->getHexNodes()->at(offsetCoordinate->toString()) : nullptr;
+	delete offsetCoordinate;
 	return currentNode;
 }
 

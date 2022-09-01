@@ -40,22 +40,13 @@ std::string Coordinate::toString() {
 	return std::to_string(*_x) + ", " + std::to_string(*_y) + ", " + std::to_string(*_z);
 };
 
-void Coordinate::offsetCoordinate(Coordinate* coordinate, HexDirection direction) {
+Coordinate* Coordinate::getOffsetCoordinate(Coordinate* originalCoordinate, HexDirection direction)
+{
+	int* newX = new int(originalCoordinate->getX() + horizontalDirectionOffset(direction));
+	int* newY = new int(originalCoordinate->getY() + verticalDirectionOffset(direction, originalCoordinate->getX()));
+	int* newZ = new int(originalCoordinate->getZ());
 
-	coordinate->setCoordinate(
-		new int(coordinate->getX() + horizontalDirectionOffset(direction)),
-		new int(coordinate->getY() + verticalDirectionOffset(direction, coordinate->getX())),
-		new int(coordinate->getZ())
-	);
-	
-
-	/*
-	int modifiedX = coordinate->getX() + horizontalDirectionOffset(direction);
-	int modifiedY = coordinate->getY() + verticalDirectionOffset(direction, coordinate->getX());
-	int z = coordinate->getZ();
-
-	coordinate->setCoordinate(&modifiedX, &modifiedY, &z);
-	*/
+	return new Coordinate(newX, newY, newZ);
 }
 
 int Coordinate::horizontalDirectionOffset(HexDirection direction) {

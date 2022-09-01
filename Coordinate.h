@@ -23,8 +23,7 @@ class Coordinate {
 		void incrementZ();
 		void setCoordinate(int* x, int* y, int* z);
 		std::string toString();
-		static void offsetCoordinate(Coordinate* coordinate, HexDirection direction);
-		//Coordinate* getOffsetCoordinate(Coordinate* oldCoordinate, HexDirection direction);
+		static Coordinate* getOffsetCoordinate(Coordinate* originalCoordinate, HexDirection direction);
 		bool operator == (const Coordinate& other);
 		bool operator < (const Coordinate& other);
 };
