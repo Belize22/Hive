@@ -18,6 +18,7 @@ Board::~Board() {
 	std::map<std::string, HexNode*>::iterator it = _hexNodes->begin();
 	while (it != _hexNodes->end()) {
 		delete it->second;
+		it++;
 	}
 	_hexNodes->clear();
 
