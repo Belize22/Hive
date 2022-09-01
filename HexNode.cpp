@@ -10,6 +10,11 @@ HexNode::HexNode(Coordinate* coordinate) {
 	initializeNode();
 }
 
+HexNode::~HexNode() {
+	//Game piece not deleted (should always be nullptr when hex node is deleted)!
+	delete _coordinate;
+}
+
 Coordinate* HexNode::getCoordinate() {
 	return _coordinate;
 }

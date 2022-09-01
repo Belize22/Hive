@@ -8,6 +8,12 @@ Coordinate::Coordinate(int* x, int* y, int* z) {
 	setCoordinate(new int(*x), new int(*y), new int(*z));
 }
 
+Coordinate::~Coordinate() {
+	delete _x;
+	delete _y;
+	delete _z;
+}
+
 int Coordinate::getX() {
 	return *_x;
 }
@@ -35,11 +41,21 @@ std::string Coordinate::toString() {
 };
 
 void Coordinate::offsetCoordinate(Coordinate* coordinate, HexDirection direction) {
+
 	coordinate->setCoordinate(
 		new int(coordinate->getX() + horizontalDirectionOffset(direction)),
 		new int(coordinate->getY() + verticalDirectionOffset(direction, coordinate->getX())),
 		new int(coordinate->getZ())
 	);
+	
+
+	/*
+	int modifiedX = coordinate->getX() + horizontalDirectionOffset(direction);
+	int modifiedY = coordinate->getY() + verticalDirectionOffset(direction, coordinate->getX());
+	int z = coordinate->getZ();
+
+	coordinate->setCoordinate(&modifiedX, &modifiedY, &z);
+	*/
 }
 
 int Coordinate::horizontalDirectionOffset(HexDirection direction) {

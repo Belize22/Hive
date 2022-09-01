@@ -15,8 +15,8 @@ bool GrasshopperMovementStrategy::pieceCanMoveOnOccupiedSpace(HexNode* target) {
 }
 
 bool GrasshopperMovementStrategy::isMovementProper(HexNode* source, Coordinate& destinationCoordinate) {
-	HexNode* destination = (_board->getGamePieces()->find((&destinationCoordinate)->toString()) != _board->getGamePieces()->end()) ?
-		(_board->getGamePieces()->at((&destinationCoordinate)->toString())) : nullptr;
+	HexNode* destination = (_board->getHexNodes()->find((&destinationCoordinate)->toString()) != _board->getHexNodes()->end()) ?
+		(_board->getHexNodes()->at((&destinationCoordinate)->toString())) : nullptr;
 
 	if (!sourceAndDestinationAreAligned(source, destination)) {
 		std::cout << "Grasshopper is not permitted to hop at that angle!" << std::endl;

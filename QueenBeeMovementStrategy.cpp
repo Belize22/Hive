@@ -15,8 +15,8 @@ bool QueenBeeMovementStrategy::pieceCanMoveOnOccupiedSpace(HexNode* target) {
 }
 
 bool QueenBeeMovementStrategy::isMovementProper(HexNode* source, Coordinate& destinationCoordinate) {
-	HexNode* destination = (_board->getGamePieces()->find((&destinationCoordinate)->toString()) != _board->getGamePieces()->end()) ?
-		(_board->getGamePieces()->at((&destinationCoordinate)->toString())) : nullptr;
+	HexNode* destination = (_board->getHexNodes()->find((&destinationCoordinate)->toString()) != _board->getHexNodes()->end()) ?
+		(_board->getHexNodes()->at((&destinationCoordinate)->toString())) : nullptr;
 	int direction = directionOfAdjacentDestination(source, destination);
 
 	if (!areSourceAndDestinationAdjacent(source, destination, direction)) {

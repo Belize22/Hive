@@ -1,10 +1,32 @@
 #include "Board.h"
 
 Board::Board() {
-	_mostRecentSpot = new HexNode(); //In the sense that a piece is placed or moved there (or the one available spot during Player 1's turn on Turn 1).
-	_gamePieces = new std::map<std::string, HexNode*>();
-	_gamePieces->insert(std::pair<std::string, HexNode*>(_mostRecentSpot->getCoordinate()->toString(), _mostRecentSpot));
-	_gamePieceStrategy = new PlacementStrategy(this); //Can only place pieces first turn
+	_mostRecentSpot = new HexNode(); //The first ever hex node made available (Player 1's first piece will always go here).
+	_hexNodes = new std::map<std::string, HexNode*>();
+	_hexNodes->insert(std::pair<std::string, HexNode*>(_mostRecentSpot->getCoordinate()->toString(), _mostRecentSpot));
+	_placementStrategy = new PlacementStrategy(this);
+	_queenBeeMovementStrategy = new QueenBeeMovementStrategy(this);
+	_beetleMovementStrategy = new BeetleMovementStrategy(this);
+	_grasshopperMovementStrategy = new GrasshopperMovementStrategy(this);
+	_spiderMovementStrategy = new SpiderMovementStrategy(this);
+	_soldierAntMovementStrategy = new SoldierAntMovementStrategy(this);
+	_gamePieceStrategy = _placementStrategy; //Can only place pieces first turn
+}
+
+Board::~Board() {
+	//Do not delete mostRecentSpot since it is part of gamePieces map!
+	std::map<std::string, HexNode*>::iterator it = _hexNodes->begin();
+	while (it != _hexNodes->end()) {
+		delete it->second;
+	}
+	_hexNodes->clear();
+
+	delete _placementStrategy;
+	delete _queenBeeMovementStrategy;
+	delete _beetleMovementStrategy;
+	delete _grasshopperMovementStrategy;
+	delete _spiderMovementStrategy;
+	delete _soldierAntMovementStrategy;
 }
 
 bool Board::handleGamePiece(GamePiece* gamePiece, Coordinate* coordinate) {
@@ -12,7 +34,7 @@ bool Board::handleGamePiece(GamePiece* gamePiece, Coordinate* coordinate) {
 }
 
 bool Board::placeGamePiece(GamePiece* gamePiece, Coordinate* coordinate) {
-	_gamePieceStrategy = new PlacementStrategy(this);
+	_gamePieceStrategy = _placementStrategy;
 	bool isValidPlacement = _gamePieceStrategy->handleGamePiece(gamePiece, coordinate);
 	return isValidPlacement;
 }
@@ -20,19 +42,19 @@ bool Board::placeGamePiece(GamePiece* gamePiece, Coordinate* coordinate) {
 bool Board::moveGamePiece(GamePiece* gamePiece, Coordinate* coordinate) {
 	GamePieceType gamePieceType = gamePiece->getGamePieceType();
 	if (gamePieceType == QUEEN_BEE) {
-		_gamePieceStrategy = new QueenBeeMovementStrategy(this);
+		_gamePieceStrategy = _queenBeeMovementStrategy;
 	}
 	else if (gamePieceType == BEETLE) {
-		_gamePieceStrategy = new BeetleMovementStrategy(this);
+		_gamePieceStrategy = _beetleMovementStrategy;
 	}
 	else if (gamePieceType == GRASSHOPPER) {
-		_gamePieceStrategy = new GrasshopperMovementStrategy(this);
+		_gamePieceStrategy = _grasshopperMovementStrategy;
 	}
 	else if (gamePieceType == SPIDER) {
-		_gamePieceStrategy = new SpiderMovementStrategy(this);
+		_gamePieceStrategy = _spiderMovementStrategy;
 	}
 	else if (gamePieceType == SOLDIER_ANT) {
-		_gamePieceStrategy = new SoldierAntMovementStrategy(this);
+		_gamePieceStrategy = _soldierAntMovementStrategy;
 	}
 	bool isValidPlacement = _gamePieceStrategy->handleGamePiece(gamePiece, coordinate);
 	return isValidPlacement;
@@ -46,8 +68,8 @@ std::vector<Coordinate*>* Board::getPlacementCandidates(HexNode* start, Player* 
 	return _gamePieceStrategy->getCandidates(start, player);
 }
 
-std::map<std::string, HexNode*>* Board::getGamePieces() {
-	return _gamePieces;
+std::map<std::string, HexNode*>* Board::getHexNodes() {
+	return _hexNodes;
 }
 
 bool Board::isGameOver(Player* playerOne, Player* playerTwo)

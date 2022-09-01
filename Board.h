@@ -20,18 +20,25 @@
 
 class Board {
 	private:
-		std::map<std::string, HexNode*>* _gamePieces;
+		std::map<std::string, HexNode*>* _hexNodes;
 		HexNode* _mostRecentSpot;
+		PlacementStrategy* _placementStrategy;
+		QueenBeeMovementStrategy* _queenBeeMovementStrategy;
+		BeetleMovementStrategy* _beetleMovementStrategy;
+		GrasshopperMovementStrategy* _grasshopperMovementStrategy;
+		SpiderMovementStrategy* _spiderMovementStrategy;
+		SoldierAntMovementStrategy* _soldierAntMovementStrategy;
 		GamePieceStrategy* _gamePieceStrategy;
 
 	public:
 		Board();
+		~Board();
 		bool placeGamePiece(GamePiece* gamePiece, Coordinate* coordinate);
 		bool moveGamePiece(GamePiece* gamePiece, Coordinate* coordinate);
 		bool handleGamePiece(GamePiece* gamePiece, Coordinate* coordinate); 
 		void setAdjacentSpots(HexNode* target);
 		std::vector<Coordinate*>* getPlacementCandidates(HexNode* start, Player* player);
-		std::map<std::string, HexNode*>* getGamePieces();
+		std::map<std::string, HexNode*>* getHexNodes();
 		bool isGameOver(Player* playerOne, Player* playerTwo);
 		HexNode* getMostRecentSpot();
 		void setMostRecentSpot(HexNode* mostRecentSpot);

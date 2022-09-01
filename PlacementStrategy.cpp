@@ -12,8 +12,8 @@ PlacementStrategy::PlacementStrategy(Board* board) {
 
 bool PlacementStrategy::handleGamePiece(GamePiece* gamePiece, Coordinate* coordinate)
 {
-	HexNode* target = (_board->getGamePieces()->count(coordinate->toString()) > 0 ? 
-		_board->getGamePieces()->at(coordinate->toString()) : nullptr);
+	HexNode* target = (_board->getHexNodes()->count(coordinate->toString()) > 0 ? 
+		_board->getHexNodes()->at(coordinate->toString()) : nullptr);
 
 	if (*(gamePiece->getPlayer()->getGamePieceQuantity()) >= PLACEMENTS_BEFORE_MANDATORY_QUEEN_BEE_PLACEMENT &&
 		  gamePiece->getPlayer()->getGamePieces()->at(QUEEN_BEE)->at(0)->getHexNode() == nullptr &&

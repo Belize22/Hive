@@ -12,9 +12,9 @@ MovementStrategy::MovementStrategy(Board* board) {
 
 bool MovementStrategy::handleGamePiece(GamePiece* gamePiece, Coordinate* coordinate) {
 	HexNode* source = gamePiece->getHexNode();
-	HexNode* target = (_board->getGamePieces()->find(coordinate->toString()) !=
-		_board->getGamePieces()->end()) ?
-		_board->getGamePieces()->at(coordinate->toString()) : nullptr;
+	HexNode* target = (_board->getHexNodes()->find(coordinate->toString()) !=
+		_board->getHexNodes()->end()) ?
+		_board->getHexNodes()->at(coordinate->toString()) : nullptr;
 
 	if (!queenBeePlaced(gamePiece->getPlayer())) {
 		std::cout << "Cannot move a piece until you place your Queen Bee!" << std::endl;
@@ -60,12 +60,12 @@ bool MovementStrategy::handleGamePiece(GamePiece* gamePiece, Coordinate* coordin
 	gamePiece->setHexNode(nullptr);
 	source->setGamePiece(nullptr);
 	if (source->getCoordinate()->getZ() > 0) {//Available spots are only indicated if z = 0!
-		_board->getGamePieces()->erase(_board->getGamePieces()->find(source->getCoordinate()->toString()));
+		_board->getHexNodes()->erase(_board->getHexNodes()->find(source->getCoordinate()->toString()));
 	}
 
 	//Retrieve again incase target coordinates changed (i.e. beetle moving to a coordinate where z > 0)
-	target = (_board->getGamePieces()->find(coordinate->toString()) != _board->getGamePieces()->end()) ?
-		_board->getGamePieces()->at(coordinate->toString()) : nullptr;
+	target = (_board->getHexNodes()->find(coordinate->toString()) != _board->getHexNodes()->end()) ?
+		_board->getHexNodes()->at(coordinate->toString()) : nullptr;
 
 	//Add spaces that are adjacent to the moved game piece after movement is completed!
 	gamePiece->setHexNode(target);
@@ -109,7 +109,9 @@ void MovementStrategy::unsetAdjacentSpots(HexNode* target) {
 		}
 
 		if (!freeSpotNeedsToExist) {
-			_board->getGamePieces()->erase(_board->getGamePieces()->find(currentNode->getCoordinate()->toString()));
+			HexNode* clearedHexNode = _board->getHexNodes()->find(currentNode->getCoordinate()->toString())->second;
+			_board->getHexNodes()->erase(_board->getHexNodes()->find(currentNode->getCoordinate()->toString()));
+			delete clearedHexNode;
 		}
 	}
 }
@@ -126,8 +128,10 @@ bool MovementStrategy::isBuried(HexNode* source) {
 	);
 
 	candidateCoordinate->incrementZ();
-	HexNode* candidateNode = (_board->getGamePieces()->find(candidateCoordinate->toString()) != _board->getGamePieces()->end()) ?
-		_board->getGamePieces()->at(candidateCoordinate->toString()) : nullptr;
+	HexNode* candidateNode = (_board->getHexNodes()->find(candidateCoordinate->toString()) != _board->getHexNodes()->end()) ?
+		_board->getHexNodes()->at(candidateCoordinate->toString()) : nullptr;
+
+	delete candidateCoordinate;
 
 	if (spotExists(candidateNode)) {
 		return true;
@@ -212,7 +216,7 @@ bool MovementStrategy::hiveWillSeparateAfterMovingPiece(GamePiece* gamePiece) {
 		}
 	}
 
-	currentNode = (_board->getGamePieces()->at(currentCoordinate->toString())); //No coordinate should be null. Focused on adjacent spots of source piece.
+	currentNode = (_board->getHexNodes()->at(currentCoordinate->toString())); //No coordinate should be null. Focused on adjacent spots of source piece.
 	closedList->push_back(currentNode); //Movement candidate should be considered non-existent when verifying OHR.
 
 	while (openList->size() > 0) {
@@ -228,7 +232,14 @@ bool MovementStrategy::hiveWillSeparateAfterMovingPiece(GamePiece* gamePiece) {
 		}
 	}
 
-	return !(closedList->size() == _board->getGamePieces()->size());
+	bool isHiveSeparate = !(closedList->size() == _board->getHexNodes()->size());
+
+	openList->clear();
+	closedList->clear();
+	delete openList;
+	delete closedList;
+
+	return isHiveSeparate;
 }
 
 //Generalized BFS algorithm for Hex node structure.

@@ -13,6 +13,22 @@ Player::Player(Board* board, int* playerId) {
 	}
 }
 
+Player::~Player() {
+	//Board is deleted independently from Player.
+	delete _piecesPlaced;
+	delete _playerId;
+
+	for (int i = 0; i < _gamePieces->size(); i++) {
+		for (int j = 0; j < _gamePieces->at(i)->size(); j++) {
+			delete _gamePieces->at(i)->at(j);
+		}
+		_gamePieces->at(i)->clear();
+		delete _gamePieces->at(i);
+	}
+	_gamePieces->clear();
+	delete _gamePieces;
+}
+
 std::vector<std::vector<GamePiece*>*>* Player::getGamePieces() {
 	return _gamePieces;
 };

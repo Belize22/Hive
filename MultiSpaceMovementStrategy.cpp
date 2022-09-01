@@ -11,8 +11,8 @@ MultiSpaceMovementStrategy::MultiSpaceMovementStrategy(Board* board) {
 }
 
 bool MultiSpaceMovementStrategy::isMovementProper(HexNode* source, Coordinate& destinationCoordinate) {
-	HexNode* destination = (_board->getGamePieces()->find((&destinationCoordinate)->toString()) != _board->getGamePieces()->end()) ?
-		(_board->getGamePieces()->at((&destinationCoordinate)->toString())) : nullptr;
+	HexNode* destination = (_board->getHexNodes()->find((&destinationCoordinate)->toString()) != _board->getHexNodes()->end()) ?
+		(_board->getHexNodes()->at((&destinationCoordinate)->toString())) : nullptr;
 	return destinationReachableByDFS(source, destination);
 }
 
@@ -26,11 +26,8 @@ bool MultiSpaceMovementStrategy::pieceCanMoveOnOccupiedSpace(HexNode* target) {
 //Since Spider cannot move without separating from an adjacent game piece and have it count as 1 move.
 //(Soldier Ant "bypasses" this rule by having no limit on distance travelled!)
 bool MultiSpaceMovementStrategy::traversingOnEdge(HexNode* node, HexDirection direction, HexNode* source) {
-	Coordinate* currentCoordinate = new Coordinate(new int(node->getCoordinate()->getX()), new int(node->getCoordinate()->getY()), new int(0));
 	HexNode* leftNode = getAdjacentHexNode(node->getCoordinate(), mod((static_cast<int>(direction)) - 1, ADJACENT_HEX_DIRECTIONS));
 	HexNode* rightNode = getAdjacentHexNode(node->getCoordinate(), mod((static_cast<int>(direction)) + 1, ADJACENT_HEX_DIRECTIONS));
-
-	delete currentCoordinate;
 
 	//Easier to check FTM here than in the other FTM verification function since
 	//source has to be considered "not occupied" in order to search properly.
@@ -63,6 +60,9 @@ bool MultiSpaceMovementStrategy::destinationReachableByDFS(HexNode* source, HexN
 		bool satisfiedDistanceCondition = (distanceConditionSatisfied(openListDistances->at(0)));
 
 		openList->clear();
+		for (int i = 0; i < openListDistances->size(); i++) {
+			delete openListDistances->at(i);
+		}
 		openListDistances->clear();
 		closedList->clear();
 
@@ -78,6 +78,9 @@ bool MultiSpaceMovementStrategy::destinationReachableByDFS(HexNode* source, HexN
 	}
 
 	openList->clear();
+	for (int i = 0; i < openListDistances->size(); i++) {
+		delete openListDistances->at(i);
+	}
 	openListDistances->clear();
 	closedList->clear();
 

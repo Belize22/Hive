@@ -17,6 +17,7 @@ class HexNode {
 	public:
 		HexNode();
 		HexNode(Coordinate* coordinate);
+		~HexNode();
 		Coordinate* getCoordinate();
 		GamePiece* getGamePiece();
 		void setCoordinate(Coordinate* coordinate);

@@ -15,11 +15,11 @@ void GamePieceStrategy::setAdjacentSpots(HexNode* target) {
 	Coordinate* currentCoordinate = target->getCoordinate();
 	for (int i = 0; i < ADJACENT_HEX_DIRECTIONS; i++) {
 		currentCoordinate->offsetCoordinate(currentCoordinate, static_cast<HexDirection>(i)); //Get coordinates of specified adjacent direction.
-		HexNode* currentNode = (_board->getGamePieces()->find(currentCoordinate->toString()) != _board->getGamePieces()->end()) ?
-			_board->getGamePieces()->at(currentCoordinate->toString()) : nullptr;
+		HexNode* currentNode = (_board->getHexNodes()->find(currentCoordinate->toString()) != _board->getHexNodes()->end()) ?
+			_board->getHexNodes()->at(currentCoordinate->toString()) : nullptr;
 
 		if (currentNode == nullptr) {
-			_board->getGamePieces()->insert(std::pair<std::string, HexNode*>(currentCoordinate->toString(), new HexNode(new Coordinate(*currentCoordinate))));
+			_board->getHexNodes()->insert(std::pair<std::string, HexNode*>(currentCoordinate->toString(), new HexNode(new Coordinate(*currentCoordinate))));
 		}
 
 		currentCoordinate->offsetCoordinate(currentCoordinate, static_cast<HexDirection>(mod(i + 3, 6))); //Return to original hex location to avoid going off-center!
@@ -31,10 +31,10 @@ std::vector<Coordinate*>* GamePieceStrategy::getCandidates(HexNode* start, Playe
 		return nullptr;
 	}
 
-	std::map<std::string, HexNode*>::iterator it = _board->getGamePieces()->begin();
+	std::map<std::string, HexNode*>::iterator it = _board->getHexNodes()->begin();
 	std::vector<Coordinate*>* freeSpots = new std::vector<Coordinate*>();
 
-	while (it != _board->getGamePieces()->end()) {
+	while (it != _board->getHexNodes()->end()) {
 		HexNode* currentHexNode = it->second;
 		Coordinate* coordinate = currentHexNode->getCoordinate();
 
@@ -78,8 +78,8 @@ bool GamePieceStrategy::queenBeeSurrounded(HexNode* queenBeeSpot) {
 
 HexNode* GamePieceStrategy::getAdjacentHexNode(Coordinate* coordinate, int iteratorValue) {
 	coordinate->offsetCoordinate(coordinate, static_cast<HexDirection>(iteratorValue)); //Get coordinates of specified adjacent direction.
-	HexNode* currentNode = (_board->getGamePieces()->find(coordinate->toString()) != _board->getGamePieces()->end()) ?
-		_board->getGamePieces()->at(coordinate->toString()) : nullptr;
+	HexNode* currentNode = (_board->getHexNodes()->find(coordinate->toString()) != _board->getHexNodes()->end()) ?
+		_board->getHexNodes()->at(coordinate->toString()) : nullptr;
 	coordinate->offsetCoordinate(coordinate, static_cast<HexDirection>(mod(iteratorValue + 3, 6))); //Return to original hex location to avoid going off-center!
 	return currentNode;
 }
@@ -120,9 +120,9 @@ bool GamePieceStrategy::spotAdjacentToOpposingPiece(Player* player, Coordinate* 
 			while (candidateNode != nullptr) {
 				currentNode = candidateNode;
 				currentCoordinate->incrementZ();
-				candidateNode = (_board->getGamePieces()->find(currentCoordinate->toString()) !=
-					_board->getGamePieces()->end()) ?
-					_board->getGamePieces()->at(currentCoordinate->toString()) : nullptr;
+				candidateNode = (_board->getHexNodes()->find(currentCoordinate->toString()) !=
+					_board->getHexNodes()->end()) ?
+					_board->getHexNodes()->at(currentCoordinate->toString()) : nullptr;
 			}
 
 			delete currentCoordinate;

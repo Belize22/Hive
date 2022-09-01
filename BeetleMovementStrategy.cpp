@@ -16,8 +16,9 @@ bool BeetleMovementStrategy::pieceCanMoveOnOccupiedSpace(HexNode* target) {
 bool BeetleMovementStrategy::isMovementProper(HexNode* source, Coordinate& destinationCoordinate)
 {
 	std::cout << "Moving Beetle!" << std::endl;
-	HexNode* destination = (_board->getGamePieces()->find((&destinationCoordinate)->toString()) != _board->getGamePieces()->end()) ?
-		(_board->getGamePieces()->at((&destinationCoordinate)->toString())) : nullptr;
+	HexNode* destination = (_board->getHexNodes()->find((&destinationCoordinate)->toString()) != _board->getHexNodes()->end()) ?
+		(_board->getHexNodes()->at((&destinationCoordinate)->toString())) : nullptr;
+
 	int direction = directionOfAdjacentDestination(getLowestGamePieceForSource(source), destination);
 
 	if (!areSourceAndDestinationAdjacent(source, destination, direction)) {
@@ -36,7 +37,7 @@ bool BeetleMovementStrategy::isMovementProper(HexNode* source, Coordinate& desti
 
 	//Insert only when FTM is confirmed to be respected!
 	//No issue if z = 0 since map insert does not replace upon discovery of existence!
-	_board->getGamePieces()->insert(std::pair<std::string, HexNode*>((&destinationCoordinate)->toString(), candidateDestination));
+	_board->getHexNodes()->insert(std::pair<std::string, HexNode*>((&destinationCoordinate)->toString(), candidateDestination));
 
 	return true;
 }
@@ -53,9 +54,9 @@ HexNode* BeetleMovementStrategy::getLowestGamePieceForSource(HexNode* source) {
 		new int(0)
 	);
 
-	HexNode* modifiedSource = (_board->getGamePieces()->find((modifiedCoordinate)->toString()) !=
-		_board->getGamePieces()->end()) ?
-		(_board->getGamePieces()->at((modifiedCoordinate)->toString())) : nullptr;
+	HexNode* modifiedSource = (_board->getHexNodes()->find((modifiedCoordinate)->toString()) !=
+		_board->getHexNodes()->end()) ?
+		(_board->getHexNodes()->at((modifiedCoordinate)->toString())) : nullptr;
 
 	delete modifiedCoordinate;
 	return modifiedSource;
@@ -68,8 +69,8 @@ HexNode* BeetleMovementStrategy::changeToLowestZValueOfAvailableDestinationCoord
 	//Need to check for availability since z should be 0 if spot is available!
 	while (spotExists(destination) && !spotIsAvailable(destination)) {
 		candidateCoordinate->incrementZ();
-		destination = (_board->getGamePieces()->find(candidateCoordinate->toString()) != _board->getGamePieces()->end()) ?
-			_board->getGamePieces()->at(candidateCoordinate->toString()) : nullptr;
+		destination = (_board->getHexNodes()->find(candidateCoordinate->toString()) != _board->getHexNodes()->end()) ?
+			_board->getHexNodes()->at(candidateCoordinate->toString()) : nullptr;
 	}
 
 	//Must change the coordinate, not the node (since prior node must still exist)

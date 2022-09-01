@@ -96,6 +96,18 @@ int main() {
 			}
 		}
 	}
+
+	delete currentPlayerNumber;
+
+	delete board;
+
+	for (int i = 0; i < players->size(); i++) {
+		delete players->at(i);
+	}
+
+	players->clear();
+	delete players;
+
 	return 0;
 }
 

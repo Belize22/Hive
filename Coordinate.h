@@ -15,6 +15,7 @@ class Coordinate {
 
 	public:
 		Coordinate();
+		~Coordinate();
 		Coordinate(int* x, int* y, int* z);
 		int getX();
 		int getY();
@@ -23,6 +24,7 @@ class Coordinate {
 		void setCoordinate(int* x, int* y, int* z);
 		std::string toString();
 		static void offsetCoordinate(Coordinate* coordinate, HexDirection direction);
+		//Coordinate* getOffsetCoordinate(Coordinate* oldCoordinate, HexDirection direction);
 		bool operator == (const Coordinate& other);
 		bool operator < (const Coordinate& other);
 };
