@@ -16,6 +16,13 @@ bool MultiSpaceMovementStrategy::isMovementProper(HexNode* source, Coordinate& d
 	return destinationReachableByDFS(source, destination);
 }
 
+bool MultiSpaceMovementStrategy::pieceCanMoveOnOccupiedSpace(HexNode* target) {
+	std::cout << "Destination spot is occupied!" << std::endl;
+	return false; //Only Beetle can move onto an occupied space (this class is for Spider and Soldier Ant)!
+}
+
+
+
 //Since Spider cannot move without separating from an adjacent game piece and have it count as 1 move.
 //(Soldier Ant "bypasses" this rule by having no limit on distance travelled!)
 bool MultiSpaceMovementStrategy::traversingOnEdge(HexNode* node, HexDirection direction, HexNode* source) {
@@ -80,11 +87,6 @@ bool MultiSpaceMovementStrategy::destinationReachableByDFS(HexNode* source, HexN
 
 	std::cout << "Destination is either too far or inaccessible without violating Freedom to Move!" << std::endl;
 	return false; //Cannot reach destination
-}
-
-bool MultiSpaceMovementStrategy::pieceCanMoveOnOccupiedSpace(HexNode* target) {
-	std::cout << "Destination spot is occupied!" << std::endl;
-	return false; //Only Beetle can move onto an occupied space (this class is for Spider and Soldier Ant)!
 }
 
 void MultiSpaceMovementStrategy::advanceBFSMultiMove(std::vector<HexNode*>* openList, std::vector<int*>* openListDistances, std::vector<HexNode*>* closedList, HexNode* source) {

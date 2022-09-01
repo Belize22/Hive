@@ -10,6 +10,8 @@ SoldierAntMovementStrategy::SoldierAntMovementStrategy(Board* board) {
 	maxDistance = INT_MAX;
 }
 
+
+
 bool SoldierAntMovementStrategy::distanceConditionSatisfied(int* distance) {
 	return true; //Any distance is good!
 }

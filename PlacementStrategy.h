@@ -1,8 +1,6 @@
 #ifndef PLACEMENT_STRATEGY
 #define PLACEMENT_STRATEGY
 
-#pragma once
-
 class Board;
 #include "GamePieceStrategy.h"
 #include "GamePiece.h"

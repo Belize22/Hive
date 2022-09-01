@@ -12,10 +12,11 @@ class HexNode {
 		Coordinate* _coordinate;
 		GamePiece* _gamePiece;
 
+		void initializeNode();
+
 	public:
 		HexNode();
 		HexNode(Coordinate* coordinate);
-		void initializeNode();
 		Coordinate* getCoordinate();
 		GamePiece* getGamePiece();
 		void setCoordinate(Coordinate* coordinate);

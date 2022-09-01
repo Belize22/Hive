@@ -48,68 +48,6 @@ std::vector<Coordinate*>* GamePieceStrategy::getCandidates(HexNode* start, Playe
 	return freeSpots;
 }
 
-bool GamePieceStrategy::pieceCanBePlaced(HexNode* target) {
-	return spotExists(target) && spotIsAvailable(target);
-}
-
-bool GamePieceStrategy::spotExists(HexNode* target) {
-	return target != nullptr;
-}
-
-bool GamePieceStrategy::spotIsAvailable(HexNode* target) {
-	return target->getGamePiece() == nullptr;
-}
-
-bool GamePieceStrategy::spotAdjacentToOpposingPiece(Player* player, Coordinate* coordinate) {
-	if (onlyOnePiecePlaced()) {
-		return false;
-	}
-
-	HexNode* currentNode;
-	for (int i = 0; i < ADJACENT_HEX_DIRECTIONS; i++) {
-		currentNode = getAdjacentHexNode(coordinate, i);
-		HexNode* candidateNode = currentNode;
-
-		if (candidateNode != nullptr) {
-			Coordinate* currentCoordinate = new Coordinate(new int(currentNode->getCoordinate()->getX()), new int(currentNode->getCoordinate()->getY()), new int(0));
-
-			//Need to get topmost piece of adjacent coordinate (takes priority for checking if potential placement is next to piece of opposing player.
-			while (candidateNode != nullptr) {
-				currentNode = candidateNode;
-				currentCoordinate->incrementZ();
-				candidateNode = (_board->getGamePieces()->find(currentCoordinate->toString()) !=
-					_board->getGamePieces()->end()) ?
-					_board->getGamePieces()->at(currentCoordinate->toString()) : nullptr;
-			}
-
-			delete currentCoordinate;
-		}
-
-		if (currentNode != nullptr && currentNode->getGamePiece() != nullptr && currentNode->getGamePiece()->getPlayer() != player)  {
-			return true;
-		}
-	}
-
-	return false;
-}
-
-//To allow the second player's first piece to be placed adjacent to the first piece on the board (Not allowed for all other scenarios).
-//The scenario where a beetle and another piece below it are the only existing pieces will never happen since you cannot move
-//Beetles above game pieces until the player's Queen Bee has been placed!
-bool GamePieceStrategy::onlyOnePiecePlaced() {
-	HexNode* currentNode = _board->getMostRecentSpot();
-	Coordinate* currentCoordinate = new Coordinate(new int(currentNode->getCoordinate()->getX()), new int(currentNode->getCoordinate()->getY()), new int(0));
-	for (int i = 0; i < ADJACENT_HEX_DIRECTIONS; i++) {
-		currentNode = getAdjacentHexNode(currentCoordinate, i);
-		if (currentNode != nullptr && currentNode->getGamePiece() != nullptr) {
-			return false;
-		}
-	}
-
-	delete currentCoordinate;
-	return true;
-}
-
 bool GamePieceStrategy::queenBeeSurrounded(HexNode* queenBeeSpot) { 
 	if (queenBeeSpot == nullptr) {
 		return false;
@@ -149,4 +87,70 @@ HexNode* GamePieceStrategy::getAdjacentHexNode(Coordinate* coordinate, int itera
 //% is remainder, not mod in C++
 int GamePieceStrategy::mod(int a, int b) {
 	return (a % b + b) % b;
+}
+
+
+
+bool GamePieceStrategy::pieceCanBePlaced(HexNode* target) {
+	return spotExists(target) && spotIsAvailable(target);
+}
+
+bool GamePieceStrategy::spotExists(HexNode* target) {
+	return target != nullptr;
+}
+
+bool GamePieceStrategy::spotIsAvailable(HexNode* target) {
+	return target->getGamePiece() == nullptr;
+}
+
+bool GamePieceStrategy::spotAdjacentToOpposingPiece(Player* player, Coordinate* coordinate) {
+	if (onlyOnePiecePlaced()) {
+		return false;
+	}
+
+	HexNode* currentNode;
+	for (int i = 0; i < ADJACENT_HEX_DIRECTIONS; i++) {
+		currentNode = getAdjacentHexNode(coordinate, i);
+		HexNode* candidateNode = currentNode;
+
+		if (candidateNode != nullptr) {
+			Coordinate* currentCoordinate = new Coordinate(new int(currentNode->getCoordinate()->getX()), new int(currentNode->getCoordinate()->getY()), new int(0));
+
+			//Need to get topmost piece of adjacent coordinate (takes priority for checking if potential placement is next to piece of opposing player.
+			while (candidateNode != nullptr) {
+				currentNode = candidateNode;
+				currentCoordinate->incrementZ();
+				candidateNode = (_board->getGamePieces()->find(currentCoordinate->toString()) !=
+					_board->getGamePieces()->end()) ?
+					_board->getGamePieces()->at(currentCoordinate->toString()) : nullptr;
+			}
+
+			delete currentCoordinate;
+		}
+
+		if (currentNode != nullptr && currentNode->getGamePiece() != nullptr && currentNode->getGamePiece()->getPlayer() != player) {
+			return true;
+		}
+	}
+
+	return false;
+}
+
+
+
+//To allow the second player's first piece to be placed adjacent to the first piece on the board (Not allowed for all other scenarios).
+//The scenario where a beetle and another piece below it are the only existing pieces will never happen since you cannot move
+//Beetles above game pieces until the player's Queen Bee has been placed!
+bool GamePieceStrategy::onlyOnePiecePlaced() {
+	HexNode* currentNode = _board->getMostRecentSpot();
+	Coordinate* currentCoordinate = new Coordinate(new int(currentNode->getCoordinate()->getX()), new int(currentNode->getCoordinate()->getY()), new int(0));
+	for (int i = 0; i < ADJACENT_HEX_DIRECTIONS; i++) {
+		currentNode = getAdjacentHexNode(currentCoordinate, i);
+		if (currentNode != nullptr && currentNode->getGamePiece() != nullptr) {
+			return false;
+		}
+	}
+
+	delete currentCoordinate;
+	return true;
 }

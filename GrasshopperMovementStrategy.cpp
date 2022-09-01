@@ -15,7 +15,6 @@ bool GrasshopperMovementStrategy::pieceCanMoveOnOccupiedSpace(HexNode* target) {
 }
 
 bool GrasshopperMovementStrategy::isMovementProper(HexNode* source, Coordinate& destinationCoordinate) {
-	std::cout << "Moving Grasshopper!" << std::endl;
 	HexNode* destination = (_board->getGamePieces()->find((&destinationCoordinate)->toString()) != _board->getGamePieces()->end()) ?
 		(_board->getGamePieces()->at((&destinationCoordinate)->toString())) : nullptr;
 
@@ -33,6 +32,7 @@ bool GrasshopperMovementStrategy::isMovementProper(HexNode* source, Coordinate& 
 
 	return true;
 }
+
 
 
 HexDirection GrasshopperMovementStrategy::getDirectionToDestination(HexNode* source, HexNode* destination) {

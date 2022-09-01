@@ -78,6 +78,12 @@ bool MovementStrategy::handleGamePiece(GamePiece* gamePiece, Coordinate* coordin
 	return true;
 }
 
+std::vector<Coordinate*>* MovementStrategy::getCandidates(HexNode* start, Player* player) {
+	return new std::vector<Coordinate*>(); //Placeholder
+}
+
+
+
 void MovementStrategy::unsetAdjacentSpots(HexNode* target) {
 	HexNode* currentNode;
 	Coordinate* currentCoordinate = target->getCoordinate();
@@ -106,10 +112,6 @@ void MovementStrategy::unsetAdjacentSpots(HexNode* target) {
 			_board->getGamePieces()->erase(_board->getGamePieces()->find(currentNode->getCoordinate()->toString()));
 		}
 	}
-}
-
-std::vector<Coordinate*>* MovementStrategy::getCandidates(HexNode* start, Player* player) {
-	return new std::vector<Coordinate*>(); //Placeholder
 }
 
 bool MovementStrategy::queenBeePlaced(Player* player) {

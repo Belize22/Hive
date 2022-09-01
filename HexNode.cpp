@@ -10,10 +10,6 @@ HexNode::HexNode(Coordinate* coordinate) {
 	initializeNode();
 }
 
-void HexNode::initializeNode() {
-	_gamePiece = nullptr;
-}
-
 Coordinate* HexNode::getCoordinate() {
 	return _coordinate;
 }
@@ -34,3 +30,8 @@ bool HexNode::operator==(const HexNode& other) {
 	return *_coordinate == *other._coordinate; //Coordinate acts as unique identifier for Hex Node!
 }
 
+
+
+void HexNode::initializeNode() {
+	_gamePiece = nullptr;
+}

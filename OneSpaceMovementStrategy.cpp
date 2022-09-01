@@ -22,14 +22,6 @@ int OneSpaceMovementStrategy::directionOfAdjacentDestination(HexNode* source, He
 	return -1; //Destination isn't adjacent.
 }
 
-bool OneSpaceMovementStrategy::areSourceAndDestinationAdjacent(HexNode* source, HexNode* destination, int direction) {
-	if (direction == -1) {
-		return false;
-	}
-
-	return true;
-}
-
 bool OneSpaceMovementStrategy::FTMRespectedForSpecifiedDirection(HexNode* node, HexDirection direction) {
 	if (isAdjacentDirectionShorter(node, direction, -1)) { //Left
 		return true;
@@ -41,6 +33,16 @@ bool OneSpaceMovementStrategy::FTMRespectedForSpecifiedDirection(HexNode* node, 
 
 	return false; //Piece cannot move one direction if both its adjacent directions are taller (or as tall) than the node!
 }
+
+bool OneSpaceMovementStrategy::areSourceAndDestinationAdjacent(HexNode* source, HexNode* destination, int direction) {
+	if (direction == -1) {
+		return false;
+	}
+
+	return true;
+}
+
+
 
 bool OneSpaceMovementStrategy::isAdjacentDirectionShorter(HexNode* node, HexDirection direction, int directionOffset) {
 	Coordinate* currentCoordinate = new Coordinate(new int(node->getCoordinate()->getX()), new int(node->getCoordinate()->getY()), new int(0));
