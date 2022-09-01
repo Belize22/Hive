@@ -17,6 +17,7 @@ class GamePieceStrategy
 {
 protected:
 	Board* _board;
+
 public:
 	GamePieceStrategy();
 	GamePieceStrategy(Board* board);

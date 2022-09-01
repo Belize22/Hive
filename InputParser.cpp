@@ -2,20 +2,20 @@
 
 bool InputParser::isValidRegex(std::string input)
 {
-	if (std::regex_match(input.begin(), input.end(), placementRegex))
-	{
+	if (std::regex_match(input.begin(), input.end(), placementRegex)) {
 		std::cout << "Placing Piece" << std::endl;
 		return true;
 	}
-	if (std::regex_match(input.begin(), input.end(), movementRegex))
-	{
+
+	if (std::regex_match(input.begin(), input.end(), movementRegex)) {
 		std::cout << "Moving Piece" << std::endl;
 		return true;
 	}
-	if (input == PASS_STRING || input == TIE_STRING)
-	{
+
+	if (input == PASS_STRING || input == TIE_STRING) {
 		return true;
 	}
+
 	std::cout << "Invalid Input" << std::endl;
 	return false;
 }
@@ -25,8 +25,7 @@ GamePieceInteractionType InputParser::getGamePieceInteractionTypeFromInput(std::
 {
 	std::smatch match;
 
-	while (std::regex_search(gamePieceInteractionTypeInput, match, interactionTypeRegex))
-	{
+	while (std::regex_search(gamePieceInteractionTypeInput, match, interactionTypeRegex)) {
 		if (match.str() == "P") {
 			gamePieceInteractionTypeInput = match.suffix().str();
 			return PLACEMENT;
@@ -68,8 +67,7 @@ GamePieceType InputParser::getGamePieceTypeFromInput(std::string& gamePieceTypeI
 GamePiece* InputParser::getGamePieceFromInput(Player* player, std::string& gamePieceInput) {
 	std::smatch match;
 
-	while (std::regex_search(gamePieceInput, match, gamePieceRegex))
-	{
+	while (std::regex_search(gamePieceInput, match, gamePieceRegex)) {
 		std::string gamePieceTypeInput = match.str().substr(0, 1);
 		std::string gamePieceIndexInput = match.str().substr(1, 1);
 		GamePieceType gamePieceType = getGamePieceTypeFromInput(gamePieceTypeInput);
@@ -83,9 +81,8 @@ Coordinate* InputParser::getCoordinateFromInput(std::string coordinateInput) {
 	int x;
 	int y;
 
-	while (std::regex_search(coordinateInput, match, coordinateRegex))
-	{
-		if (coordinateInput[0] == '('){
+	while (std::regex_search(coordinateInput, match, coordinateRegex)) {
+		if (coordinateInput[0] == '(') {
 			x = stoi(match.str());
 		}
 		else {

@@ -19,24 +19,19 @@ bool Board::placeGamePiece(GamePiece* gamePiece, Coordinate* coordinate) {
 
 bool Board::moveGamePiece(GamePiece* gamePiece, Coordinate* coordinate) {
 	GamePieceType gamePieceType = gamePiece->getGamePieceType();
-	if (gamePieceType == QUEEN_BEE)
-	{
+	if (gamePieceType == QUEEN_BEE) {
 		_gamePieceStrategy = new QueenBeeMovementStrategy(this);
 	}
-	else if (gamePieceType == BEETLE)
-	{
+	else if (gamePieceType == BEETLE) {
 		_gamePieceStrategy = new BeetleMovementStrategy(this);
 	}
-	else if (gamePieceType == GRASSHOPPER)
-	{
+	else if (gamePieceType == GRASSHOPPER) {
 		_gamePieceStrategy = new GrasshopperMovementStrategy(this);
 	}
-	else if (gamePieceType == SPIDER)
-	{
+	else if (gamePieceType == SPIDER) {
 		_gamePieceStrategy = new SpiderMovementStrategy(this);
 	}
-	else if (gamePieceType == SOLDIER_ANT)
-	{
+	else if (gamePieceType == SOLDIER_ANT) {
 		_gamePieceStrategy = new SoldierAntMovementStrategy(this);
 	}
 	bool isValidPlacement = _gamePieceStrategy->handleGamePiece(gamePiece, coordinate);
@@ -60,10 +55,8 @@ bool Board::isGameOver(Player* playerOne, Player* playerTwo)
 	bool playerOneQueenBeeSurrounded = _gamePieceStrategy->queenBeeSurrounded(playerOne->getGamePieces()->at(QUEEN_BEE)->at(0)->getHexNode());
 	bool playerTwoQueenBeeSurrounded = _gamePieceStrategy->queenBeeSurrounded(playerTwo->getGamePieces()->at(QUEEN_BEE)->at(0)->getHexNode());
 
-	if (playerOneQueenBeeSurrounded == playerTwoQueenBeeSurrounded)
-	{
-		if (playerOneQueenBeeSurrounded)
-		{
+	if (playerOneQueenBeeSurrounded == playerTwoQueenBeeSurrounded) {
+		if (playerOneQueenBeeSurrounded) {
 			std::cout << "Game has ended in a stalemate!";
 			return true;
 		}

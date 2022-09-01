@@ -5,8 +5,6 @@ GamePiece::GamePiece(Board* board, Player* player, GamePieceType gamePieceType) 
 	_player = player;
 	_gamePieceType = gamePieceType;
 	_hexNode = nullptr;
-	_active = false;
-	_buried = false;
 };
 
 

@@ -20,16 +20,13 @@ const std::regex gamePieceTypeRegex("^[ABGQS]");
 const std::regex gamePieceRegex("^[ABGQS][0-9]");
 const std::regex coordinateRegex("[-]?[0-9]");
 
-class InputParser 
-{
-public:
-	static bool isValidRegex(std::string input);
-	static GamePieceInteractionType getGamePieceInteractionTypeFromInput(std::string& gamePieceInteractionTypeInput);
-	static GamePieceType getGamePieceTypeFromInput(std::string& gamePieceTypeInput); //Placement only.
-	static GamePiece* getGamePieceFromInput(Player* player, std::string& gamePieceInput); //Movement only.
-	static Coordinate* getCoordinateFromInput(std::string coordinateInput);
+class InputParser  {
+	public:
+		static bool isValidRegex(std::string input);
+		static GamePieceInteractionType getGamePieceInteractionTypeFromInput(std::string& gamePieceInteractionTypeInput);
+		static GamePieceType getGamePieceTypeFromInput(std::string& gamePieceTypeInput); //Placement only.
+		static GamePiece* getGamePieceFromInput(Player* player, std::string& gamePieceInput); //Movement only.
+		static Coordinate* getCoordinateFromInput(std::string coordinateInput);
 };
-
-#pragma once
 
 #endif

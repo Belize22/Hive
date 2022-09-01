@@ -10,7 +10,6 @@ SpiderMovementStrategy::SpiderMovementStrategy(Board* board) {
 	maxDistance = DISTANCE_SPIDER_CAN_MOVE;
 }
 
-bool SpiderMovementStrategy::distanceConditionSatisfied(int* distance)
-{
+bool SpiderMovementStrategy::distanceConditionSatisfied(int* distance) {
 	return (*distance) == DISTANCE_SPIDER_CAN_MOVE;
 }

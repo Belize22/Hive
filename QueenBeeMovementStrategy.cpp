@@ -9,28 +9,23 @@ QueenBeeMovementStrategy::QueenBeeMovementStrategy(Board* board) {
 	_board = board;
 }
 
-bool QueenBeeMovementStrategy::pieceCanMoveOnOccupiedSpace(HexNode* target)
-{
+bool QueenBeeMovementStrategy::pieceCanMoveOnOccupiedSpace(HexNode* target) {
 	std::cout << "Destination spot is occupied!" << std::endl;
 	return false; //Only Beetle can move onto an occupied space!
 }
 
-bool QueenBeeMovementStrategy::isMovementProper(HexNode* source, Coordinate& destinationCoordinate)
-{
-	std::cout << "Moving Queen Bee!" << std::endl;
-	HexNode* destination = (_board->getGamePieces()->find((&destinationCoordinate)->toString()) !=
-		_board->getGamePieces()->end()) ?
+bool QueenBeeMovementStrategy::isMovementProper(HexNode* source, Coordinate& destinationCoordinate) {
+	HexNode* destination = (_board->getGamePieces()->find((&destinationCoordinate)->toString()) != _board->getGamePieces()->end()) ?
 		(_board->getGamePieces()->at((&destinationCoordinate)->toString())) : nullptr;
 	int direction = directionOfAdjacentDestination(source, destination);
-	if (!areSourceAndDestinationAdjacent(source, destination, direction))
-	{
+
+	if (!areSourceAndDestinationAdjacent(source, destination, direction)) {
 		std::cout << "Queen Bee cannot move more than 1 space!" << std::endl;
 		return false;
 	}
 
 	//Only need to check one direction since source and destination are guaranteed to be z = 0.
-	if (!FTMRespectedForSpecifiedDirection(source, static_cast<HexDirection>(direction)))
-	{
+	if (!FTMRespectedForSpecifiedDirection(source, static_cast<HexDirection>(direction))) {
 		std::cout << "Moving that direction violates Freedom To Move rule!" << std::endl;
 		return false;
 	}

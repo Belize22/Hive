@@ -9,29 +9,24 @@ GrasshopperMovementStrategy::GrasshopperMovementStrategy(Board* board) {
 	_board = board;
 }
 
-bool GrasshopperMovementStrategy::pieceCanMoveOnOccupiedSpace(HexNode* target)
-{
+bool GrasshopperMovementStrategy::pieceCanMoveOnOccupiedSpace(HexNode* target) {
 	std::cout << "Destination spot is occupied!" << std::endl;
 	return false; //Only Beetle can move onto an occupied space!
 }
 
-bool GrasshopperMovementStrategy::isMovementProper(HexNode* source, Coordinate& destinationCoordinate)
-{
+bool GrasshopperMovementStrategy::isMovementProper(HexNode* source, Coordinate& destinationCoordinate) {
 	std::cout << "Moving Grasshopper!" << std::endl;
-	HexNode* destination = (_board->getGamePieces()->find((&destinationCoordinate)->toString()) !=
-		_board->getGamePieces()->end()) ?
+	HexNode* destination = (_board->getGamePieces()->find((&destinationCoordinate)->toString()) != _board->getGamePieces()->end()) ?
 		(_board->getGamePieces()->at((&destinationCoordinate)->toString())) : nullptr;
 
-	if (!sourceAndDestinationAreAligned(source, destination))
-	{
+	if (!sourceAndDestinationAreAligned(source, destination)) {
 		std::cout << "Grasshopper is not permitted to hop at that angle!" << std::endl;
 		return false;
 	}
 
 	HexDirection direction = getDirectionToDestination(source, destination);
 
-	if (!nodesBetweenSourceAndDestinationAreOccupied(source, destination, direction))
-	{
+	if (!nodesBetweenSourceAndDestinationAreOccupied(source, destination, direction)) {
 		std::cout << "Grasshopper must hop over at least one occupied space without skipping an available space!" << std::endl;
 		return false;
 	}
@@ -40,39 +35,30 @@ bool GrasshopperMovementStrategy::isMovementProper(HexNode* source, Coordinate& 
 }
 
 
-HexDirection GrasshopperMovementStrategy::getDirectionToDestination(HexNode* source, HexNode* destination)
-{
-	if (source->getCoordinate()->getX() == destination->getCoordinate()->getX())
-	{
+HexDirection GrasshopperMovementStrategy::getDirectionToDestination(HexNode* source, HexNode* destination) {
+	if (source->getCoordinate()->getX() == destination->getCoordinate()->getX()) {
 		return (source->getCoordinate()->getY() > destination->getCoordinate()->getY()) ? UP : DOWN;
 	}
-	else 
-	{
+	else {
 		if (source->getCoordinate()->getY() > destination->getCoordinate()->getY() ||
 			(source->getCoordinate()->getY() == destination->getCoordinate()->getX() &&
-				source->getCoordinate()->getX() % 2 != 0))
-		{
+			 source->getCoordinate()->getX() % 2 != 0)) {
 			return (source->getCoordinate()->getX() > destination->getCoordinate()->getX()) ? UP_LEFT : UP_RIGHT;
 		}
-		else //Covers (y1 < y2 || (y1 == y2 && x1 % 2 == 0), source is 1, destination is 2.
-		{
+		else { //Covers (y1 < y2 || (y1 == y2 && x1 % 2 == 0), source is 1, destination is 2.
 			return (source->getCoordinate()->getX() > destination->getCoordinate()->getX()) ? DOWN_LEFT : DOWN_RIGHT;
 		}
 	}
 }
 
-bool GrasshopperMovementStrategy::nodesBetweenSourceAndDestinationAreOccupied(HexNode* source, HexNode* destination, HexDirection direction)
-{
+bool GrasshopperMovementStrategy::nodesBetweenSourceAndDestinationAreOccupied(HexNode* source, HexNode* destination, HexDirection direction) {
 	HexNode* currentNode = getAdjacentHexNode(source->getCoordinate(), static_cast<int>(direction));
-	if (currentNode == destination)
-	{
+	if (currentNode == destination) {
 		return false; //Source and Destination cannot be adjacent (must hop over at least one game piece).
 	}
 
-	while (currentNode != destination)
-	{
-		if (currentNode->getGamePiece() == nullptr)
-		{
+	while (currentNode != destination) {
+		if (currentNode->getGamePiece() == nullptr) {
 			return false; //Cannot make multiple hops in a single turn!
 		}
 
@@ -89,15 +75,13 @@ bool GrasshopperMovementStrategy::sourceAndDestinationAreAligned(HexNode* source
 	int y1 = source->getCoordinate()->getY();
 	int y2 = destination->getCoordinate()->getY();
 
-	if (source->getCoordinate()->getX() == destination->getCoordinate()->getX()) //Are they vertically aligned?
-	{
+	if (source->getCoordinate()->getX() == destination->getCoordinate()->getX()) { //Are they vertically aligned?
 		return true;
 	}
 
 	if (source->getCoordinate()->getY() > destination->getCoordinate()->getY() ||
 	   (source->getCoordinate()->getY() == destination->getCoordinate()->getX() && 
-		mod(source->getCoordinate()->getX(), 2) != 0))
-	{
+		mod(source->getCoordinate()->getX(), 2) != 0)) {
 		return verifyDiagonalAlignment(source, destination, -1);
 	}
 	else //Covers (y1 < y2 || (y1 == y2 && x1 % 2 == 0), source is 1, destination is 2.
@@ -106,8 +90,7 @@ bool GrasshopperMovementStrategy::sourceAndDestinationAreAligned(HexNode* source
 	}
 }
 
-bool GrasshopperMovementStrategy::verifyDiagonalAlignment(HexNode* source, HexNode* destination, int yOffset)
-{
+bool GrasshopperMovementStrategy::verifyDiagonalAlignment(HexNode* source, HexNode* destination, int yOffset) {
 	//Use copies of coordinates since algorithm will change these values!
 	int* x1 = new int(source->getCoordinate()->getX());
 	int* x2 = new int(destination->getCoordinate()->getX());
@@ -118,23 +101,17 @@ bool GrasshopperMovementStrategy::verifyDiagonalAlignment(HexNode* source, HexNo
 
 	int* yN = y1;
 
-	if ((*x1) > (*x2))
-	{
-		while ((*x1) > *(x2))
-		{
-			if (mod(*x1, 2) == *(moduloOffset))
-			{
+	if ((*x1) > (*x2)) {
+		while ((*x1) > *(x2)) {
+			if (mod(*x1, 2) == *(moduloOffset)) {
 				(*yN) += yOffset;
 			}
 			(*x1)--;
 		}
 	}
-	else
-	{
-		while (*(x1) < *(x2))
-		{
-			if (mod(*x1, 2) == *(moduloOffset))
-			{
+	else {
+		while (*(x1) < *(x2)) {
+			if (mod(*x1, 2) == *(moduloOffset)) {
 				(*yN) += yOffset;
 			}
 			(*x1)++;
@@ -145,8 +122,7 @@ bool GrasshopperMovementStrategy::verifyDiagonalAlignment(HexNode* source, HexNo
 	delete x1;
 	delete x2;
 
-	if ((*yN) != (*y2))
-	{
+	if ((*yN) != (*y2)) {
 		delete y1;
 		delete y2;
 		return false;

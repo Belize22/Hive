@@ -1,7 +1,6 @@
 #include "Coordinate.h"
 
-Coordinate::Coordinate()
-{
+Coordinate::Coordinate() {
 	setCoordinate(new int(0), new int(0), new int(0));
 }
 
@@ -21,8 +20,7 @@ int Coordinate::getZ() {
 	return *_z;
 }
 
-void Coordinate::incrementZ()
-{
+void Coordinate::incrementZ() {
 	(*_z)++; //Needed to find coordinate above an occupied spot that a Beetle will go onto.
 }
 
@@ -37,40 +35,42 @@ std::string Coordinate::toString() {
 };
 
 void Coordinate::offsetCoordinate(Coordinate* coordinate, HexDirection direction) {
-	coordinate->setCoordinate(new int(coordinate->getX() + horizontalDirectionOffset(direction)),
+	coordinate->setCoordinate(
+		new int(coordinate->getX() + horizontalDirectionOffset(direction)),
 		new int(coordinate->getY() + verticalDirectionOffset(direction, coordinate->getX())),
-		new int(coordinate->getZ()));
+		new int(coordinate->getZ())
+	);
 }
 
 int Coordinate::horizontalDirectionOffset(HexDirection direction) {
 	switch (direction) {
-	case UP_RIGHT:
-		return 1;
-	case DOWN_RIGHT:
-		return 1;
-	case DOWN_LEFT:
-		return -1;
-	case UP_LEFT:
-		return -1;
-	default:
-		return 0;
+		case UP_RIGHT:
+			return 1;
+		case DOWN_RIGHT:
+			return 1;
+		case DOWN_LEFT:
+			return -1;
+		case UP_LEFT:
+			return -1;
+		default:
+			return 0;
 	}
 }
 
 int Coordinate::verticalDirectionOffset(HexDirection direction, int xValue) {
 	switch (direction) {
-	case UP:
-		return -1;
-	case UP_RIGHT:
-	case UP_LEFT:
-		return (xValue % 2 == 0 ? -1 : 0);
-	case DOWN_RIGHT:
-	case DOWN_LEFT:
-		return (xValue % 2 == 0 ? 0 : 1);
-	case DOWN:
-		return 1;
-	default:
-		return 0;
+		case UP:
+			return -1;
+		case UP_RIGHT:
+		case UP_LEFT:
+			return (xValue % 2 == 0 ? -1 : 0);
+		case DOWN_RIGHT:
+		case DOWN_LEFT:
+			return (xValue % 2 == 0 ? 0 : 1);
+		case DOWN:
+			return 1;
+		default:
+			return 0;
 	}
 }
 
@@ -79,6 +79,5 @@ bool Coordinate::operator==(const Coordinate& other) {
 }
 
 bool Coordinate::operator<(const Coordinate& other) {
-	// priority is x, then y, then z.
 	return (*_x != *other._x ? *_x < *other._x : (*_y != *other._y ? *_y < *other._y : *_z < *other._z));
 }

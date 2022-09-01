@@ -8,11 +8,12 @@ class Board;
 #include "GamePiece.h"
 #include "Coordinate.h"
 
-class PlacementStrategy : public GamePieceStrategy
-{
-public:
-	PlacementStrategy();
-	PlacementStrategy(Board* board);
-	bool handleGamePiece(GamePiece* gamePiece, Coordinate* coordinate);
+const int PLACEMENTS_BEFORE_MANDATORY_QUEEN_BEE_PLACEMENT = 3;
+
+class PlacementStrategy : public GamePieceStrategy {
+	public:
+		PlacementStrategy();
+		PlacementStrategy(Board* board);
+		bool handleGamePiece(GamePiece* gamePiece, Coordinate* coordinate);
 };
 #endif

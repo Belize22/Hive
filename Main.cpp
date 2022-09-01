@@ -22,11 +22,15 @@ int main() {
 	int turn = 1;
 	Board* board = new Board();
 	std::vector<Player*>* players = new std::vector<Player*>;
+
 	for (int i = 0; i < NUM_PLAYERS; i++) {
 		players->push_back(new Player(board, &i));
 	}
+
 	int* currentPlayerNumber = new int(-1);
 	Player* currentPlayer = changePlayer(players, currentPlayerNumber);
+
+	//Game Loop
 	while (true) {
 		displayPlacementCandidates(board->getPlacementCandidates(board->getMostRecentSpot(), currentPlayer));
 		std::cout << "Place a piece: P[A|B|G|Q|S]([-]?[0-9]+,[-]?[0-9]+" << std::endl;
@@ -66,7 +70,9 @@ int main() {
 				GamePieceType gamePieceType = InputParser::getGamePieceTypeFromInput(input);
 				Coordinate* inputCoordinate = InputParser::getCoordinateFromInput(input);
 				bool isValidSpot = currentPlayer->placeGamePiece(inputCoordinate, gamePieceType);
+
 				delete inputCoordinate;
+
 				if (isValidSpot) {
 					if (isGameOver(board, players->at(0), players->at(1))) {
 						break;
@@ -78,7 +84,9 @@ int main() {
 				GamePiece* gamePiece = InputParser::getGamePieceFromInput(currentPlayer, input);
 				Coordinate* inputCoordinate = InputParser::getCoordinateFromInput(input);
 				bool isValidSpot = currentPlayer->moveGamePiece(inputCoordinate, gamePiece);
+
 				delete inputCoordinate;
+
 				if (isValidSpot) {
 					if (isGameOver(board, players->at(0), players->at(1))) {
 						break;
@@ -112,6 +120,7 @@ void displayPlacementCandidates(std::vector<Coordinate*>* coordinates) {
 std::string getRegexInput() {
 	std::string input;
 	std::cin >> input;
+
 	if (InputParser::isValidRegex(input)) {
 		return input;
 	}
@@ -123,12 +132,14 @@ std::string getRegexInput() {
 int getCoordinateInput() {
 	int input;
 	std::cin >> input;
+
 	while (std::cin.fail()) {
 		std::cin.clear();
 		std::cin.ignore(INT_MAX, '\n');
 		std::cout << "Coordinate must be a number: ";
 		std::cin >> input;
 	}
+
 	std::cin.clear();
 	std::cin.ignore(INT_MAX, '\n');
 	return input;
@@ -159,8 +170,10 @@ bool stalemateAgreedUpon(Player* currentPlayer) {
 	std::cout << "Player " << otherPlayerId << " has proposed a stalemate! Type Y to agree, type anything else to continue: ";
 	std::string input;
 	std::cin >> input;
+
 	if (input == "Y") {
 		return true;
 	}
+
 	return false;
 }

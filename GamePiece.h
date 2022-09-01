@@ -7,22 +7,19 @@ class Board;
 class Player;
 class HexNode;
 
-class GamePiece
-{
-private:
-	Board* _board;
-	Player* _player;
-	HexNode* _hexNode;
-	GamePieceType _gamePieceType;
-	bool _active;
-	bool _buried;
+class GamePiece {
+	private:
+		Board* _board;
+		Player* _player;
+		HexNode* _hexNode;
+		GamePieceType _gamePieceType;
 
-public:
-	GamePiece(Board* board, Player* player, GamePieceType gamePieceType);
-	Player* getPlayer();
-	HexNode* getHexNode();
-	GamePieceType getGamePieceType();
-	void setHexNode(HexNode* hexNode);
+	public:
+		GamePiece(Board* board, Player* player, GamePieceType gamePieceType);
+		Player* getPlayer();
+		HexNode* getHexNode();
+		GamePieceType getGamePieceType();
+		void setHexNode(HexNode* hexNode);
 };
 
 #endif

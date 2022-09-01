@@ -4,12 +4,11 @@
 class Board;
 #include "MultiSpaceMovementStrategy.h"
 
-class SoldierAntMovementStrategy : public MultiSpaceMovementStrategy
-{
-public:
-	SoldierAntMovementStrategy();
-	SoldierAntMovementStrategy(Board* board);
-	bool distanceConditionSatisfied(int* distance);
+class SoldierAntMovementStrategy : public MultiSpaceMovementStrategy {
+	public:
+		SoldierAntMovementStrategy();
+		SoldierAntMovementStrategy(Board* board);
+		bool distanceConditionSatisfied(int* distance);
 };
 
 #endif
