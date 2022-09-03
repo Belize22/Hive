@@ -29,6 +29,7 @@ class Board {
 		SpiderMovementStrategy* _spiderMovementStrategy;
 		SoldierAntMovementStrategy* _soldierAntMovementStrategy;
 		GamePieceStrategy* _gamePieceStrategy;
+		MovementStrategy* getSpecifiedMovementStrategy(GamePieceType gamePieceType);
 
 	public:
 		Board();
@@ -37,7 +38,8 @@ class Board {
 		bool moveGamePiece(GamePiece* gamePiece, Coordinate* coordinate);
 		bool handleGamePiece(GamePiece* gamePiece, Coordinate* coordinate); 
 		void setAdjacentSpots(HexNode* target);
-		std::vector<Coordinate*>* getPlacementCandidates(HexNode* start, Player* player);
+		std::vector<Coordinate*>* getPlacementCandidates(HexNode* start, Player* player); 
+		std::vector<Coordinate*>* getMovementCandidates(HexNode* start, Player* player);
 		std::map<std::string, HexNode*>* getHexNodes();
 		bool isGameOver(Player* playerOne, Player* playerTwo);
 		HexNode* getMostRecentSpot();

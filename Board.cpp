@@ -41,22 +41,8 @@ bool Board::placeGamePiece(GamePiece* gamePiece, Coordinate* coordinate) {
 }
 
 bool Board::moveGamePiece(GamePiece* gamePiece, Coordinate* coordinate) {
-	GamePieceType gamePieceType = gamePiece->getGamePieceType();
-	if (gamePieceType == QUEEN_BEE) {
-		_gamePieceStrategy = _queenBeeMovementStrategy;
-	}
-	else if (gamePieceType == BEETLE) {
-		_gamePieceStrategy = _beetleMovementStrategy;
-	}
-	else if (gamePieceType == GRASSHOPPER) {
-		_gamePieceStrategy = _grasshopperMovementStrategy;
-	}
-	else if (gamePieceType == SPIDER) {
-		_gamePieceStrategy = _spiderMovementStrategy;
-	}
-	else if (gamePieceType == SOLDIER_ANT) {
-		_gamePieceStrategy = _soldierAntMovementStrategy;
-	}
+	_gamePieceStrategy = getSpecifiedMovementStrategy(gamePiece->getGamePieceType());
+
 	bool isValidPlacement = _gamePieceStrategy->handleGamePiece(gamePiece, coordinate);
 	return isValidPlacement;
 }
@@ -66,6 +52,12 @@ void Board::setAdjacentSpots(HexNode* target) {
 }
 
 std::vector<Coordinate*>* Board::getPlacementCandidates(HexNode* start, Player* player) {
+	_gamePieceStrategy = _placementStrategy;
+	return _gamePieceStrategy->getCandidates(start, player);
+}
+
+std::vector<Coordinate*>* Board::getMovementCandidates(HexNode* start, Player* player) {
+	_gamePieceStrategy = getSpecifiedMovementStrategy(start->getGamePiece()->getGamePieceType());
 	return _gamePieceStrategy->getCandidates(start, player);
 }
 
@@ -99,4 +91,22 @@ HexNode* Board::getMostRecentSpot() {
 
 void Board::setMostRecentSpot(HexNode* mostRecentSpot) {
 	_mostRecentSpot = mostRecentSpot;
+}
+
+
+
+MovementStrategy* Board::getSpecifiedMovementStrategy(GamePieceType gamePieceType) {
+	if (gamePieceType == QUEEN_BEE) {
+		return _queenBeeMovementStrategy;
+	}
+	if (gamePieceType == BEETLE) {
+		return _beetleMovementStrategy;
+	}
+	if (gamePieceType == GRASSHOPPER) {
+		return _grasshopperMovementStrategy;
+	}
+	if (gamePieceType == SPIDER) {
+		return _spiderMovementStrategy;
+	}
+	return _soldierAntMovementStrategy; //SOLDIER_ANT
 }

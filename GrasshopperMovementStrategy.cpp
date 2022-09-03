@@ -14,6 +14,10 @@ bool GrasshopperMovementStrategy::pieceCanMoveOnOccupiedSpace(HexNode* target) {
 	return false; //Only Beetle can move onto an occupied space!
 }
 
+std::vector<Coordinate*>* GrasshopperMovementStrategy::getCandidates(HexNode* start, Player* player) {
+	return nullptr;
+}
+
 bool GrasshopperMovementStrategy::isMovementProper(HexNode* source, Coordinate& destinationCoordinate) {
 	HexNode* destination = (_board->getHexNodes()->find((&destinationCoordinate)->toString()) != _board->getHexNodes()->end()) ?
 		(_board->getHexNodes()->at((&destinationCoordinate)->toString())) : nullptr;

@@ -13,6 +13,10 @@ bool BeetleMovementStrategy::pieceCanMoveOnOccupiedSpace(HexNode* target) {
 	return true; //Only Beetle can move onto an occupied space!
 }
 
+std::vector<Coordinate*>* BeetleMovementStrategy::getCandidates(HexNode* start, Player* player) {
+	return nullptr;
+}
+
 bool BeetleMovementStrategy::isMovementProper(HexNode* source, Coordinate& destinationCoordinate)
 {
 	std::cout << "Moving Beetle!" << std::endl;

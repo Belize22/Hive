@@ -10,6 +10,10 @@ SoldierAntMovementStrategy::SoldierAntMovementStrategy(Board* board) {
 	maxDistance = INT_MAX;
 }
 
+std::vector<Coordinate*>* SoldierAntMovementStrategy::getCandidates(HexNode* start, Player* player) {
+	return nullptr;
+}
+
 
 
 bool SoldierAntMovementStrategy::distanceConditionSatisfied(int* distance) {

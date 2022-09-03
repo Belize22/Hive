@@ -78,10 +78,6 @@ bool MovementStrategy::handleGamePiece(GamePiece* gamePiece, Coordinate* coordin
 	return true;
 }
 
-std::vector<Coordinate*>* MovementStrategy::getCandidates(HexNode* start, Player* player) {
-	return new std::vector<Coordinate*>(); //Placeholder
-}
-
 
 
 void MovementStrategy::unsetAdjacentSpots(HexNode* target) {

@@ -13,5 +13,6 @@ class PlacementStrategy : public GamePieceStrategy {
 		PlacementStrategy();
 		PlacementStrategy(Board* board);
 		bool handleGamePiece(GamePiece* gamePiece, Coordinate* coordinate);
+		std::vector<Coordinate*>* getCandidates(HexNode* start, Player* player);
 };
 #endif

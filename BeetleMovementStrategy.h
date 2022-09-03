@@ -13,6 +13,7 @@ class BeetleMovementStrategy : public OneSpaceMovementStrategy {
 		BeetleMovementStrategy();
 		BeetleMovementStrategy(Board* board); 
 		bool pieceCanMoveOnOccupiedSpace(HexNode* target);
+		std::vector<Coordinate*>* getCandidates(HexNode* start, Player* player);
 		bool isMovementProper(HexNode* source, Coordinate& destinationCoordinate);
 };
 

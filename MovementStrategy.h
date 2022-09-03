@@ -19,8 +19,8 @@ class MovementStrategy : public GamePieceStrategy {
 		MovementStrategy();
 		MovementStrategy(Board* board);
 		bool handleGamePiece(GamePiece* gamePiece, Coordinate* coordinate);
-		std::vector<Coordinate*>* getCandidates(HexNode* start, Player* player);
 		virtual bool pieceCanMoveOnOccupiedSpace(HexNode* target) = 0;
+		virtual std::vector<Coordinate*>* getCandidates(HexNode* start, Player* player) = 0;
 		virtual bool isMovementProper(HexNode* source, Coordinate& destinationCoordinate) = 0;
 };
 

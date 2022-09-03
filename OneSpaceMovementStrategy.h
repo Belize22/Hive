@@ -17,6 +17,7 @@ class OneSpaceMovementStrategy : public MovementStrategy {
 		OneSpaceMovementStrategy();
 		OneSpaceMovementStrategy(Board* board);
 		virtual bool pieceCanMoveOnOccupiedSpace(HexNode* target) = 0;
+		virtual std::vector<Coordinate*>* getCandidates(HexNode* start, Player* player) = 0;
 		virtual bool isMovementProper(HexNode* source, Coordinate& destinationCoordinate) = 0;
 };
 

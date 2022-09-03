@@ -20,6 +20,7 @@ class MultiSpaceMovementStrategy : public MovementStrategy {
 		MultiSpaceMovementStrategy(Board* board);
 		bool isMovementProper(HexNode* source, Coordinate& destinationCoordinate);
 		bool pieceCanMoveOnOccupiedSpace(HexNode* target);
+		virtual std::vector<Coordinate*>* getCandidates(HexNode* start, Player* player) = 0;
 };
 
 #endif
