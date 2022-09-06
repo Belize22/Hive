@@ -9,7 +9,7 @@
 
 const int NUM_PLAYERS = 2;
 
-void displayPlacementCandidates(std::vector<Coordinate*>* coordinates); 
+void displayCandidates(std::vector<Coordinate*>* coordinates, GamePiece* gamePiece);
 Player* changePlayer(std::vector<Player*>* players, int* currentPlayerNumber);
 std::string getRegexInput();
 int getCoordinateInput();
@@ -32,7 +32,10 @@ int main() {
 
 	//Game Loop
 	while (true) {
-		displayPlacementCandidates(board->getPlacementCandidates(board->getMostRecentSpot(), currentPlayer));
+		std::vector<Coordinate*>* placementCandidates = board->getPlacementCandidates(board->getMostRecentSpot(), currentPlayer);
+		displayCandidates(placementCandidates, nullptr);
+		delete placementCandidates;
+
 		std::cout << "Place a piece: P[A|B|G|Q|S]([-]?[0-9]+,[-]?[0-9]+" << std::endl;
 		std::cout << "Move a piece: M[A|B|G|Q|S][0-9]([-]?[0-9]+,[-]?[0-9]+" << std::endl; 
 		std::cout << "Pass Turn: PASS" << std::endl;
@@ -94,6 +97,17 @@ int main() {
 					currentPlayer = changePlayer(players, currentPlayerNumber);
 				}
 			}
+			else if (gamePieceInteractionType == CANDIDATE_FETCH) {
+				GamePiece* gamePiece = InputParser::getGamePieceFromInput(currentPlayer, input);
+				if (gamePiece->getHexNode() == nullptr) {
+					std::cout << "Game piece is not on the board yet!" << std::endl;
+				}
+				else {
+					std::vector<Coordinate*>* movementCandidates = board->getMovementCandidates(board->getMostRecentSpot(), currentPlayer);
+					displayCandidates(movementCandidates, gamePiece);
+					delete movementCandidates;
+				}
+			}
 		}
 	}
 
@@ -111,18 +125,24 @@ int main() {
 	return 0;
 }
 
-void displayPlacementCandidates(std::vector<Coordinate*>* coordinates) {
+void displayCandidates(std::vector<Coordinate*>* coordinates, GamePiece* gamePiece) {
 	if (coordinates == nullptr) {
 		std::cout << "All game pieces have been placed!" << std::endl;
 		return;
 	}
 
 	if (coordinates->size() == 0) {
-		std::cout << "No possible placement candidates!" << std::endl;
+		std::cout << "No possible candidates!" << std::endl;
 		return;
 	}
 
-	std::cout << "Here are all placement candidates: " << std::endl;
+	if (gamePiece == nullptr) {
+		std::cout << "Here are all placement candidates: " << std::endl;
+	}
+	else {
+		std::cout << "Here are movement candidates for the selected piece: " << std::endl;
+	}
+
 	for (int i = 0; i < coordinates->size(); i++) {
     	std::cout << coordinates->at(i)->getX() << ", " << coordinates->at(i)->getY() << ", " << coordinates->at(i)->getZ() << std::endl;
     }

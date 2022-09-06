@@ -12,6 +12,10 @@ bool InputParser::isValidRegex(std::string input)
 		return true;
 	}
 
+	if (std::regex_match(input.begin(), input.end(), candidateRegex)) {
+		return true;
+	}
+
 	if (input == PASS_STRING || input == TIE_STRING) {
 		return true;
 	}
@@ -29,9 +33,13 @@ GamePieceInteractionType InputParser::getGamePieceInteractionTypeFromInput(std::
 		if (match.str() == "P") {
 			gamePieceInteractionTypeInput = match.suffix().str();
 			return PLACEMENT;
+		}		
+		if (match.str() == "M") {
+			gamePieceInteractionTypeInput = match.suffix().str();
+			return MOVEMENT;
 		}
 		gamePieceInteractionTypeInput = match.suffix().str();
-		return MOVEMENT;
+		return CANDIDATE_FETCH;
 	}
 	return PLACEMENT; //Will never fire. Placed here for compiling purposes.
 }

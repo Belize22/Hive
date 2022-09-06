@@ -15,7 +15,8 @@ const std::string TIE_STRING = "TIE";
 
 const std::regex placementRegex("P[ABGQS]\\([-]?[0-9]+,[-]?[0-9]+\\)");     //ex: PQ(-1,1)
 const std::regex movementRegex("M[ABGQS][0-9]\\([-]?[0-9]+,[-]?[0-9]+\\)"); //ex: MS1(0,-2)
-const std::regex interactionTypeRegex("^[MP]");
+const std::regex candidateRegex("C[ABGQS][0-9]");                           //ex: CS1
+const std::regex interactionTypeRegex("^[CMP]");
 const std::regex gamePieceTypeRegex("^[ABGQS]");
 const std::regex gamePieceRegex("^[ABGQS][0-9]");
 const std::regex coordinateRegex("[-]?[0-9]");
