@@ -14,7 +14,47 @@ bool BeetleMovementStrategy::pieceCanMoveOnOccupiedSpace(HexNode* target) {
 }
 
 std::vector<Coordinate*>* BeetleMovementStrategy::getCandidates(HexNode* start, Player* player) {
-	return nullptr;
+	std::vector<Coordinate*>* candidates = new std::vector<Coordinate*>();
+	HexNode* currentNode;
+	HexNode* adjacentNode;
+
+	if (!canMovePiece(start, player)) {
+		return candidates;
+	}
+
+	Coordinate* modifiedCoordinate = new Coordinate(
+		new int(start->getCoordinate()->getX()),
+		new int(start->getCoordinate()->getY()),
+		new int (0)
+	);
+
+	for (int i = 0; i < ADJACENT_HEX_DIRECTIONS; i++) {
+		currentNode = getAdjacentHexNode(start->getCoordinate(), i);
+		if (!FTMRespectedForSpecifiedDirection(start, static_cast<HexDirection>(i))
+			&& !FTMRespectedForSpecifiedDirection(currentNode, static_cast<HexDirection>(mod(i + 3, ADJACENT_HEX_DIRECTIONS)))) {
+			continue;
+		}
+
+		if (currentNode != nullptr && currentNode->getGamePiece() != nullptr) { //Skip OHR check if z-value of coordinate of movement candidate is greater than zero.
+			candidates->push_back(currentNode->getCoordinate());
+			continue;
+		}
+
+		for (int j = 0; j < ADJACENT_HEX_DIRECTIONS; j++) { //Check that move doesn't violate OHR after it's complete.
+			adjacentNode = getAdjacentHexNode(currentNode->getCoordinate(), j);
+			if (adjacentNode != nullptr && adjacentNode->getGamePiece() != nullptr && adjacentNode != start) {
+				break; //Found adjacent game piece that isn't a movement candidate!
+			}
+		}
+
+		//OHR check here incase above loop does not find an adjacent game piece that isn't a movement candidate!
+		if (adjacentNode != nullptr && adjacentNode->getGamePiece() != nullptr && adjacentNode != start) {
+			candidates->push_back(currentNode->getCoordinate());
+		}
+	}
+
+	delete modifiedCoordinate;
+	return candidates;
 }
 
 bool BeetleMovementStrategy::isMovementProper(HexNode* source, Coordinate& destinationCoordinate)

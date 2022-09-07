@@ -15,7 +15,39 @@ bool QueenBeeMovementStrategy::pieceCanMoveOnOccupiedSpace(HexNode* target) {
 }
 
 std::vector<Coordinate*>* QueenBeeMovementStrategy::getCandidates(HexNode* start, Player* player) {
-	return nullptr;
+	std::vector<Coordinate*>* candidates = new std::vector<Coordinate*>();
+	HexNode* currentNode;
+	HexNode* adjacentNode;
+
+	if (!canMovePiece(start, player)) {
+		return candidates;
+	}
+
+	for (int i = 0; i < ADJACENT_HEX_DIRECTIONS; i++) {
+		if (!FTMRespectedForSpecifiedDirection(start, static_cast<HexDirection>(i))) {
+			continue;
+		}
+
+		currentNode = getAdjacentHexNode(start->getCoordinate(), i);
+
+		if (currentNode->getGamePiece() != nullptr) {
+			continue;
+		}
+
+		for (int j = 0; j < ADJACENT_HEX_DIRECTIONS; j++) { //Check that move doesn't violate OHR after it's complete.
+			adjacentNode = getAdjacentHexNode(currentNode->getCoordinate(), j);
+			if (adjacentNode != nullptr && adjacentNode->getGamePiece() != nullptr && adjacentNode != start) {
+				break; //Found adjacent game piece that isn't a movement candidate!
+			}
+		}
+
+		//OHR check here incase above loop does not find an adjacent game piece that isn't a movement candidate!
+		if (adjacentNode != nullptr && adjacentNode->getGamePiece() != nullptr && adjacentNode != start) {
+			candidates->push_back(currentNode->getCoordinate());
+		}
+	}
+
+	return candidates;
 }
 
 bool QueenBeeMovementStrategy::isMovementProper(HexNode* source, Coordinate& destinationCoordinate) {

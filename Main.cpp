@@ -42,6 +42,7 @@ int main() {
 		std::cout << "Propose Stalemate: TIE" << std::endl;
 		std::cout << "Insert Input: ";
 		std::string input = getRegexInput();
+
 		if (input == "PASS") {
 			if (canPassTurn(currentPlayer, board)) {
 				std::cout << "Passing Turn!" << std::endl;
@@ -103,7 +104,7 @@ int main() {
 					std::cout << "Game piece is not on the board yet!" << std::endl;
 				}
 				else {
-					std::vector<Coordinate*>* movementCandidates = board->getMovementCandidates(board->getMostRecentSpot(), currentPlayer);
+					std::vector<Coordinate*>* movementCandidates = board->getMovementCandidates(gamePiece->getHexNode(), currentPlayer);
 					displayCandidates(movementCandidates, gamePiece);
 					delete movementCandidates;
 				}
@@ -144,7 +145,7 @@ void displayCandidates(std::vector<Coordinate*>* coordinates, GamePiece* gamePie
 	}
 
 	for (int i = 0; i < coordinates->size(); i++) {
-    	std::cout << coordinates->at(i)->getX() << ", " << coordinates->at(i)->getY() << ", " << coordinates->at(i)->getZ() << std::endl;
+    	std::cout << coordinates->at(i)->getX() << ", " << coordinates->at(i)->getY() << std::endl;
     }
     std::cout << "-----------------" << std::endl;
 }

@@ -15,6 +15,9 @@ class MovementStrategy : public GamePieceStrategy {
 		bool hiveWillSeparateAfterMovingPiece(GamePiece* gamePiece);
 		void advanceBFS(std::vector<HexNode*>* openList, std::vector<HexNode*>* closedList);
 
+	protected:
+		bool canMovePiece(HexNode* source, Player* player);
+
 	public:
 		MovementStrategy();
 		MovementStrategy(Board* board);

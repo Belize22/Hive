@@ -59,7 +59,7 @@ bool MovementStrategy::handleGamePiece(GamePiece* gamePiece, Coordinate* coordin
 	}
 	gamePiece->setHexNode(nullptr);
 	source->setGamePiece(nullptr);
-	if (source->getCoordinate()->getZ() > 0) {//Available spots are only indicated if z = 0!
+	if (source->getCoordinate()->getZ() > 0) { //Available spots are only indicated if z = 0!
 		_board->getHexNodes()->erase(_board->getHexNodes()->find(source->getCoordinate()->toString()));
 	}
 
@@ -74,6 +74,25 @@ bool MovementStrategy::handleGamePiece(GamePiece* gamePiece, Coordinate* coordin
 		setAdjacentSpots(target);
 	}
 	_board->setMostRecentSpot(target);
+
+	return true;
+}
+
+
+
+//In this context, can move piece means it can move to at least one specified destination.
+bool MovementStrategy::canMovePiece(HexNode* source, Player* player) {
+	if (!respectsOHR(source->getGamePiece())) {
+		return false;
+	}
+
+	if (isBuried(source)) {
+		return false;
+	}
+
+	if (!queenBeePlaced(player)) {
+		return false;
+	}
 
 	return true;
 }
