@@ -13,7 +13,6 @@ class SpiderMovementStrategy : public MultiSpaceMovementStrategy {
 	public:
 		SpiderMovementStrategy();
 		SpiderMovementStrategy(Board* board);
-		std::vector<Coordinate*>* getCandidates(HexNode* start, Player* player);
 };
 
 #endif

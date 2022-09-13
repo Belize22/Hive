@@ -11,7 +11,6 @@ class SoldierAntMovementStrategy : public MultiSpaceMovementStrategy {
 	public:
 		SoldierAntMovementStrategy();
 		SoldierAntMovementStrategy(Board* board);
-		std::vector<Coordinate*>* getCandidates(HexNode* start, Player* player);
 };
 
 #endif

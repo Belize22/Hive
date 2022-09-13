@@ -10,10 +10,22 @@ MultiSpaceMovementStrategy::MultiSpaceMovementStrategy(Board* board) {
 	maxDistance = INT_MAX;
 }
 
+
+std::vector<Coordinate*>* MultiSpaceMovementStrategy::getCandidates(HexNode* start, Player* player) {
+	std::vector<Coordinate*>* candidates = new std::vector<Coordinate*>();
+
+	if (!canMovePiece(start, player)) {
+		return candidates;
+	}
+
+	candidates = performMultiMoveBFS(start, nullptr);
+	return nullptr;
+}
+
 bool MultiSpaceMovementStrategy::isMovementProper(HexNode* source, Coordinate& destinationCoordinate) {
 	HexNode* destination = (_board->getHexNodes()->find((&destinationCoordinate)->toString()) != _board->getHexNodes()->end()) ?
 		(_board->getHexNodes()->at((&destinationCoordinate)->toString())) : nullptr;
-	return destinationReachableByDFS(source, destination);
+	return destinationReachableByBFS(source, destination);
 }
 
 bool MultiSpaceMovementStrategy::pieceCanMoveOnOccupiedSpace(HexNode* target) {
@@ -39,10 +51,24 @@ bool MultiSpaceMovementStrategy::traversingOnEdge(HexNode* node, HexDirection di
 	return false;
 }
 
-bool MultiSpaceMovementStrategy::destinationReachableByDFS(HexNode* source, HexNode* destination) {
+bool MultiSpaceMovementStrategy::destinationReachableByBFS(HexNode* source, HexNode* destination) {
+	std::vector<Coordinate*>* candidates = performMultiMoveBFS(source, destination);
+
+	if (candidates->size() > 0 && candidates->at(0) == destination->getCoordinate()) {
+		return true;
+	}
+
+	return false;
+}
+
+std::vector<Coordinate*>* MultiSpaceMovementStrategy::performMultiMoveBFS(HexNode* source, HexNode* destination) {
+	std::vector<Coordinate*>* candidates = new std::vector<Coordinate*>();
+
 	std::vector<HexNode*>* openList = new std::vector<HexNode*>();
 	std::vector<int*>* openListDistances = new std::vector<int*>();
 	std::vector<HexNode*>* closedList = new std::vector<HexNode*>();
+	std::vector<int*>* closedListDistances = new std::vector<int*>();
+
 	Coordinate* currentCoordinate = source->getCoordinate();
 	HexNode* currentNode;
 	bool foundOccupiedHexNode = false;
@@ -52,7 +78,7 @@ bool MultiSpaceMovementStrategy::destinationReachableByDFS(HexNode* source, HexN
 
 	while (openList->size() > 0 && openList->at(0) != destination) {
 		HexNode* currentHexNode = openList->at(0);
-		advanceBFSMultiMove(openList, openListDistances, closedList, source);
+		advanceBFSMultiMove(openList, openListDistances, closedList, closedListDistances, source);
 	}
 
 	if (openList->size() > 0 && openList->at(0) == destination) { //Reached destination
@@ -74,7 +100,18 @@ bool MultiSpaceMovementStrategy::destinationReachableByDFS(HexNode* source, HexN
 			std::cout << "Piece not permitted to move that amount of spaces!" << std::endl;
 		}
 
-		return satisfiedDistanceCondition;
+		if (satisfiedDistanceCondition) {
+			candidates->push_back(destination->getCoordinate());
+		}
+		return candidates;
+	}
+
+	if (destination == nullptr) { //For finding all movement candidates.
+		for (int i = 0; i < closedList->size(); i++) {
+			if (distanceConditionSatisfied(closedListDistances->at(i))) {
+				candidates->push_back(closedList->at(i)->getCoordinate());
+			}
+		}
 	}
 
 	openList->clear();
@@ -88,11 +125,14 @@ bool MultiSpaceMovementStrategy::destinationReachableByDFS(HexNode* source, HexN
 	delete openListDistances;
 	delete closedList;
 
-	std::cout << "Destination is either too far or inaccessible without violating Freedom to Move!" << std::endl;
-	return false; //Cannot reach destination
+	if (destination != nullptr) {
+		std::cout << "Destination is either too far or inaccessible without violating Freedom to Move!" << std::endl;
+	}
+
+	return candidates; //Cannot reach destination (or finding movement candidates)
 }
 
-void MultiSpaceMovementStrategy::advanceBFSMultiMove(std::vector<HexNode*>* openList, std::vector<int*>* openListDistances, std::vector<HexNode*>* closedList, HexNode* source) {
+void MultiSpaceMovementStrategy::advanceBFSMultiMove(std::vector<HexNode*>* openList, std::vector<int*>* openListDistances, std::vector<HexNode*>* closedList, std::vector<int*>* closedListDistances, HexNode* source) {
 	HexNode* currentHexNode = openList->at(0);
 	HexNode* currentNode;
 	int* nodeDistance = openListDistances->at(0);
@@ -118,6 +158,7 @@ void MultiSpaceMovementStrategy::advanceBFSMultiMove(std::vector<HexNode*>* open
 
 	if (!std::count(closedList->begin(), closedList->end(), currentHexNode)) {
 		closedList->push_back(currentHexNode);
+		closedListDistances->push_back(nodeDistance);
 	}
 }
 

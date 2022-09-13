@@ -10,10 +10,6 @@ SpiderMovementStrategy::SpiderMovementStrategy(Board* board) {
 	maxDistance = DISTANCE_SPIDER_CAN_MOVE;
 }
 
-std::vector<Coordinate*>* SpiderMovementStrategy::getCandidates(HexNode* start, Player* player) {
-	return nullptr;
-}
-
 
 
 bool SpiderMovementStrategy::distanceConditionSatisfied(int* distance) {
