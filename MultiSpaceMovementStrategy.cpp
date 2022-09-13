@@ -19,7 +19,7 @@ std::vector<Coordinate*>* MultiSpaceMovementStrategy::getCandidates(HexNode* sta
 	}
 
 	candidates = performMultiMoveBFS(start, nullptr);
-	return nullptr;
+	return candidates;
 }
 
 bool MultiSpaceMovementStrategy::isMovementProper(HexNode* source, Coordinate& destinationCoordinate) {
@@ -55,9 +55,11 @@ bool MultiSpaceMovementStrategy::destinationReachableByBFS(HexNode* source, HexN
 	std::vector<Coordinate*>* candidates = performMultiMoveBFS(source, destination);
 
 	if (candidates->size() > 0 && candidates->at(0) == destination->getCoordinate()) {
+		delete candidates;
 		return true;
 	}
 
+	delete candidates;
 	return false;
 }
 
@@ -86,15 +88,23 @@ std::vector<Coordinate*>* MultiSpaceMovementStrategy::performMultiMoveBFS(HexNod
 		bool satisfiedDistanceCondition = (distanceConditionSatisfied(openListDistances->at(0)));
 
 		openList->clear();
+
 		for (int i = 0; i < openListDistances->size(); i++) {
 			delete openListDistances->at(i);
 		}
+
+		for (int i = 0; i < openListDistances->size(); i++) {
+			delete closedListDistances->at(i);
+		}
+
 		openListDistances->clear();
 		closedList->clear();
+		closedListDistances->clear();
 
 		delete openList;
 		delete openListDistances;
 		delete closedList;
+		delete closedListDistances;
 
 		if (!satisfiedDistanceCondition) {
 			std::cout << "Piece not permitted to move that amount of spaces!" << std::endl;
@@ -115,15 +125,23 @@ std::vector<Coordinate*>* MultiSpaceMovementStrategy::performMultiMoveBFS(HexNod
 	}
 
 	openList->clear();
+
 	for (int i = 0; i < openListDistances->size(); i++) {
 		delete openListDistances->at(i);
 	}
+
+	for (int i = 0; i < openListDistances->size(); i++) {
+		delete closedListDistances->at(i);
+	}
+
 	openListDistances->clear();
 	closedList->clear();
+	closedListDistances->clear();
 
 	delete openList;
 	delete openListDistances;
 	delete closedList;
+	delete closedListDistances;
 
 	if (destination != nullptr) {
 		std::cout << "Destination is either too far or inaccessible without violating Freedom to Move!" << std::endl;
@@ -141,7 +159,7 @@ void MultiSpaceMovementStrategy::advanceBFSMultiMove(std::vector<HexNode*>* open
 	openList->erase(openList->begin());
 	openListDistances->erase(openListDistances->begin());
 
-	if ((*nodeDistance) >= maxDistance) { //Don't explore candidates beyond max distance the piece can travel!
+	if ((*nodeDistance) > maxDistance) { //Don't explore candidates beyond max distance the piece can travel!
 		return;
 	}
 

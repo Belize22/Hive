@@ -13,5 +13,5 @@ SoldierAntMovementStrategy::SoldierAntMovementStrategy(Board* board) {
 
 
 bool SoldierAntMovementStrategy::distanceConditionSatisfied(int* distance) {
-	return true; //Any distance is good!
+	return (*distance) != 0; //Any distance except its current position is good!
 }
