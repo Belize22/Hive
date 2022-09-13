@@ -15,7 +15,23 @@ bool GrasshopperMovementStrategy::pieceCanMoveOnOccupiedSpace(HexNode* target) {
 }
 
 std::vector<Coordinate*>* GrasshopperMovementStrategy::getCandidates(HexNode* start, Player* player) {
-	return nullptr;
+	std::vector<Coordinate*>* candidates = new std::vector<Coordinate*>();
+	HexNode* currentNode;
+
+	if (!canMovePiece(start, player)) {
+		return candidates;
+	}
+
+	for (int i = 0; i < ADJACENT_HEX_DIRECTIONS; i++) {
+		currentNode = getAdjacentHexNode(start->getCoordinate(), i);
+
+		if (currentNode->getGamePiece() != nullptr) { //Grasshopper must hop over at least 1 game piece.
+			HexNode* candidate = retrieveAvailableSpotInSpecifiedDirection(currentNode, static_cast<HexDirection>(i));
+			candidates->push_back(candidate->getCoordinate());
+		}
+	}
+
+	return candidates;
 }
 
 bool GrasshopperMovementStrategy::isMovementProper(HexNode* source, Coordinate& destinationCoordinate) {
@@ -35,6 +51,16 @@ bool GrasshopperMovementStrategy::isMovementProper(HexNode* source, Coordinate& 
 	}
 
 	return true;
+}
+
+HexNode* GrasshopperMovementStrategy::retrieveAvailableSpotInSpecifiedDirection(HexNode* source, HexDirection direction) {
+	HexNode* currentNode = source;
+
+	do { //Represents the act of hopping one direction to an available spot.
+		currentNode = getAdjacentHexNode(currentNode->getCoordinate(), static_cast<int>(direction));
+	} while (currentNode->getGamePiece() != nullptr);
+
+	return currentNode;
 }
 
 
@@ -105,6 +131,7 @@ bool GrasshopperMovementStrategy::verifyDiagonalAlignment(HexNode* source, HexNo
 
 	int* yN = y1;
 
+	//Move left diagonally (yOffset determines if diagonal direction is up or down).
 	if ((*x1) > (*x2)) {
 		while ((*x1) > *(x2)) {
 			if (mod(*x1, 2) == *(moduloOffset)) {
@@ -113,6 +140,8 @@ bool GrasshopperMovementStrategy::verifyDiagonalAlignment(HexNode* source, HexNo
 			(*x1)--;
 		}
 	}
+
+	//Move right diagonally (yOffset determines if diagonal direction is up or down).
 	else {
 		while (*(x1) < *(x2)) {
 			if (mod(*x1, 2) == *(moduloOffset)) {
@@ -126,6 +155,7 @@ bool GrasshopperMovementStrategy::verifyDiagonalAlignment(HexNode* source, HexNo
 	delete x1;
 	delete x2;
 
+	//Is candidate destination the same as user-specified destination?
 	if ((*yN) != (*y2)) {
 		delete y1;
 		delete y2;

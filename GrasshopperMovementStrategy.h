@@ -10,6 +10,7 @@ class GrasshopperMovementStrategy : public MovementStrategy {
 		bool nodesBetweenSourceAndDestinationAreOccupied(HexNode* source, HexNode* destination, HexDirection direction);
 		bool sourceAndDestinationAreAligned(HexNode* source, HexNode* destination);
 		bool verifyDiagonalAlignment(HexNode* source, HexNode* destination, int yOffset);
+		HexNode* retrieveAvailableSpotInSpecifiedDirection(HexNode* source, HexDirection direction);
 
 	public:
 		GrasshopperMovementStrategy();
