@@ -29,7 +29,8 @@ std::vector<Coordinate*>* BeetleMovementStrategy::getCandidates(HexNode* start, 
 	);
 
 	for (int i = 0; i < ADJACENT_HEX_DIRECTIONS; i++) {
-		currentNode = getAdjacentHexNode(start->getCoordinate(), i);
+		currentNode = getAdjacentHexNode(modifiedCoordinate, i);
+		changeToLowestZValueOfAvailableDestinationCoordinate(currentNode, *currentNode->getCoordinate());
 		if (!FTMRespectedForSpecifiedDirection(start, static_cast<HexDirection>(i))
 			&& !FTMRespectedForSpecifiedDirection(currentNode, static_cast<HexDirection>(mod(i + 3, ADJACENT_HEX_DIRECTIONS)))) {
 			continue;
