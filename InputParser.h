@@ -10,7 +10,6 @@
 #include <string>
 #include <regex>
 
-const std::string PASS_STRING = "PASS";
 const std::string TIE_STRING = "TIE";
 
 const std::regex placementRegex("P[ABGQS]\\([-]?[0-9]+,[-]?[0-9]+\\)");     //ex: PQ(-1,1)

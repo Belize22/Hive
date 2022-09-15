@@ -14,7 +14,7 @@ Player* changePlayer(std::vector<Player*>* players, int* currentPlayerNumber);
 std::string getRegexInput();
 int getCoordinateInput();
 bool isGameOver(Board* board, Player* playerOne, Player* playerTwo);
-bool canPassTurn(Player* currentPlayer, Board* board);
+bool mustPassTurn(Player* currentPlayer, Board* board);
 bool canProposeStalemate(Player* currentPlayer, Board* board);
 bool stalemateAgreedUpon(Player* currentPlayer);
 
@@ -32,27 +32,23 @@ int main() {
 
 	//Game Loop
 	while (true) {
+		if (mustPassTurn(currentPlayer, board)) {
+			std::cout << "Cannot place or move any piece. Passing Turn to Player " << *currentPlayerNumber + 1 << "!" << std::endl;
+			currentPlayer = changePlayer(players, currentPlayerNumber);
+			continue;
+		}
+
 		std::vector<Coordinate*>* placementCandidates = board->getPlacementCandidates(board->getMostRecentSpot(), currentPlayer);
 		displayCandidates(placementCandidates, nullptr);
 		delete placementCandidates;
 
 		std::cout << "Place a piece: P[A|B|G|Q|S]([-]?[0-9]+,[-]?[0-9]+" << std::endl;
-		std::cout << "Move a piece: M[A|B|G|Q|S][0-9]([-]?[0-9]+,[-]?[0-9]+" << std::endl; 
-		std::cout << "Pass Turn: PASS" << std::endl;
+		std::cout << "Move a piece: M[A|B|G|Q|S][0-9]([-]?[0-9]+,[-]?[0-9]+" << std::endl;
 		std::cout << "Propose Stalemate: TIE" << std::endl;
 		std::cout << "Insert Input: ";
 		std::string input = getRegexInput();
 
-		if (input == "PASS") {
-			if (canPassTurn(currentPlayer, board)) {
-				std::cout << "Passing Turn!" << std::endl;
-				currentPlayer = changePlayer(players, currentPlayerNumber);
-			}
-			else {
-				std::cout << "Can only pass turn if no viable placement options exist!" << std::endl;
-			}
-		}
-		else if (input == "TIE") {
+		if (input == "TIE") {
 			if (canProposeStalemate(currentPlayer, board)) {
 				currentPlayer = changePlayer(players, currentPlayerNumber);
 				if (stalemateAgreedUpon(currentPlayer)) {
@@ -188,9 +184,31 @@ bool isGameOver(Board* board, Player* playerOne, Player* playerTwo) {
 	return board->isGameOver(playerOne, playerTwo);
 }
 
-bool canPassTurn(Player* currentPlayer, Board* board) {
+bool mustPassTurn(Player* currentPlayer, Board* board) {
 	std::vector<Coordinate*>* placementCandidates = board->getPlacementCandidates(board->getMostRecentSpot(), currentPlayer);
-	return (placementCandidates == nullptr || placementCandidates->size() == 0);
+	std::vector<Coordinate*>* movementCandidates;
+
+	if (!(placementCandidates == nullptr || placementCandidates->size() == 0)) {
+		return false; //Can place a piece. Player must take their turn.
+	}
+
+	for (int i = 0; i < currentPlayer->getGamePieces()->size(); i++) {
+		for (int j = 0; j < currentPlayer->getGamePieces()->at(i)->size(); j++) {
+			if (currentPlayer->getGamePieces()->at(i)->at(j)->getHexNode() == nullptr) {
+				continue; //No movement candidates since piece is not on the board yet.
+			}
+
+			movementCandidates = board->getPlacementCandidates(board->getMostRecentSpot(), currentPlayer);
+			if (board->getMovementCandidates(currentPlayer->getGamePieces()->at(i)->at(j)->getHexNode(), currentPlayer)->size() > 0) {
+				delete movementCandidates;
+				return false; //Can move a piece. Player must take their turn.
+			}
+
+			delete movementCandidates;
+		}
+	}
+
+	return true; //Cannot place or move a piece. Player must skip their turn.
 }
 
 bool canProposeStalemate(Player* currentPlayer, Board* board) {

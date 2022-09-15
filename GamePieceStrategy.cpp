@@ -24,28 +24,6 @@ void GamePieceStrategy::setAdjacentSpots(HexNode* target) {
 	}
 }
 
-std::vector<Coordinate*>* GamePieceStrategy::getCandidates(HexNode* start, Player* player) {
-	if (player->allPiecesPlaced()) {
-		return nullptr;
-	}
-
-	std::map<std::string, HexNode*>::iterator it = _board->getHexNodes()->begin();
-	std::vector<Coordinate*>* freeSpots = new std::vector<Coordinate*>();
-
-	while (it != _board->getHexNodes()->end()) {
-		HexNode* currentHexNode = it->second;
-		Coordinate* coordinate = currentHexNode->getCoordinate();
-
-		if (currentHexNode->getGamePiece() == nullptr && (!spotAdjacentToOpposingPiece(player, coordinate) || onlyOnePiecePlaced())) {
-			freeSpots->push_back(coordinate);
-		}
-
-		it++;
-	}
-
-	return freeSpots;
-}
-
 bool GamePieceStrategy::queenBeeSurrounded(HexNode* queenBeeSpot) { 
 	if (queenBeeSpot == nullptr) {
 		return false;

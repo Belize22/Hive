@@ -16,7 +16,7 @@ bool InputParser::isValidRegex(std::string input)
 		return true;
 	}
 
-	if (input == PASS_STRING || input == TIE_STRING) {
+	if (input == TIE_STRING) {
 		return true;
 	}
 

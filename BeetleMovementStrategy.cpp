@@ -60,7 +60,6 @@ std::vector<Coordinate*>* BeetleMovementStrategy::getCandidates(HexNode* start, 
 
 bool BeetleMovementStrategy::isMovementProper(HexNode* source, Coordinate& destinationCoordinate)
 {
-	std::cout << "Moving Beetle!" << std::endl;
 	HexNode* destination = (_board->getHexNodes()->find((&destinationCoordinate)->toString()) != _board->getHexNodes()->end()) ?
 		(_board->getHexNodes()->at((&destinationCoordinate)->toString())) : nullptr;
 
